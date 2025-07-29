@@ -96,84 +96,15 @@ export default function StudentRegisterForm({ onLoginClick, onSuccess }: Student
       // Register user with email and the modified password
       const user = await register(formData.email, password)
 
-      // Initialize game results schema organized by seasons
-      const initializeGameResults = () => {
-        const gamesList = [
-          'puzzleGame',
-          'butterflyPairs', 
-          'connectGame',
-          'sequenceGame',
-          'sequenceGame2',
-          'oddOneOut',
-          'categorySorting',
-          'categorySorting2',
-          'categorySorting3',
-          'categorySorting4',
-          'memoryGame',
-          'memoryGame2',
-          'memoryGame3',
-          'memoryGame4',
-          'memoryGame5',
-          'memoryGame6',
-          'memoryGame7',
-          'memoryMatch',
-          'memoryMatch2x4',
-          'spotDifference',
-          'spotDifference5',
-          'easterBasket',
-          'easterBasket2',
-          'easterSequence',
-          'mazeGame',
-          'mazeGame2',
-          'mazeGame3',
-          'mazeGame4',
-          'sortingGame',
-          'sortingGame2',
-          'sortingGame3',
-          'sortingGame4',
-          'findMissing',
-          'findMissingHalf',
-          'findFlippedRabbit',
-          'findIncorrectLadybug',
-          'find6Differences',
-          'sequentialOrder',
-          'sequentialOrder2',
-          'sequentialOrder3',
-          'matchingGame',
-          'branchSequence',
-          'birdsPuzzle',
-          'puzzleAssembly2',
-          'patternCompletion',
-          'sudokuGame'
-        ]
-
-        const seasons = ['wiosna', 'lato', 'jesien', 'zima']
-        const gameResults: any = {}
-
-        seasons.forEach(season => {
-          gameResults[season] = {}
-          gamesList.forEach(game => {
-            gameResults[season][game] = {
-              completed: 0,
-              bestTime: null,
-              lastPlayed: null,
-              completions: []
-            }
-          })
-        })
-
-        return gameResults
-      }
-
-      // Save student data with comprehensive game results schema
+      // Save student data with minimal structure - game data will be added when games are played
       await addDoc(collection(db, "students"), {
         uid: user.uid,
         name: formData.name,
         email: formData.email,
         teacher_code: formData.teacherCode,
         createdAt: new Date(),
-        // Comprehensive game results organized by seasons
-        gameResults: initializeGameResults(),
+        // Game results will be added dynamically when games are played
+        gameResults: {},
         // Overall statistics
         overallStats: {
           totalGamesCompleted: 0,

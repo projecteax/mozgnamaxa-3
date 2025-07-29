@@ -81,7 +81,7 @@ export default function SudokuGame({ onMenuClick, onComplete }: SudokuGameProps)
       // Call completion callback after 3 seconds to show success message
       if (onComplete) {
         setTimeout(() => {
-          onComplete()
+        onComplete()
         }, 3000) // 3 second delay
       }
     }

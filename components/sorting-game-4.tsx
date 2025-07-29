@@ -22,7 +22,7 @@ interface ChickenItem {
 export default function SortingGame4({ onMenuClick }: SortingGame4Props) {
   const { getThemeColors } = useSeason()
   const theme = getThemeColors()
-  
+
   // Define the chicken items with their sizes
   const [chickenItems, setChickenItems] = useState<ChickenItem[]>([
     { id: "chicken-40", size: 40, placed: true, position: 0 }, // Already placed in first box
@@ -243,7 +243,7 @@ export default function SortingGame4({ onMenuClick }: SortingGame4Props) {
             <div className="bg-green-100 border-2 border-green-500 rounded-lg p-6 text-center max-w-md mx-auto">
               <div className="text-green-700 text-xl font-medium">🎉 {successMessage} 🎉</div>
             </div>
-          </div>
+        </div>
         )}
 
         {/* Login reminder for non-logged users */}
@@ -256,8 +256,8 @@ export default function SortingGame4({ onMenuClick }: SortingGame4Props) {
         {/* Reset button - only visible when game is completed */}
         {isCompleted && (
           <div className="flex justify-center mt-8">
-            <button 
-              onClick={resetGame} 
+            <button
+              onClick={resetGame}
               className="text-white px-8 py-3 rounded-full font-sour-gummy text-xl shadow-lg hover:opacity-90 transition-opacity"
               style={{ backgroundColor: theme.buttonColor }}
             >

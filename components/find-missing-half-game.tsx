@@ -289,7 +289,7 @@ export default function FindMissingHalfGame({ onMenuClick, onComplete }: FindMis
       // Call onComplete callback after 3 seconds to show success message
       if (onComplete) {
         setTimeout(() => {
-          onComplete()
+        onComplete()
         }, 3000) // 3 second delay
       }
     } else {

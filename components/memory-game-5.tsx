@@ -208,7 +208,7 @@ export default function MemoryGame5({ onMenuClick, onComplete }: MemoryGame5Prop
         // Trigger completion flow after 3 seconds to show success message
         if (onComplete) {
           setTimeout(() => {
-            onComplete()
+          onComplete()
           }, 3000) // 3 second delay
         }
       } catch (error) {
@@ -217,7 +217,7 @@ export default function MemoryGame5({ onMenuClick, onComplete }: MemoryGame5Prop
     } else if (onComplete) {
       // For non-logged users, still trigger completion after 3 seconds
       setTimeout(() => {
-        onComplete()
+      onComplete()
       }, 3000) // 3 second delay
     }
   }

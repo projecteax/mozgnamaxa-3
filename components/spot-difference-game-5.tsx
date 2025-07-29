@@ -145,7 +145,7 @@ export default function SpotDifferenceGame5({ onMenuClick, onComplete }: SpotDif
           // Call completion callback after 3 seconds to show success message
           if (onComplete) {
             setTimeout(() => {
-              onComplete()
+            onComplete()
             }, 3000) // 3 second delay
           }
         }

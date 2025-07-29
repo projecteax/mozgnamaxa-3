@@ -143,7 +143,7 @@ export default function EasterSequenceGame({ onMenuClick, onComplete }: EasterSe
             // Call onComplete callback after 3 seconds to show success message
             if (onComplete) {
               setTimeout(() => {
-                onComplete()
+              onComplete()
               }, 3000) // 3 second delay
             }
           })

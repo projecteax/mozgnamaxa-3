@@ -49,7 +49,9 @@ export default function TeacherPanel({ onMenuClick }: TeacherPanelProps) {
 
           // Fetch students for this teacher
           if (teacher.unique_code) {
+            console.log("Teacher unique code:", teacher.unique_code)
             const teacherStudents = await getTeacherStudents(teacher.unique_code)
+            console.log("Teacher students fetched:", teacherStudents)
             setStudents(teacherStudents)
           }
 
@@ -179,10 +181,6 @@ export default function TeacherPanel({ onMenuClick }: TeacherPanelProps) {
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {students.map((student) => {
-                      const totalCompletions = Object.values(student.progress || {}).reduce(
-                        (total, count) => total + count,
-                        0,
-                      )
                       return (
                         <div
                           key={student.uid}
@@ -198,7 +196,33 @@ export default function TeacherPanel({ onMenuClick }: TeacherPanelProps) {
                           </div>
                           <div className="text-center">
                             <p className="text-sm text-gray-600 font-dongle">Ukończone gry:</p>
-                            <p className="font-bold text-2xl text-[#3e459c] font-dongle">{totalCompletions}</p>
+                            <p className="font-bold text-md text-[#3e459c] font-dongle">
+                              {(() => {
+                                const progress = student.progress || {};
+                                const gameResults = progress.gameResults || {};
+                                
+                                // Debug logging
+                                console.log(`Student ${student.name} progress:`, progress);
+                                console.log(`Student ${student.name} gameResults:`, gameResults);
+                                
+                                const seasons = [
+                                  { key: 'wiosna', label: 'Wiosna' },
+                                  { key: 'lato', label: 'Lato' },
+                                  { key: 'jesien', label: 'Jesień' },
+                                  { key: 'zima', label: 'Zima' },
+                                ];
+                                return seasons.map((season, idx) => {
+                                  const seasonGames = gameResults[season.key] || {};
+                                  console.log(`Student ${student.name} ${season.key} games:`, seasonGames);
+                                  const completed = Object.values(seasonGames).reduce((sum: number, g: any) => {
+                                    console.log(`Game completion data:`, g);
+                                    return sum + (g.completed || 0);
+                                  }, 0);
+                                  console.log(`Student ${student.name} ${season.key} total completed:`, completed);
+                                  return `${season.label} - ${completed}` + (idx < seasons.length - 1 ? ', ' : '');
+                                }).join(' ');
+                              })()}
+                            </p>
                           </div>
                         </div>
                       )

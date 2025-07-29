@@ -34,7 +34,7 @@ export default function FindFlippedRabbitGame({ onMenuClick }: FindFlippedRabbit
       ? "/images/sound_autumn.svg"
       : isSummer
         ? "/images/sound_summer.svg"
-        : "/images/sound_new.svg"
+      : "/images/sound_new.svg"
   const menuIcon = isWinter 
     ? "/images/menu_winter.svg" 
     : isAutumn 
@@ -48,14 +48,14 @@ export default function FindFlippedRabbitGame({ onMenuClick }: FindFlippedRabbit
       ? "/images/title_box_small_autumn.svg"
       : isSummer
         ? "/images/title_box_small_summer.svg"
-        : "/images/title_box_small.png"
+      : "/images/title_box_small.png"
   const gameIcon = isWinter
     ? "/images/snowman_winter.svg"
     : isAutumn
       ? "/images/squirrel_autumn.svg"
       : isSummer
         ? "/images/banana_summer.svg"
-        : "/images/rabbit.svg"
+      : "/images/rabbit.svg"
 
   // Get season-specific title text
   const getTitleText = () => {

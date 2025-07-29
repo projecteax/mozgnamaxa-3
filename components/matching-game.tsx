@@ -165,7 +165,7 @@ export default function MatchingGame({ onMenuClick }: MatchingGameProps) {
       const expectedNextItem = scrambledTargetItems[currentCorrectCount]
       
       if (targetId === expectedNextItem.id) {
-        setCorrectItems([...correctItems, targetId])
+      setCorrectItems([...correctItems, targetId])
       }
     }
     setDraggedItem(null)
@@ -195,7 +195,7 @@ export default function MatchingGame({ onMenuClick }: MatchingGameProps) {
       const expectedNextItem = scrambledTargetItems[currentCorrectCount]
       
       if (targetId === expectedNextItem.id) {
-        setCorrectItems([...correctItems, targetId])
+      setCorrectItems([...correctItems, targetId])
       }
     }
     setDraggedItem(null)

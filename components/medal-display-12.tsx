@@ -12,30 +12,30 @@ export default function MedalDisplay12({ onComplete }: MedalDisplay12Props) {
   const [medalAndBackground, setMedalAndBackground] = useState({ medal: "", background: "" })
 
   useEffect(() => {
-    const getMedalAndBackground = () => {
-      switch (selectedSeason) {
-        case "lato":
-          return {
-            medal: "/images/medal_12_summer.svg",
-            background: "bg-[#FFE082]",
-          }
-        case "jesien":
-          return {
-            medal: "/images/medal_12_autumn.svg",
-            background: "bg-[#FF8A65]",
-          }
-        case "zima":
-          return {
-            medal: "/images/medal_12_winter.svg",
-            background: "bg-[#81D4FA]",
-          }
-        default: // wiosna
-          return {
-            medal: "/images/medal_12.svg",
-            background: "bg-[#C8E6C9]",
-          }
-      }
+  const getMedalAndBackground = () => {
+    switch (selectedSeason) {
+      case "lato":
+        return {
+          medal: "/images/medal_12_summer.svg",
+          background: "bg-[#FFE082]",
+        }
+      case "jesien":
+        return {
+          medal: "/images/medal_12_autumn.svg",
+          background: "bg-[#FF8A65]",
+        }
+      case "zima":
+        return {
+          medal: "/images/medal_12_winter.svg",
+          background: "bg-[#81D4FA]",
+        }
+      default: // wiosna
+        return {
+          medal: "/images/medal_12.svg",
+          background: "bg-[#C8E6C9]",
+        }
     }
+  }
 
     setMedalAndBackground(getMedalAndBackground())
   }, [selectedSeason])

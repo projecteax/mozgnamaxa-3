@@ -21,7 +21,7 @@ interface PetalItem {
 }
 
 export default function SequentialOrderGame2({ onMenuClick }: SequentialOrderGame2Props) {
-  const { recordCompletion, user } = useGameCompletion()
+  const { recordCompletion, isLoggedIn } = useGameCompletion()
   const { selectedSeason, getThemeColors } = useSeason()
   const theme = getThemeColors()
 
@@ -173,7 +173,7 @@ export default function SequentialOrderGame2({ onMenuClick }: SequentialOrderGam
         setSuccessMessage(getRandomSuccessMessage())
 
         // Record completion in database
-        if (user) {
+        if (isLoggedIn) {
           recordCompletion("sequential-order-2")
           console.log("Game completion recorded in database")
         } else {

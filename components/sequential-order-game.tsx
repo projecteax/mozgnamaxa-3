@@ -212,8 +212,8 @@ export default function SequentialOrderGame({ onMenuClick }: SequentialOrderGame
         {/* Reset button - only visible when at least one petal is placed (besides the pre-placed one) */}
         {(petalItems.filter((item) => item.placed).length > 1 || isCompleted) && (
           <div className="flex justify-center mt-8">
-            <button 
-              onClick={resetGame} 
+            <button
+              onClick={resetGame}
               className="text-white px-8 py-3 rounded-full font-sour-gummy text-xl shadow-lg hover:opacity-90 transition-opacity"
               style={{ backgroundColor: theme.buttonColor }}
             >

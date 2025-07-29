@@ -69,36 +69,36 @@ export default function ConnectGame({ onMenuClick, onComplete }: ConnectGameProp
           },
         ]
       : [
-          {
-            id: "single-leaf",
-            image: "/images/leaf_green_autumn.svg",
+    {
+      id: "single-leaf",
+      image: "/images/leaf_green_autumn.svg",
             springImage: "/images/leaf_green_spring.svg",
-            autumnImage: "/images/onion_autumn.svg",
-            winterImage: "/images/person_winter.svg",
-            pairId: selectedSeason === "zima" ? "person" : selectedSeason === "jesien" ? "onion" : "leaf",
-            isLeft: true,
-            matched: false,
-          },
-          {
-            id: "single-hedgehog",
-            image: "/images/hedgehog_autumn.svg",
+      autumnImage: "/images/onion_autumn.svg",
+      winterImage: "/images/person_winter.svg",
+      pairId: selectedSeason === "zima" ? "person" : selectedSeason === "jesien" ? "onion" : "leaf",
+      isLeft: true,
+      matched: false,
+    },
+    {
+      id: "single-hedgehog",
+      image: "/images/hedgehog_autumn.svg",
             springImage: "/images/hedgehog_spring.svg",
-            autumnImage: "/images/carrot_autumn.svg",
-            winterImage: "/images/cookie_winter.svg",
-            pairId: selectedSeason === "zima" ? "cookie" : selectedSeason === "jesien" ? "carrot" : "hedgehog",
-            isLeft: true,
-            matched: false,
-          },
-          {
-            id: "single-nut",
-            image: "/images/husselnut_autumn.svg",
+      autumnImage: "/images/carrot_autumn.svg",
+      winterImage: "/images/cookie_winter.svg",
+      pairId: selectedSeason === "zima" ? "cookie" : selectedSeason === "jesien" ? "carrot" : "hedgehog",
+      isLeft: true,
+      matched: false,
+    },
+    {
+      id: "single-nut",
+      image: "/images/husselnut_autumn.svg",
             springImage: "/images/husselnut_spring.svg",
-            autumnImage: "/images/beetroot_autumn.svg",
-            winterImage: "/images/ball_winter.svg",
-            pairId: selectedSeason === "zima" ? "ball" : selectedSeason === "jesien" ? "beetroot" : "nut",
-            isLeft: true,
-            matched: false,
-          },
+      autumnImage: "/images/beetroot_autumn.svg",
+      winterImage: "/images/ball_winter.svg",
+      pairId: selectedSeason === "zima" ? "ball" : selectedSeason === "jesien" ? "beetroot" : "nut",
+      isLeft: true,
+      matched: false,
+    },
         ],
   ].flat())
 
@@ -216,7 +216,7 @@ export default function ConnectGame({ onMenuClick, onComplete }: ConnectGameProp
                 ? "onion"
                 : selectedSeason === "wiosna"
                   ? "leaf"
-                  : "leaf"
+                : "leaf"
             : item.id === "single-hedgehog"
               ? selectedSeason === "zima"
                 ? "cookie"
@@ -224,14 +224,14 @@ export default function ConnectGame({ onMenuClick, onComplete }: ConnectGameProp
                   ? "carrot"
                   : selectedSeason === "wiosna"
                     ? "hedgehog"
-                    : "hedgehog"
+                  : "hedgehog"
               : selectedSeason === "zima"
                 ? "ball"
                 : selectedSeason === "jesien"
                   ? "beetroot"
                   : selectedSeason === "wiosna"
                     ? "nut"
-                    : "nut",
+                  : "nut",
       })),
     )
 
@@ -384,7 +384,7 @@ export default function ConnectGame({ onMenuClick, onComplete }: ConnectGameProp
         // Trigger completion callback for medal sequence after 3 seconds
         if (onComplete) {
           setTimeout(() => {
-            onComplete()
+          onComplete()
           }, 3000) // 3 second delay
         }
       }

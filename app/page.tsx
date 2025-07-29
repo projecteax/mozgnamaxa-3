@@ -148,9 +148,7 @@ type GameType =
   | "sequential-order-2"
   | "teacher-panel"
   | "student-panel"
-  | "dragon-welcome-4"
   | "puzzle-assembly-2"
-  | "dragon-welcome-12"
 
 // Map game types to progress service game IDs
 const gameIdMap: Record<GameType, string> = {
@@ -268,6 +266,7 @@ export default function Home() {
     | "dragon-welcome-11"
     | "dragon-welcome-12"
     | "dragon-welcome-13"
+    | "teacher-panel"
     | "game"
   >("welcome")
 
@@ -637,8 +636,36 @@ export default function Home() {
     setCurrentView("welcome")
   }
 
-  const handleLoginSuccess = () => {
-    // Show season selection menu after successful login
+  const handleLoginSuccess = async () => {
+    // Check if the logged-in user is a teacher
+    if (user) {
+      try {
+        const { collection, query, where, getDocs } = await import("firebase/firestore")
+        const { db } = await import("@/lib/firebase")
+        
+        const teacherQuery = query(collection(db, "users"), where("uid", "==", user.uid))
+        const teacherSnapshot = await getDocs(teacherQuery)
+        
+        if (!teacherSnapshot.empty) {
+          const teacherData = teacherSnapshot.docs[0].data()
+          // If user has unique_code, they are a teacher
+          if (teacherData.unique_code) {
+            setCurrentView("teacher-panel")
+            setCurrentGame("teacher-panel")
+            return
+          }
+        }
+      } catch (error) {
+        console.error("Error checking user type:", error)
+      }
+    }
+    
+    // Default: Show season selection menu for students
+    setCurrentView("season-selection")
+  }
+
+  const handleStudentLoginSuccess = async () => {
+    // For student login, always go to season selection menu
     setCurrentView("season-selection")
   }
 
@@ -806,7 +833,6 @@ export default function Home() {
         onTeacherLogin={handleTeacherLogin}
         onTeacherRegister={handleTeacherRegister}
         onPlayWithoutLogin={handlePlayWithoutLogin}
-        onBack={handleBackToWelcome}
       />
     )
   }
@@ -849,7 +875,7 @@ export default function Home() {
         <StudentLoginForm
           onRegisterClick={handleStudentRegister}
           onForgotPasswordClick={handleForgotPassword}
-          onSuccess={handleLoginSuccess}
+          onSuccess={handleStudentLoginSuccess}
         />
       </main>
     )
@@ -864,7 +890,7 @@ export default function Home() {
         >
           ← Powrót do menu
         </button>
-        <StudentRegisterForm onLoginClick={handleStudentLogin} onSuccess={handleLoginSuccess} />
+        <StudentRegisterForm onLoginClick={handleStudentLogin} onSuccess={handleStudentLoginSuccess} />
       </main>
     )
   }
@@ -905,6 +931,10 @@ export default function Home() {
         <RegisterForm onLoginClick={handleTeacherLogin} onSuccess={handleLoginSuccess} />
       </main>
     )
+  }
+
+  if (currentView === "teacher-panel") {
+    return <TeacherPanel onMenuClick={toggleMenu} />
   }
 
   if (currentView === "forgot-password") {

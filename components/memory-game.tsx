@@ -141,21 +141,21 @@ export default function MemoryGame({ onMenuClick, onComplete }: MemoryGameProps)
         setCards((prevCards) => {
           const updatedCards = prevCards.map((card) => 
             card.id === firstId || card.id === secondId ? { ...card, isMatched: true } : card
-          )
-          
-          // Check if all cards are matched
+        )
+
+        // Check if all cards are matched
           if (updatedCards.every((card) => card.isMatched)) {
-            setIsCompleted(true)
+          setIsCompleted(true)
             setSuccessMessage(getRandomSuccessMessage())
-            // Record completion for user stats
-            recordCompletion("memory-game")
+          // Record completion for user stats
+          recordCompletion("memory-game")
             // Record completion for medal flow after 3 seconds
-            if (onComplete) {
+          if (onComplete) {
               setTimeout(() => {
-                onComplete()
+            onComplete()
               }, 3000) // 3 second delay
-            }
           }
+        }
           
           return updatedCards
         })

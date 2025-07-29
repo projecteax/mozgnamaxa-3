@@ -235,7 +235,7 @@ export default function ButterflyPairsGame({ onMenuClick, onComplete }: Butterfl
         // Trigger the completion flow after 3 seconds to show success message
         if (onComplete) {
           setTimeout(() => {
-            onComplete()
+          onComplete()
           }, 3000) // 3 second delay
         }
       }

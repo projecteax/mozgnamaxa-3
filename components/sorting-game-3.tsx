@@ -255,7 +255,7 @@ export default function SortingGame3({ onMenuClick }: SortingGame3Props) {
             <div className="bg-green-100 border-2 border-green-500 rounded-lg p-6 text-center max-w-md mx-auto">
               <div className="text-green-700 text-xl font-medium">🎉 {successMessage} 🎉</div>
             </div>
-          </div>
+        </div>
         )}
 
         {/* Reset button - only visible when game is completed */}

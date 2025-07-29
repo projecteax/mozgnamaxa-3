@@ -1,0 +1,267 @@
+"use client"
+
+import { useState } from "react"
+import Image from "next/image"
+import { useGameCompletion } from "@/hooks/use-game-completion"
+import { getRandomSuccessMessage } from "@/lib/success-messages"
+import { useSeason } from "@/contexts/season-context"
+
+interface FindMissingGameProps {
+  onMenuClick: () => void
+}
+
+interface OptionItem {
+  id: string
+  name: string
+  image: string
+  isCorrect: boolean
+}
+
+export default function FindMissingGame({ onMenuClick }: FindMissingGameProps) {
+  // Use the season context
+  const { selectedSeason, getThemeColors } = useSeason()
+  const theme = getThemeColors()
+
+  // Use the game completion hook
+  const { recordCompletion, isLoggedIn } = useGameCompletion()
+
+  // Define the options based on season
+  const getOptions = (): OptionItem[] => {
+    if (selectedSeason === "zima") {
+      return [
+        { id: "slaigh", name: "Slaigh", image: "/images/slaigh_winter.svg", isCorrect: false },
+        { id: "snawball", name: "Snowball", image: "/images/snawball_winter.svg", isCorrect: false },
+        { id: "snowflake", name: "Snowflake", image: "/images/snowflake_winter.svg", isCorrect: false },
+        { id: "pinguin", name: "Pinguin", image: "/images/pinguin_winter.svg", isCorrect: true }, // This is the correct answer
+        { id: "fox", name: "Fox", image: "/images/fox_winter.svg", isCorrect: false },
+      ]
+    } else if (selectedSeason === "jesien") {
+      return [
+        { id: "mushroom", name: "Red Mushroom", image: "/images/mushroom_red_autumn.svg", isCorrect: false },
+        { id: "fox", name: "Fox", image: "/images/fox_autumn.svg", isCorrect: false },
+        { id: "apple", name: "Apple", image: "/images/apple_autumn.svg", isCorrect: false },
+        { id: "chestnut_leaf", name: "Chestnut Leaf", image: "/images/chestnut_leaf_autumn.svg", isCorrect: true }, // This is the correct answer
+        { id: "yellow_leaf", name: "Yellow Leaf", image: "/images/yellow_leaf_autumn.svg", isCorrect: false },
+      ]
+    } else if (selectedSeason === "lato") {
+      return [
+        { id: "shell", name: "Shell", image: "/images/shell_02_summer.svg", isCorrect: false },
+        { id: "duck", name: "Duck", image: "/images/duck_02_summer.svg", isCorrect: false },
+        { id: "tomato", name: "Tomato", image: "/images/tomato_summer.svg", isCorrect: false },
+        { id: "ball", name: "Pink Ball", image: "/images/pink_ball_summer.svg", isCorrect: true }, // This is the correct answer
+        { id: "wheel", name: "Rescue Wheel", image: "/images/rescue_wheel_summer.svg", isCorrect: false },
+      ]
+    } else {
+      return [
+        { id: "flower", name: "Orange Flower", image: "/images/flower_orange.svg", isCorrect: false },
+        { id: "frog", name: "Frog", image: "/images/frog2.svg", isCorrect: false },
+        { id: "stork", name: "Stork", image: "/images/stork.svg", isCorrect: false },
+        { id: "snail", name: "Snail", image: "/images/snail.svg", isCorrect: true }, // This is the correct answer
+        { id: "bee", name: "Bee", image: "/images/bee_top_view.svg", isCorrect: false },
+      ]
+    }
+  }
+
+  const options = getOptions()
+
+  // State for tracking the selected option
+  const [selectedOption, setSelectedOption] = useState<string | null>(null)
+
+  // State for feedback message
+  const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null)
+
+  // State for tracking if the game is completed
+  const [isCompleted, setIsCompleted] = useState(false)
+
+  // Success message state
+  const [successMessage, setSuccessMessage] = useState<string>("")
+
+  // Handle option click
+  const handleOptionClick = (id: string, isCorrect: boolean) => {
+    // If game is already completed, do nothing
+    if (isCompleted) return
+
+    setSelectedOption(id)
+
+    if (isCorrect) {
+      setFeedbackMessage("Brawo! Znalazłeś brakujący element!")
+      setSuccessMessage(getRandomSuccessMessage())
+      setIsCompleted(true)
+
+      // Record completion in database
+      if (isLoggedIn) {
+        recordCompletion("find-missing")
+      }
+    } else {
+      setFeedbackMessage("Przykro mi ale ten obiekt znajduje się na obrazku")
+    }
+  }
+
+  // Reset the game
+  const resetGame = () => {
+    setSelectedOption(null)
+    setFeedbackMessage(null)
+    setIsCompleted(false)
+    setSuccessMessage("")
+  }
+
+  // Get main image based on season
+  const getMainImage = () => {
+    if (selectedSeason === "zima") {
+      return "/images/find_missing_image.svg"
+    } else if (selectedSeason === "jesien") {
+      return "/images/find_whats_missing_autumn.svg"
+    } else if (selectedSeason === "lato") {
+      return "/images/missing_summer.svg"
+    } else {
+      return "/images/find_whats_missing.svg"
+    }
+  }
+
+  // Get title box based on season
+  const getTitleBox = () => {
+    if (selectedSeason === "zima") {
+      return "/images/title_box_small_winter.svg"
+    } else if (selectedSeason === "jesien") {
+      return "/images/title_box_small_autumn.svg"
+    } else if (selectedSeason === "lato") {
+      return "/images/title_box_small_summer.svg"
+    } else {
+      return "/images/green_large_box.svg"
+    }
+  }
+
+  return (
+    <div className="w-full max-w-6xl mx-auto px-4" style={{ backgroundColor: theme.background }}>
+      {/* Header with title */}
+      <div className="w-full flex justify-between items-center mb-8">
+        <div className="relative w-16 h-16">
+          <Image
+            src={theme.soundIcon || "/placeholder.svg"}
+            alt="Sound"
+            fill
+            className="object-contain cursor-pointer"
+          />
+        </div>
+
+        <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
+          <Image src={getTitleBox() || "/placeholder.svg"} alt="Title box" fill className="object-contain" />
+          <span className="relative z-10 text-white text-lg md:text-xl font-sour-gummy font-thin text-center">
+            ZAZNACZ TO, CZEGO BRAKUJE NA OBRAZKU.
+          </span>
+        </div>
+
+        <div className="relative w-16 h-16" onClick={onMenuClick}>
+          <Image src={theme.menuIcon || "/placeholder.svg"} alt="Menu" fill className="object-contain cursor-pointer" />
+        </div>
+      </div>
+
+      {/* Game area - following Figma design */}
+      <div className="w-full flex gap-8 justify-center items-start">
+        {/* Main image - div size matches picture size */}
+        <div className="flex-shrink-0">
+          <div className="relative w-[900px] h-[450px]">
+            <Image
+              src={getMainImage() || "/placeholder.svg"}
+              alt="Find what's missing"
+              fill
+              className="object-contain"
+            />
+          </div>
+        </div>
+
+        {/* Options layout - takes up 1/4 of the space */}
+        <div className="flex-shrink-0 w-[200px] h-[450px] flex flex-col justify-between">
+          {/* First row: First two options */}
+          <div className="flex gap-4 justify-center">
+            <div
+              className={`relative h-20 w-20 cursor-pointer transition-all duration-300 hover:scale-105 ${
+                selectedOption === options[0].id ? (options[0].isCorrect ? "scale-105 drop-shadow-lg" : "") : ""
+              }`}
+              onClick={() => handleOptionClick(options[0].id, options[0].isCorrect)}
+            >
+              <Image
+                src={options[0].image || "/placeholder.svg"}
+                alt={options[0].name}
+                fill
+                className="object-contain"
+              />
+            </div>
+
+            <div
+              className={`relative h-20 w-20 cursor-pointer transition-all duration-300 hover:scale-105 ${
+                selectedOption === options[1].id ? (options[1].isCorrect ? "scale-105 drop-shadow-lg" : "") : ""
+              }`}
+              onClick={() => handleOptionClick(options[1].id, options[1].isCorrect)}
+            >
+              <Image
+                src={options[1].image || "/placeholder.svg"}
+                alt={options[1].name}
+                fill
+                className="object-contain"
+              />
+            </div>
+          </div>
+
+          {/* Second row: Third option (130% larger, centered) */}
+          <div className="flex justify-center">
+            <div
+              className={`relative h-30 w-30 cursor-pointer transition-all duration-300 hover:scale-105 ${
+                selectedOption === options[2].id ? (options[2].isCorrect ? "scale-105 drop-shadow-lg" : "") : ""
+              }`}
+              style={{ height: "120px", width: "120px" }}
+              onClick={() => handleOptionClick(options[2].id, options[2].isCorrect)}
+            >
+              <Image
+                src={options[2].image || "/placeholder.svg"}
+                alt={options[2].name}
+                fill
+                className="object-contain"
+              />
+            </div>
+          </div>
+
+          {/* Third row: Last two options */}
+          <div className="flex gap-4 justify-center">
+            <div
+              className={`relative h-20 w-20 cursor-pointer transition-all duration-300 hover:scale-105 ${
+                selectedOption === options[3].id ? (options[3].isCorrect ? "scale-105 drop-shadow-lg" : "") : ""
+              }`}
+              onClick={() => handleOptionClick(options[3].id, options[3].isCorrect)}
+            >
+              <Image
+                src={options[3].image || "/placeholder.svg"}
+                alt={options[3].name}
+                fill
+                className="object-contain"
+              />
+            </div>
+
+            <div
+              className={`relative h-20 w-20 cursor-pointer transition-all duration-300 hover:scale-105 ${
+                selectedOption === options[4].id ? (options[4].isCorrect ? "scale-105 drop-shadow-lg" : "") : ""
+              }`}
+              onClick={() => handleOptionClick(options[4].id, options[4].isCorrect)}
+            >
+              <Image
+                src={options[4].image || "/placeholder.svg"}
+                alt={options[4].name}
+                fill
+                className="object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Success message and button - only visible when the game is complete */}
+      {isCompleted && (
+        <div className="flex flex-col items-center mt-8">
+          <div className="mb-4 p-4 bg-green-100 border-2 border-green-400 rounded-lg text-center">
+            <div className="text-2xl font-bold text-green-800 mb-2">🎉 {successMessage} 🎉</div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

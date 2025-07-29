@@ -1,0 +1,18 @@
+<svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="drop-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+      <feOffset dx="2" dy="2" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+  </defs>
+  <g transform="translate(10, 10)">
+    <path d="M13.1648 6.96204C25.1658 0.316396 55.7453 0 55.7453 0C79.5013 0 83.8231 8.23377 89.7479 29.2859C92.7897 40.094 89.678 55.6403 86.9002 66.954C84.1223 78.2677 74.9706 86.4819 72.2672 88.2466C66.7116 91.8732 37.3763 91.9622 25.5207 88.2466C13.6651 84.5311 2.84462 79.7977 0.68416 55.6206C-1.4763 31.4434 1.16383 13.6077 13.1648 6.96204Z" fill="white" stroke="#539e1b" stroke-width="3" filter="url(#drop-shadow)"/>
+  </g>
+</svg>

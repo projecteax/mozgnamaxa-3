@@ -1,0 +1,90 @@
+@font-face {
+  font-family: "SourGummy";
+  src: url("/fonts/SourGummy-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 90 100% 95%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 100 60% 35%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 100 60% 35%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Ensure Dongle font is applied to all text elements */
+  body,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  div,
+  a,
+  button,
+  input,
+  textarea,
+  select,
+  option,
+  label,
+  li,
+  td,
+  th {
+    font-family: inherit !important;
+  }
+
+  /* Override any specific font declarations */
+  .font-sans,
+  .font-serif,
+  .font-mono {
+    font-family: inherit !important;
+  }
+}
+
+@layer utilities {
+  .font-sour-gummy {
+    font-family: "SourGummy", "Comic Sans MS", cursive !important;
+    font-weight: 300 !important;
+  }
+}
+
+/* Specific class for dragon speech bubble text */
+.dragon-speech-text {
+  font-family: "SourGummy", "Comic Sans MS", cursive !important;
+  font-weight: 400 !important;
+}

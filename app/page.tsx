@@ -1064,7 +1064,7 @@ export default function Home() {
         <button
           onClick={goToPreviousGame}
           disabled={isFirstGame}
-          className={`px-6 py-3 rounded-full font-bold text-lg ${
+          className={`px-6 py-3 rounded-full font-sour-gummy text-lg ${
             isFirstGame ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#539e1b] text-white hover:bg-[#468619]"
           }`}
         >
@@ -1073,7 +1073,7 @@ export default function Home() {
         <button
           onClick={goToNextGame}
           disabled={isLastGame}
-          className={`px-6 py-3 rounded-full font-bold text-lg ${
+          className={`px-6 py-3 rounded-full font-sour-gummy text-lg ${
             isLastGame ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#539e1b] text-white hover:bg-gray-600"
           }`}
         >

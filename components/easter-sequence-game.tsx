@@ -7,6 +7,7 @@ import Image from "next/image"
 import { useGameCompletion } from "@/hooks/use-game-completion"
 import { getRandomSuccessMessage } from "@/lib/success-messages"
 import { useSeason } from "@/contexts/season-context"
+import SuccessMessage from "./success-message"
 
 interface EasterSequenceGameProps {
   onMenuClick: () => void
@@ -262,11 +263,7 @@ export default function EasterSequenceGame({ onMenuClick, onComplete }: EasterSe
       </div>
 
       {/* Success message */}
-      {isCompleted && successMessage && (
-        <div className="mt-8 bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg text-center">
-          <div className="text-xl font-bold">🎉 {successMessage} 🎉</div>
-        </div>
-      )}
+      {isCompleted && successMessage && <SuccessMessage message={successMessage} />}
 
       {/* Reset button - only visible when sequence is completed */}
       {isCompleted && (

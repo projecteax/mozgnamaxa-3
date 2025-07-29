@@ -7,6 +7,7 @@ import Image from "next/image"
 import { useGameCompletion } from "@/hooks/use-game-completion"
 import { getRandomSuccessMessage } from "@/lib/success-messages"
 import { useSeason } from "@/contexts/season-context"
+import SuccessMessage from "./success-message"
 
 interface SpotDifferenceGameProps {
   onMenuClick: () => void
@@ -289,11 +290,7 @@ export default function SpotDifferenceGame({ onMenuClick }: SpotDifferenceGamePr
         </div>
 
         {/* Success message */}
-        {successMessage && (
-          <div className="mt-8 bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg text-center">
-            <div className="text-2xl font-bold mb-2">🎉 {successMessage} 🎉</div>
-          </div>
-        )}
+        {successMessage && <SuccessMessage message={successMessage} />}
 
         {/* Reset button - only visible when game is completed */}
         {isCompleted && (

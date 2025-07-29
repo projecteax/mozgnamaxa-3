@@ -7,6 +7,7 @@ import Image from "next/image"
 import { useGameCompletion } from "@/hooks/use-game-completion"
 import { getRandomSuccessMessage } from "@/lib/success-messages"
 import { useSeason } from "@/contexts/season-context"
+import SuccessMessage from "./success-message"
 
 interface SortingGame4Props {
   onMenuClick: () => void
@@ -238,13 +239,7 @@ export default function SortingGame4({ onMenuClick }: SortingGame4Props) {
         {errorMessage && <div className="mt-8 text-red-600 font-medium text-lg text-center">{errorMessage}</div>}
 
         {/* Success message */}
-        {isCompleted && successMessage && (
-          <div className="mt-8">
-            <div className="bg-green-100 border-2 border-green-500 rounded-lg p-6 text-center max-w-md mx-auto">
-              <div className="text-green-700 text-xl font-medium">🎉 {successMessage} 🎉</div>
-            </div>
-        </div>
-        )}
+        {isCompleted && successMessage && <SuccessMessage message={successMessage} />}
 
         {/* Login reminder for non-logged users */}
         {isCompleted && !isLoggedIn && (

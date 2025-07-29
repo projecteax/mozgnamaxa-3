@@ -7,6 +7,7 @@ import Image from "next/image"
 import { useGameCompletion } from "@/hooks/use-game-completion"
 import { getRandomSuccessMessage } from "@/lib/success-messages"
 import { useSeason } from "@/contexts/season-context"
+import SuccessMessage from "./success-message"
 
 interface SpotDifferenceGame5Props {
   onMenuClick: () => void

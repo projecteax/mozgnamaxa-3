@@ -7,6 +7,7 @@ import Image from "next/image"
 import { useGameCompletion } from "@/hooks/use-game-completion"
 import { getRandomSuccessMessage } from "@/lib/success-messages"
 import { useSeason } from "@/contexts/season-context"
+import SuccessMessage from "./success-message"
 
 interface SequenceGameProps {
   onMenuClick: () => void
@@ -323,14 +324,8 @@ export default function SequenceGame({ onMenuClick }: SequenceGameProps) {
           ))}
         </div>
 
-        {/* Success message - matching the style from matching-game */}
-        {showSuccess && (
-          <div className="flex flex-col items-center mt-8">
-            <div className="mb-4 p-4 bg-green-100 border-2 border-green-400 rounded-lg text-center">
-              <div className="text-2xl font-bold text-green-800 mb-2">🎉 {successMessage} 🎉</div>
-            </div>
-          </div>
-        )}
+        {/* Success message */}
+        {showSuccess && <SuccessMessage message={successMessage} />}
       </div>
 
       {/* Login reminder for non-logged in users */}

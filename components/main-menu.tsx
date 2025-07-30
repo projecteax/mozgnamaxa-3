@@ -24,7 +24,7 @@ export default function MainMenu({
           className="relative w-full h-[60px] flex items-center justify-center group hover:scale-105 transition-transform duration-200"
         >
           <Image src="/images/main_menu_box.svg" alt="Menu Button" width={323} height={51} className="w-full h-full" />
-          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-lg font-dongle tracking-wide">
+          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-[2.2rem] font-dongle tracking-wide">
             LOGOWANIE DLA UCZNIA
           </span>
         </button>
@@ -35,7 +35,7 @@ export default function MainMenu({
           className="relative w-full h-[60px] flex items-center justify-center group hover:scale-105 transition-transform duration-200"
         >
           <Image src="/images/main_menu_box.svg" alt="Menu Button" width={323} height={51} className="w-full h-full" />
-          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-lg font-dongle tracking-wide">
+          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-[2.2rem] font-dongle tracking-wide">
             UTWÓRZ KONTO
           </span>
         </button>
@@ -46,7 +46,7 @@ export default function MainMenu({
           className="relative w-full h-[60px] flex items-center justify-center group hover:scale-105 transition-transform duration-200"
         >
           <Image src="/images/main_menu_box.svg" alt="Menu Button" width={323} height={51} className="w-full h-full" />
-          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-lg font-dongle tracking-wide">
+          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-[2.2rem] font-dongle tracking-wide">
             ZAGRAJ BEZ LOGOWANIA
           </span>
         </button>
@@ -57,7 +57,7 @@ export default function MainMenu({
           className="relative w-full h-[60px] flex items-center justify-center group hover:scale-105 transition-transform duration-200"
         >
           <Image src="/images/main_menu_box.svg" alt="Menu Button" width={323} height={51} className="w-full h-full" />
-          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-lg font-dongle tracking-wide">
+          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-[2.2rem] font-dongle tracking-wide">
             LOGOWANIE DLA NAUCZYCIELA
           </span>
         </button>

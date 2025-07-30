@@ -7,6 +7,7 @@ import RegisterForm from "./register-form"
 import ForgotPasswordForm from "./forgot-password-form"
 import StudentProgressTable from "./student-progress-table"
 import UserAvatar from "./user-avatar"
+import TeacherUserButton from "./teacher-user-button"
 import { collection, query, where, getDocs } from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import { getTeacherStudents, type StudentProgress } from "@/lib/progress-service"
@@ -14,11 +15,12 @@ import Image from "next/image"
 
 interface TeacherPanelProps {
   onMenuClick: () => void
+  onGoToSeasonSelection: () => void
 }
 
 type AuthView = "login" | "register" | "forgot-password" | "dashboard" | "student-progress"
 
-export default function TeacherPanel({ onMenuClick }: TeacherPanelProps) {
+export default function TeacherPanel({ onMenuClick, onGoToSeasonSelection }: TeacherPanelProps) {
   const [view, setView] = useState<AuthView>("login")
   const [teacherData, setTeacherData] = useState<any>(null)
   const [students, setStudents] = useState<StudentProgress[]>([])
@@ -91,26 +93,31 @@ export default function TeacherPanel({ onMenuClick }: TeacherPanelProps) {
   }
 
   return (
-    <div className="w-full max-w-6xl min-h-screen bg-[#e3f7ff] p-4">
-      {/* Header with title - matching other games exactly */}
-      <div className="w-full flex justify-between items-center mb-8">
-        <div className="relative w-16 h-16">
-          <Image src="/images/sound.png" alt="Sound" fill className="object-contain cursor-pointer" />
-        </div>
+    <div className="min-h-screen bg-[#e3f7ff] flex justify-center items-center p-4">
+      <div className="w-full max-w-6xl min-h-screen rounded-lg p-4">
+        {/* Header with title */}
+        <div className="w-full flex justify-between items-center mb-8">
+          {/* Empty space for layout balance */}
+          <div className="w-16 h-16"></div>
 
-        <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
-          <Image src="/images/title_box_small.png" alt="Title box" fill className="object-contain" />
-          <span className="relative z-10 text-white text-2xl md:text-3xl font-bold font-dongle">PANEL NAUCZYCIELA</span>
-        </div>
+          {/* Title without background image */}
+          <div className="flex items-center justify-center">
+            <h1 className="text-2xl md:text-3xl font-bold font-sour-gummy" style={{ color: '#3E459C' }}>
+              PANEL NAUCZYCIELA
+            </h1>
+          </div>
 
-        <div className="flex items-center gap-4">
-          {/* Show avatar when logged in */}
-          {teacherData && <UserAvatar name={teacherData.name} size="md" />}
-          <div className="relative w-16 h-16" onClick={onMenuClick}>
-            <Image src="/images/menu.png" alt="Menu" fill className="object-contain cursor-pointer" />
+          {/* User initials button with dropdown */}
+          <div className="flex items-center">
+            {teacherData && (
+              <TeacherUserButton 
+                onLogout={handleLogout}
+                onGoToSeasonSelection={onGoToSeasonSelection}
+                teacherName={teacherData.name}
+              />
+            )}
           </div>
         </div>
-      </div>
 
       {/* Game area - matching other games layout */}
       <div className="flex justify-center items-center mt-16">
@@ -137,16 +144,10 @@ export default function TeacherPanel({ onMenuClick }: TeacherPanelProps) {
             />
           ) : (
             <div className="w-full max-w-4xl">
-              <div className="flex justify-between items-center mb-8">
-                <h2 className="text-4xl font-bold text-[#3e459c] font-dongle">
+              <div className="flex justify-center items-center mb-8">
+                <h2 className="text-4xl font-bold text-[#3e459c] font-sour-gummy text-center">
                   Witaj, {teacherData?.name || "Nauczycielu"}!
                 </h2>
-                <button
-                  onClick={handleLogout}
-                  className="px-6 py-3 bg-[#3e459c] hover:bg-[#2d3a8c] text-white rounded-full font-bold text-xl transition-colors font-dongle"
-                >
-                  Wyloguj się
-                </button>
               </div>
 
               <div className="bg-white p-8 rounded-2xl shadow-lg mb-8">
@@ -245,6 +246,7 @@ export default function TeacherPanel({ onMenuClick }: TeacherPanelProps) {
             </div>
           )}
         </div>
+      </div>
       </div>
     </div>
   )

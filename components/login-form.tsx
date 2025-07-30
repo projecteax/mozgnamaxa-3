@@ -46,64 +46,66 @@ export default function LoginForm({ onRegisterClick, onForgotPasswordClick, onSu
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-lg">
-      <h2 className="text-3xl font-bold text-center mb-8 text-[#539e1b] font-dongle">Logowanie</h2>
+    <div className="w-full max-w-md">
+      <div className="bg-white p-8 rounded-2xl shadow-lg border-2 border-[#3e459c]/20">
+        <h2 className="text-3xl font-bold mb-6 text-center text-[#3e459c] font-dongle">Logowanie dla nauczyciela</h2>
 
-      {error && (
-        <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg text-xl font-dongle">
-          {error}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 font-dongle">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="email" className="block text-[1.6rem] font-medium text-[#3e459c] mb-1 font-dongle">
+              Adres Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-3 py-2 border-2 border-[#3e459c]/30 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e459c] focus:border-[#3e459c] font-dongle text-[1.6rem]"
+              placeholder="Wprowadź adres email"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block text-[1.6rem] font-medium text-[#3e459c] mb-1 font-dongle">
+              Hasło
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full px-3 py-2 border-2 border-[#3e459c]/30 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e459c] focus:border-[#3e459c] font-dongle text-[1.6rem]"
+              placeholder="Wprowadź hasło"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full bg-[#3e459c] hover:bg-[#2d3470] text-white font-bold py-2 px-4 rounded-md transition-colors disabled:opacity-50 font-dongle text-[1.6rem]"
+          >
+            {isLoading ? "Logowanie..." : "Zaloguj się"}
+          </button>
+        </form>
+
+        <div className="mt-6 text-center space-y-2">
+          <button onClick={onForgotPasswordClick} className="text-[#3e459c] hover:underline font-dongle text-[1.6rem]">
+            Zapomniałeś hasła?
+          </button>
+          <div>
+            <button onClick={onRegisterClick} className="text-[#3e459c] hover:underline font-dongle text-[1.6rem]">
+              Nie masz konta? Zarejestruj się
+            </button>
+          </div>
         </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label htmlFor="email" className="block text-xl font-bold text-gray-700 mb-3 font-dongle">
-            Adres Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full px-4 py-4 border-2 border-[#e0ebd7] rounded-lg focus:border-[#539e1b] focus:outline-none text-xl font-dongle"
-            placeholder="Wprowadź adres email"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="password" className="block text-xl font-bold text-gray-700 mb-3">
-            Hasło
-          </label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full px-4 py-4 border-2 border-[#e0ebd7] rounded-lg focus:border-[#539e1b] focus:outline-none text-xl font-dongle"
-            placeholder="Wprowadź hasło"
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={isLoading}
-          className={`w-full py-4 rounded-lg font-bold text-2xl transition-colors font-dongle ${
-            isLoading ? "bg-gray-400 text-gray-600 cursor-not-allowed" : "bg-[#539e1b] text-white hover:bg-[#468619]"
-          }`}
-        >
-          {isLoading ? "Logowanie..." : "Zaloguj się"}
-        </button>
-      </form>
-
-      <div className="mt-8 flex flex-col items-center space-y-4">
-        <button onClick={onForgotPasswordClick} className="text-[#539e1b] hover:text-[#468619] text-xl font-dongle">
-          Zapomniałeś hasła?
-        </button>
-        <button onClick={onRegisterClick} className="text-[#539e1b] hover:text-[#468619] font-bold text-xl font-dongle">
-          Nie masz konta? Zarejestruj się
-        </button>
       </div>
     </div>
   )

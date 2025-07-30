@@ -71,6 +71,8 @@ import StudentLoginForm from "@/components/student-login-form"
 import ForgotPasswordForm from "@/components/forgot-password-form"
 import StudentRegisterForm from "@/components/student-register-form"
 import SeasonSelectionMenu from "@/components/season-selection-menu"
+import StudentProgressMenu from "@/components/student-progress-menu"
+import StudentGameMenu from "@/components/student-game-menu"
 import MedalDisplay from "@/components/medal-display"
 import MedalDisplay2 from "@/components/medal-display-2"
 import MedalDisplay3 from "@/components/medal-display-3"
@@ -340,6 +342,16 @@ export default function Home() {
 
   const selectGame = (game: GameType) => {
     setCurrentGame(game)
+    setShowMenu(false)
+  }
+
+  const handleGoHome = () => {
+    setCurrentView("season-selection")
+    setShowMenu(false)
+  }
+
+  const handleLogout = () => {
+    setCurrentView("main-menu")
     setShowMenu(false)
   }
 
@@ -677,6 +689,10 @@ export default function Home() {
     setCurrentView("student-register")
   }
 
+  const handleGoToSeasonSelection = () => {
+    setCurrentView("season-selection")
+  }
+
   // Handle first dragon welcome screen START button - goes to first game
   const handleDragonStart = () => {
     setCurrentView("game")
@@ -700,6 +716,14 @@ export default function Home() {
     setSelectedSeason(season as "wiosna" | "lato" | "jesien" | "zima")
     // For now, all seasons start the same game sequence
     setCurrentView("dragon-welcome")
+  }
+
+  // Handle game start from student progress menu
+  const handleGameStartFromProgress = (gameIndex: number) => {
+    if (gameIndex < gameOrder.length) {
+      setCurrentGame(gameOrder[gameIndex])
+      setCurrentView("game")
+    }
   }
 
   const isFirstGame = gameOrder.indexOf(currentGame) === 0
@@ -842,11 +866,19 @@ export default function Home() {
       <main className="min-h-screen bg-gradient-to-br from-[#e3f7ff] to-[#b8e6ff] flex flex-col items-center justify-center p-4">
         <button
           onClick={handleBackToMenu}
-          className="self-start mb-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 font-dongle"
+          className="self-start mb-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 font-sour-gummy"
         >
           ← Powrót do menu
         </button>
-        <SeasonSelectionMenu onSeasonSelect={handleSeasonSelect} onMenuClick={handleBackToMenu} />
+        {/* Show different components based on user login status */}
+        {user ? (
+          <StudentProgressMenu 
+            onGameStart={handleGameStartFromProgress} 
+            onMenuClick={handleBackToMenu} 
+          />
+        ) : (
+          <SeasonSelectionMenu onSeasonSelect={handleSeasonSelect} onMenuClick={handleBackToMenu} />
+        )}
       </main>
     )
   }
@@ -897,10 +929,7 @@ export default function Home() {
 
   if (currentView === "teacher-login") {
     return (
-      <main
-        className="min-h-screen flex flex-col items-center justify-center p-4"
-        style={{ backgroundColor: theme.backgroundColor }}
-      >
+      <main className="min-h-screen bg-gradient-to-br from-[#e3f7ff] to-[#b8e6ff] flex flex-col items-center justify-center p-4">
         <button
           onClick={handleBackToMenu}
           className="self-start mb-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 font-dongle"
@@ -918,10 +947,7 @@ export default function Home() {
 
   if (currentView === "teacher-register") {
     return (
-      <main
-        className="min-h-screen flex flex-col items-center justify-center p-4"
-        style={{ backgroundColor: theme.backgroundColor }}
-      >
+      <main className="min-h-screen bg-gradient-to-br from-[#e3f7ff] to-[#b8e6ff] flex flex-col items-center justify-center p-4">
         <button
           onClick={handleBackToMenu}
           className="self-start mb-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 font-dongle"
@@ -934,7 +960,7 @@ export default function Home() {
   }
 
   if (currentView === "teacher-panel") {
-    return <TeacherPanel onMenuClick={toggleMenu} />
+    return <TeacherPanel onMenuClick={toggleMenu} onGoToSeasonSelection={handleGoToSeasonSelection} />
   }
 
   if (currentView === "forgot-password") {
@@ -984,7 +1010,7 @@ export default function Home() {
       ) : currentGame === "student-panel" ? (
         <StudentPanel onMenuClick={toggleMenu} />
       ) : currentGame === "teacher-panel" ? (
-        <TeacherPanel onMenuClick={toggleMenu} />
+        <TeacherPanel onMenuClick={toggleMenu} onGoToSeasonSelection={handleGoToSeasonSelection} />
       ) : currentGame === "maze-4" ? (
         <MazeGame4 onMenuClick={toggleMenu} />
       ) : currentGame === "maze-3" ? (
@@ -1087,7 +1113,13 @@ export default function Home() {
       )}
 
       {/* Game selection menu */}
-      {showMenu && <GameMenu currentGame={currentGame} onSelectGame={selectGame} onClose={() => setShowMenu(false)} />}
+      {showMenu && (
+        <StudentGameMenu 
+          onGoHome={handleGoHome} 
+          onLogout={handleLogout} 
+          onClose={() => setShowMenu(false)} 
+        />
+      )}
     </main>
   )
 }

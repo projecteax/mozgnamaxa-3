@@ -54,7 +54,7 @@ export default function StudentLoginForm({ onRegisterClick, onForgotPasswordClic
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-[#3e459c] mb-1 font-dongle">
+            <label htmlFor="email" className="block text-[1.6rem] font-medium text-[#3e459c] mb-1 font-dongle">
               Email
             </label>
             <input
@@ -62,13 +62,13 @@ export default function StudentLoginForm({ onRegisterClick, onForgotPasswordClic
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border-2 border-[#3e459c]/30 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e459c] focus:border-[#3e459c] font-dongle"
+              className="w-full px-3 py-2 border-2 border-[#3e459c]/30 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e459c] focus:border-[#3e459c] font-dongle text-[1.6rem]"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="code" className="block text-sm font-medium text-[#3e459c] mb-1 font-dongle">
+            <label htmlFor="code" className="block text-[1.6rem] font-medium text-[#3e459c] mb-1 font-dongle">
               Kod nauczyciela (4 cyfry)
             </label>
             <input
@@ -79,7 +79,7 @@ export default function StudentLoginForm({ onRegisterClick, onForgotPasswordClic
               maxLength={4}
               pattern="[0-9]{4}"
               inputMode="numeric"
-              className="w-full px-3 py-2 border-2 border-[#3e459c]/30 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e459c] focus:border-[#3e459c] font-dongle"
+              className="w-full px-3 py-2 border-2 border-[#3e459c]/30 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e459c] focus:border-[#3e459c] font-dongle text-[1.6rem]"
               required
             />
           </div>
@@ -87,19 +87,19 @@ export default function StudentLoginForm({ onRegisterClick, onForgotPasswordClic
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-[#3e459c] hover:bg-[#2d3470] text-white font-bold py-2 px-4 rounded-md transition-colors disabled:opacity-50 font-dongle"
+            className="w-full bg-[#3e459c] hover:bg-[#2d3470] text-white font-bold py-2 px-4 rounded-md transition-colors disabled:opacity-50 font-dongle text-[1.6rem]"
           >
             {isLoading ? "Logowanie..." : "Zaloguj się"}
           </button>
         </form>
 
         <div className="mt-6 text-center space-y-2">
-          <button onClick={onForgotPasswordClick} className="text-[#3e459c] hover:underline font-dongle">
+          <button onClick={onForgotPasswordClick} className="text-[#3e459c] hover:underline font-dongle text-[1.6rem]">
             Zapomniałeś hasła?
           </button>
           <div>
-            <span className="text-gray-600 font-dongle">Nie masz konta? </span>
-            <button onClick={onRegisterClick} className="text-[#3e459c] hover:underline font-bold font-dongle">
+            <span className="text-gray-600 font-dongle text-[1.6rem]">Nie masz konta? </span>
+            <button onClick={onRegisterClick} className="text-[#3e459c] hover:underline font-bold font-dongle text-[1.6rem]">
               Zarejestruj się
             </button>
           </div>

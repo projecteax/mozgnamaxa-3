@@ -274,14 +274,53 @@ export default function Home() {
 
   // Check for redirect on component mount
   useEffect(() => {
-    const redirectToGame = localStorage.getItem("redirectToGame")
-    if (redirectToGame) {
-      console.log(`Redirecting to game: ${redirectToGame}`)
-      localStorage.removeItem("redirectToGame") // Clean up
-      setCurrentGame(redirectToGame as GameType)
-      setCurrentView("game")
+    if (typeof window !== 'undefined') {
+      const redirectToGame = localStorage.getItem("redirectToGame")
+      if (redirectToGame) {
+        console.log(`Redirecting to game: ${redirectToGame}`)
+        localStorage.removeItem("redirectToGame") // Clean up
+        setCurrentGame(redirectToGame as GameType)
+        setCurrentView("game")
+      }
     }
   }, [])
+
+  // Handle user authentication redirection
+  useEffect(() => {
+    if (user) {
+      console.log("User authenticated, checking role...")
+      const checkUserRole = async () => {
+        try {
+          const { collection, query, where, getDocs } = await import("firebase/firestore")
+          const { db } = await import("@/lib/firebase")
+          
+          const teacherQuery = query(collection(db, "users"), where("uid", "==", user.uid))
+          const teacherSnapshot = await getDocs(teacherQuery)
+          
+          if (!teacherSnapshot.empty) {
+            const teacherData = teacherSnapshot.docs[0].data()
+            // If user has unique_code, they are a teacher
+            if (teacherData.unique_code) {
+              console.log("User is a teacher, redirecting to teacher panel")
+              setCurrentView("teacher-panel")
+              setCurrentGame("teacher-panel")
+              return
+            }
+          }
+          
+          // If no teacher data found or no unique_code, redirect to season selection
+          console.log("User is a student, redirecting to season selection")
+          setCurrentView("season-selection")
+        } catch (error) {
+          console.error("Error checking user type:", error)
+          // Default to season selection on error
+          setCurrentView("season-selection")
+        }
+      }
+      
+      checkUserRole()
+    }
+  }, [user])
 
   // Define the game order based on the menu
   const gameOrder: GameType[] = [
@@ -649,31 +688,8 @@ export default function Home() {
   }
 
   const handleLoginSuccess = async () => {
-    // Check if the logged-in user is a teacher
-    if (user) {
-      try {
-        const { collection, query, where, getDocs } = await import("firebase/firestore")
-        const { db } = await import("@/lib/firebase")
-        
-        const teacherQuery = query(collection(db, "users"), where("uid", "==", user.uid))
-        const teacherSnapshot = await getDocs(teacherQuery)
-        
-        if (!teacherSnapshot.empty) {
-          const teacherData = teacherSnapshot.docs[0].data()
-          // If user has unique_code, they are a teacher
-          if (teacherData.unique_code) {
-            setCurrentView("teacher-panel")
-            setCurrentGame("teacher-panel")
-            return
-          }
-        }
-      } catch (error) {
-        console.error("Error checking user type:", error)
-      }
-    }
-    
-    // Default: Show season selection menu for students
-    setCurrentView("season-selection")
+    // The actual redirection will be handled by useEffect when user state changes
+    console.log("Login successful, waiting for user state to update...")
   }
 
   const handleStudentLoginSuccess = async () => {

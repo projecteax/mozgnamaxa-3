@@ -25,9 +25,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={dongle.variable}>
+    <html lang="en" className={dongle.variable} suppressHydrationWarning>
       <body className={`${dongle.className} font-dongle`}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
           <AuthProvider>
             <SeasonProvider>{children}</SeasonProvider>
           </AuthProvider>

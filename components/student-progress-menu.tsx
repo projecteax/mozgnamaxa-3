@@ -116,10 +116,45 @@ export default function StudentProgressMenu({ onGameStart, onMenuClick }: Studen
   const gamesPerSeason = 36
   const medalsPerSeason = 12 // medal every 3 games
   const completedCount = completedGames.length
-  const nextGameIndex = completedCount
-  const currentSeason = Math.floor(completedCount / gamesPerSeason) // 0=spring, 1=summer, 2=autumn, 3=winter
   const medals = progress?.medals || Math.floor(completedCount / 3)
   const progressPercent = (completedCount / totalGames) * 100
+
+  // Determine next game and season
+  const getNextGameInfo = () => {
+    // Early return if progress is not available
+    if (!progress) {
+      return null
+    }
+    
+    // Check each season to find the next available game
+    for (let seasonIndex = 0; seasonIndex < 4; seasonIndex++) {
+      const seasonId = SEASONS[seasonIndex].id as keyof typeof progress.seasonProgress
+      const seasonCompletedGames = progress?.seasonProgress?.[seasonId]?.completedGames || []
+      
+      // If this season has uncompleted games, return the first one
+      if (seasonCompletedGames.length < gamesPerSeason) {
+        const nextGameIndex = seasonIndex * gamesPerSeason + seasonCompletedGames.length
+        
+        // Check if the game index is within bounds
+        if (nextGameIndex < GAMES_LIST.length) {
+          const nextGame = GAMES_LIST[nextGameIndex]
+          if (nextGame) {
+            return {
+              gameIndex: nextGameIndex,
+              seasonId: seasonId,
+              gameName: nextGame.name
+            }
+          }
+        }
+      }
+    }
+    
+    // If all games are completed, return null
+    return null
+  }
+
+  const nextGameInfo = getNextGameInfo()
+  const nextGameIndex = nextGameInfo?.gameIndex || 0
 
   // Helper function to get medal suffix based on season
   const getMedalSuffix = (seasonId: string) => {
@@ -154,8 +189,10 @@ export default function StudentProgressMenu({ onGameStart, onMenuClick }: Studen
   const handleGameSelectFromPopup = (gameId: string, gameIndex: number) => {
     if (!selectedSeasonPopup) return
     
+    // For now, we use the same 36 games for each season, so gameIndex is correct
+    // The season context is handled by setSelectedSeason
     setSelectedSeason(selectedSeasonPopup.season.id as any)
-    onGameStart(gameIndex)
+    onGameStart(gameIndex) // Use the gameIndex directly since it's 0-35 for each season
     setSelectedSeasonPopup(null)
   }
 
@@ -173,16 +210,34 @@ export default function StudentProgressMenu({ onGameStart, onMenuClick }: Studen
 
   // Find the next available game in the current season
   const getNextGameInSeason = (seasonIndex: number) => {
-    const seasonStartIndex = seasonIndex * gamesPerSeason
-    const seasonEndIndex = Math.min(seasonStartIndex + gamesPerSeason, GAMES_LIST.length)
+    // Early return if progress is not available
+    if (!progress) {
+      return undefined
+    }
+    
+    // Get season-specific completed games
+    const seasonId = SEASONS[seasonIndex].id as keyof typeof progress.seasonProgress
+    const seasonCompletedGames = progress?.seasonProgress?.[seasonId]?.completedGames || []
+    
+    // Hardcode: Always return the first game if season has no completed games
+    if (seasonCompletedGames.length === 0) {
+      const firstGame = GAMES_LIST[0] // Always the first game in GAMES_LIST for any season
+      console.log(`Returning first game for season ${seasonId}:`, firstGame)
+      return {
+        id: firstGame.id,
+        name: firstGame.name,
+        index: 0 // Always index 0 since we're using the same 36 games for each season
+      }
+    }
     
     // Find the first uncompleted game in this season
-    for (let i = seasonStartIndex; i < seasonEndIndex; i++) {
-      if (!completedGames.includes(GAMES_LIST[i].id)) {
+    for (let i = 0; i < GAMES_LIST.length; i++) {
+      const game = GAMES_LIST[i]
+      if (game && !seasonCompletedGames.includes(game.id)) {
         return {
-          id: GAMES_LIST[i].id,
-          name: GAMES_LIST[i].name,
-          index: i
+          id: game.id,
+          name: game.name,
+          index: i // This is the correct index (0-35) for the season
         }
       }
     }
@@ -192,9 +247,9 @@ export default function StudentProgressMenu({ onGameStart, onMenuClick }: Studen
   }
 
   const handleContinueGame = () => {
-    if (nextGameIndex < GAMES_LIST.length) {
-      // Set season based on current progress (Spring for now, since all 36 games are in Spring)
-      setSelectedSeason("wiosna" as any)
+    if (nextGameInfo && nextGameIndex < GAMES_LIST.length) {
+      // Set season based on the next game's season
+      setSelectedSeason(nextGameInfo.seasonId as any)
       onGameStart(nextGameIndex)
     }
   }
@@ -250,7 +305,7 @@ export default function StudentProgressMenu({ onGameStart, onMenuClick }: Studen
               </div>
             </div>
             <p className="text-sm font-sour-gummy mt-2" style={{ color: '#3E459C' }}>
-              Następna gra: {GAMES_LIST[nextGameIndex]?.name}
+              Następna gra: {nextGameInfo?.gameName || GAMES_LIST[nextGameIndex]?.name}
             </p>
           </div>
         )}
@@ -262,13 +317,14 @@ export default function StudentProgressMenu({ onGameStart, onMenuClick }: Studen
           const seasonStart = seasonIndex * gamesPerSeason
           const seasonEnd = (seasonIndex + 1) * gamesPerSeason
           const seasonGames = GAMES_LIST.slice(0, gamesPerSeason) // Each season has same 36 games
-          const seasonCompletedGames = seasonGames.filter(game => 
-            completedGames.includes(game.id)
-          ).length
+          // Use season-specific progress data
+          const seasonKey = season.id as keyof typeof progress.seasonProgress
+          const seasonData = progress?.seasonProgress?.[seasonKey]
+          const seasonCompletedGames = seasonData?.completedGames?.length || 0
           const seasonTotal = gamesPerSeason
           const seasonProgress = (seasonCompletedGames / seasonTotal) * 100
           const medalSuffix = getMedalSuffix(season.id)
-          const seasonMedals = Math.floor(seasonCompletedGames / 3) // medals earned in this season
+          const seasonMedals = seasonData?.medals || 0 // medals earned in this season
 
           return (
             <div
@@ -398,13 +454,13 @@ export default function StudentProgressMenu({ onGameStart, onMenuClick }: Studen
       )}
 
       {/* Season Game Selection Popup */}
-      {selectedSeasonPopup && (
+      {selectedSeasonPopup && progress && (
         <SeasonGamePopup
           isOpen={true}
           onClose={handleClosePopup}
           season={selectedSeasonPopup.season}
-          games={GAMES_LIST} // For now, all seasons have the same games
-          completedGames={completedGames}
+          games={GAMES_LIST} // All 36 games (same for each season)
+          completedGames={progress?.seasonProgress?.[selectedSeasonPopup.season.id as keyof typeof progress.seasonProgress]?.completedGames || []}
           gameCompletionCounts={gameCompletionCounts}
           onGameSelect={handleGameSelectFromPopup}
           onContinueGame={handleContinueFromPopup}

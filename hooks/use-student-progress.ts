@@ -10,6 +10,12 @@ interface StudentProgress {
   currentSeason: string
   totalGamesCompleted: number
   gameCompletionCounts: Record<string, number>
+  seasonProgress: {
+    wiosna: { completedGames: string[], medals: number }
+    lato: { completedGames: string[], medals: number }
+    jesien: { completedGames: string[], medals: number }
+    zima: { completedGames: string[], medals: number }
+  }
 }
 
 export function useStudentProgress() {
@@ -92,7 +98,7 @@ export function useStudentProgress() {
         "sorting-2": "sorting-game-2",
         "memory-5": "memory-game-5",
         "memory-3": "memory-game-3",
-        "puzzle-assembly-2": "puzzle-assembly-2",
+        "puzzle-assembly-2": "puzzle-assembly-game-2",
         "spot-difference-5": "spot-difference-game-5",
         "memory-7": "memory-game-7",
         "category-sorting-3": "category-sorting-game-3",
@@ -114,32 +120,85 @@ export function useStudentProgress() {
         "sequential-order-3": "sequential-order-game-3"
       }
 
-      // Check completion for each game in spring season first
+      // Track season-specific progress
+      const seasonProgress = {
+        wiosna: { completedGames: [] as string[], medals: 0 },
+        lato: { completedGames: [] as string[], medals: 0 },
+        jesien: { completedGames: [] as string[], medals: 0 },
+        zima: { completedGames: [] as string[], medals: 0 }
+      }
+
+      // Check completion for each game in each season
       gameOrder.forEach(gameId => {
         const standardizedId = gameIdMap[gameId] || gameId
+        
+        // Check spring season
         const springKey = `${standardizedId}-spring`
         if (gameResults[springKey] && gameResults[springKey].completed > 0) {
           completedGames.push(gameId)
           gameCompletionCounts[gameId] = gameResults[springKey].completed
+          seasonProgress.wiosna.completedGames.push(gameId)
           totalCompleted++
+        }
+        
+        // Check summer season
+        const summerKey = `${standardizedId}-summer`
+        if (gameResults[summerKey] && gameResults[summerKey].completed > 0) {
+          seasonProgress.lato.completedGames.push(gameId)
+        }
+        
+        // Check autumn season
+        const autumnKey = `${standardizedId}-autumn`
+        if (gameResults[autumnKey] && gameResults[autumnKey].completed > 0) {
+          seasonProgress.jesien.completedGames.push(gameId)
+        }
+        
+        // Check winter season
+        const winterKey = `${standardizedId}-winter`
+        if (gameResults[winterKey] && gameResults[winterKey].completed > 0) {
+          seasonProgress.zima.completedGames.push(gameId)
         }
       })
 
-      // Calculate unlocked seasons based on progress
+      // Calculate medals for each season
+      seasonProgress.wiosna.medals = Math.floor(seasonProgress.wiosna.completedGames.length / 3)
+      seasonProgress.lato.medals = Math.floor(seasonProgress.lato.completedGames.length / 3)
+      seasonProgress.jesien.medals = Math.floor(seasonProgress.jesien.completedGames.length / 3)
+      seasonProgress.zima.medals = Math.floor(seasonProgress.zima.completedGames.length / 3)
+
+      // Calculate unlocked seasons based on season completion
       const unlockedSeasons = ["wiosna"] // Spring always unlocked
       const gamesPerSeason = 36 // 36 games per season
       
-      if (completedGames.length >= gamesPerSeason) unlockedSeasons.push("lato")
-      if (completedGames.length >= gamesPerSeason * 2) unlockedSeasons.push("jesien")
-      if (completedGames.length >= gamesPerSeason * 3) unlockedSeasons.push("zima")
+      // Unlock summer if spring is completed
+      if (seasonProgress.wiosna.completedGames.length >= gamesPerSeason) {
+        unlockedSeasons.push("lato")
+      }
+      
+      // Unlock autumn if summer is completed
+      if (seasonProgress.lato.completedGames.length >= gamesPerSeason) {
+        unlockedSeasons.push("jesien")
+      }
+      
+      // Unlock winter if autumn is completed
+      if (seasonProgress.jesien.completedGames.length >= gamesPerSeason) {
+        unlockedSeasons.push("zima")
+      }
 
-      // Calculate medals (every 3 games)
-      const medals = Math.floor(completedGames.length / 3)
+      // Calculate total medals across all seasons
+      const medals = seasonProgress.wiosna.medals + seasonProgress.lato.medals + seasonProgress.jesien.medals + seasonProgress.zima.medals
 
-      // Determine current season
-      const currentSeasonIndex = Math.floor(completedGames.length / gamesPerSeason)
-      const seasons = ["wiosna", "lato", "jesien", "zima"]
-      const currentSeason = seasons[Math.min(currentSeasonIndex, 3)]
+      // Determine current season based on which season the user is actively playing
+      let currentSeason = "wiosna"
+      if (seasonProgress.wiosna.completedGames.length >= gamesPerSeason) {
+        currentSeason = "lato"
+      }
+      if (seasonProgress.lato.completedGames.length >= gamesPerSeason) {
+        currentSeason = "jesien"
+      }
+      if (seasonProgress.jesien.completedGames.length >= gamesPerSeason) {
+        currentSeason = "zima"
+      }
 
       setProgress({
         completedGames,
@@ -147,20 +206,27 @@ export function useStudentProgress() {
         medals,
         currentSeason,
         totalGamesCompleted: totalCompleted,
-        gameCompletionCounts
+        gameCompletionCounts,
+        seasonProgress
       })
 
     } catch (error) {
       console.error("Error fetching student progress:", error)
       // Fallback to empty progress
-      setProgress({
-        completedGames: [],
-        unlockedSeasons: ["wiosna"],
-        medals: 0,
-        currentSeason: "wiosna", 
-        totalGamesCompleted: 0,
-        gameCompletionCounts: {}
-      })
+              setProgress({
+          completedGames: [],
+          unlockedSeasons: ["wiosna"],
+          medals: 0,
+          currentSeason: "wiosna",
+          totalGamesCompleted: 0,
+          gameCompletionCounts: {},
+          seasonProgress: {
+            wiosna: { completedGames: [], medals: 0 },
+            lato: { completedGames: [], medals: 0 },
+            jesien: { completedGames: [], medals: 0 },
+            zima: { completedGames: [], medals: 0 }
+          }
+        })
     } finally {
       setLoading(false)
     }

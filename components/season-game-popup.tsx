@@ -143,6 +143,13 @@ export default function SeasonGamePopup({
             const isNextGame = nextGameAfterCompleted?.id === game.id
             const isClickable = isCompleted || isNextGame // Only completed games and next game are clickable
             
+            // Debug logging
+            if (gameIndex === 0) {
+              console.log(`Game ${game.id}: isCompleted=${isCompleted}, isNextGame=${isNextGame}, isClickable=${isClickable}`)
+              console.log('nextGameAfterCompleted:', nextGameAfterCompleted)
+              console.log('completedGames:', completedGames)
+            }
+            
             // Calculate className step by step to avoid long template literals
             const baseClasses = "relative p-4 rounded-2xl border-2 transition-all duration-200"
             const clickableClasses = isClickable 

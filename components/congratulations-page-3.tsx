@@ -1,13 +1,15 @@
 "use client"
 import Image from "next/image"
 import { useSeason } from "@/contexts/season-context"
+import SoundButtonEnhanced from "./sound-button-enhanced"
 
 interface CongratulationsPage3Props {
   onStartClick: () => void
 }
 
 export default function CongratulationsPage3({ onStartClick }: CongratulationsPage3Props) {
-  const { selectedSeason } = useSeason()
+  const { selectedSeason, getThemeColors } = useSeason()
+  const theme = getThemeColors()
 
   const getSeasonContent = () => {
     switch (selectedSeason) {
@@ -15,49 +17,59 @@ export default function CongratulationsPage3({ onStartClick }: CongratulationsPa
         return {
           text: (
             <>
-              <p className="mb-1">A to zabawne!</p>
-              <p className="mb-1">Przez jakie ryby można skakać?</p>
-              <p>Przez płotki!</p>
+              <p className="mb-1">A to ciekawe!</p>
+              <p className="mb-1">W lesie latem można spotkać więcej zwierząt,</p>
+              <p className="mb-1">które wychodzą z ukrycia, aby korzystać</p>
+              <p>z obfitości pożywienia.</p>
             </>
           ),
-          bgColor: "bg-[#FCFFD6]",
+          speechText: "A to ciekawe! W lesie latem można spotkać więcej zwierząt, które wychodzą z ukrycia, aby korzystać z obfitości pożywienia.",
+          dragon: "/images/dragon_03_summer.svg",
+          
           textColor: "text-[#FF8C00]",
         }
       case "jesien":
         return {
           text: (
             <>
-              <p className="mb-1">A to ciekawe!</p>
-              <p className="mb-1">Wysoka wilgotność i umiarkowane temperatury</p>
-              <p className="mb-1">sprzyjają wzrostowi grzybów,</p>
-              <p>dlatego jesienią jest ich najwięcej.</p>
+              <p className="mb-1">A to zabawne!</p>
+              <p className="mb-1">Co robi drzewo gdy się nudzi?</p>
+              <p>Liście się!</p>
             </>
           ),
-          bgColor: "bg-[#FFEBE3]",
+          speechText: "A to zabawne! Co robi drzewo gdy się nudzi? Liście się!",
+          dragon: "/images/dragon_03_autumn.svg",
+          
           textColor: "text-[#D2691E]",
         }
       case "zima":
         return {
           text: (
             <>
-              <p className="mb-1">A to zabawne!</p>
-              <p className="mb-1">Jaka część ciała najwięcej razy mówi „pa"?</p>
-              <p>Stopa.</p>
+              <p className="mb-1">A to ciekawe!</p>
+              <p className="mb-1">Śnieg jest biały, ponieważ odbija wszystkie</p>
+              <p className="mb-1">kolory światła, ale najczęściej widzimy</p>
+              <p>go w świetle słonecznym.</p>
             </>
           ),
-          bgColor: "bg-[#C3F7FD]",
+          speechText: "A to ciekawe! Śnieg jest biały, ponieważ odbija wszystkie kolory światła, ale najczęściej widzimy go w świetle słonecznym.",
+          dragon: "/images/dragon_03_winter.svg",
+          
           textColor: "text-[#4682B4]",
         }
       default: // wiosna
         return {
           text: (
             <>
-              <p className="mb-1">A to zabawne!</p>
-              <p className="mb-1">Jak nazywa się mrówka, która ma jad?</p>
-              <p>Mrówkojad!</p>
+              <p className="mb-1">A to ciekawe!</p>
+              <p className="mb-1">Wiosną ptaki śpiewają głośniej, aby</p>
+              <p className="mb-1">przyciągnąć partnerów i oznaczyć</p>
+              <p>swoje terytorium.</p>
             </>
           ),
-          bgColor: "bg-[#edffe5]",
+          speechText: "A to ciekawe! Wiosną ptaki śpiewają głośniej, aby przyciągnąć partnerów i oznaczyć swoje terytorium.",
+          dragon: "/images/dragon_03.svg",
+          
           textColor: "text-[#539e1b]",
         }
     }
@@ -66,15 +78,18 @@ export default function CongratulationsPage3({ onStartClick }: CongratulationsPa
   const seasonContent = getSeasonContent()
 
   return (
-    <div className={`w-full h-screen ${seasonContent.bgColor} flex items-center justify-center px-12 overflow-hidden`}>
+    <div
+      className="w-full h-screen flex items-center justify-center px-12 overflow-hidden"
+      style={{ backgroundColor: theme.backgroundColor }}
+    >
       <div className="flex items-center justify-between w-full max-w-6xl gap-16">
-        {/* Speech bubble with ant joke text - 150% larger with shadow */}
+        {/* Speech bubble with seasonal text - 150% larger with shadow */}
         <div className="relative w-[692px] h-[317px] flex-shrink-0 drop-shadow-lg">
           <Image src="/images/cloud_text.svg" alt="Speech bubble" fill className="object-contain" />
 
-          {/* Text overlay - left aligned, 120% larger text */}
-          <div className="absolute inset-0 flex flex-col justify-center pl-20 pr-16">
-            <div className={`font-bold text-3xl leading-tight text-left dragon-speech-text ${seasonContent.textColor}`}>
+          {/* Seasonal text overlay - left aligned, 120% larger text */}
+          <div className="absolute inset-0 flex flex-col justify-center pl-16 pr-12">
+            <div className={`font-bold text-2xl leading-tight text-left dragon-speech-text ${seasonContent.textColor}`}>
               {seasonContent.text}
             </div>
           </div>
@@ -85,15 +100,7 @@ export default function CongratulationsPage3({ onStartClick }: CongratulationsPa
           {/* Dragon character with shadow */}
           <div className="relative w-[420px] h-[420px] drop-shadow-lg">
             <Image
-              src={
-                selectedSeason === "lato"
-                  ? "/images/dragon_03_summer.svg"
-                  : selectedSeason === "jesien"
-                    ? "/images/dragon_03_autumn.svg"
-                    : selectedSeason === "zima"
-                      ? "/images/dragon_03_winter.svg"
-                      : "/images/dragon_03.svg"
-              }
+              src={seasonContent.dragon || "/placeholder.svg"}
               alt="Funny dragon"
               fill
               className="object-contain"
@@ -102,16 +109,12 @@ export default function CongratulationsPage3({ onStartClick }: CongratulationsPa
 
           {/* Buttons positioned under the dragon */}
           <div className="flex items-center gap-8">
-            {/* Sound button without white circle, with shadow */}
-            <div className="w-16 h-16 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform drop-shadow-lg">
-              <Image
-                src="/images/sound_icon_dragon_page.svg"
-                alt="Sound"
-                width={40}
-                height={40}
-                className="object-contain"
-              />
-            </div>
+            {/* Sound button with speech functionality */}
+            <SoundButtonEnhanced 
+              text={seasonContent.speechText}
+              soundIcon={theme.soundIcon}
+              size="md"
+            />
 
             {/* START button with shadow */}
             <div
@@ -120,7 +123,7 @@ export default function CongratulationsPage3({ onStartClick }: CongratulationsPa
             >
               <Image src="/images/start_button.svg" alt="Start button background" fill className="object-contain" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-[#539e1b] font-bold text-2xl">START</span>
+                <span className="font-bold text-2xl" style={{ color: theme.buttonColor }}>START</span>
               </div>
             </div>
           </div>

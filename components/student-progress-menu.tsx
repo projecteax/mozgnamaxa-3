@@ -199,8 +199,13 @@ export default function StudentProgressMenu({ onGameStart, onMenuClick }: Studen
   const handleContinueFromPopup = () => {
     if (!selectedSeasonPopup) return
     
-    setSelectedSeason(selectedSeasonPopup.season.id as any)
-    handleContinueGame()
+    const nextGameInSeason = getNextGameInSeason(selectedSeasonPopup.seasonIndex)
+    if (nextGameInSeason) {
+      setSelectedSeason(selectedSeasonPopup.season.id as any)
+      // Calculate the global game index for this game
+      const globalGameIndex = selectedSeasonPopup.seasonIndex * gamesPerSeason + nextGameInSeason.index
+      onGameStart(globalGameIndex)
+    }
     setSelectedSeasonPopup(null)
   }
 
@@ -247,10 +252,11 @@ export default function StudentProgressMenu({ onGameStart, onMenuClick }: Studen
   }
 
   const handleContinueGame = () => {
-    if (nextGameInfo && nextGameIndex < GAMES_LIST.length) {
+    if (nextGameInfo && nextGameInfo.gameIndex < GAMES_LIST.length) {
       // Set season based on the next game's season
       setSelectedSeason(nextGameInfo.seasonId as any)
-      onGameStart(nextGameIndex)
+      // Pass the global game index to onGameStart
+      onGameStart(nextGameInfo.gameIndex)
     }
   }
 

@@ -4,15 +4,23 @@ import type React from "react"
 
 import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
-import { useGameCompletion } from "@/hooks/use-game-completion"
+import { useGameCompletionWithHistory } from "@/hooks/use-game-completion"
 import { getRandomSuccessMessage } from "@/lib/success-messages"
 import { useSeason } from "@/contexts/season-context"
+import SoundButtonEnhanced from "./sound-button-enhanced"
+import SuccessMessage from "./success-message"
 
 interface MazeGameProps {
   onMenuClick: () => void
+  onBack?: () => void
+  onNext?: () => void
+  onRetry?: () => void
+  userLoggedIn?: boolean
+  currentSeason?: string
+  isGameCompleted?: boolean
 }
 
-export default function MazeGame({ onMenuClick }: MazeGameProps) {
+export default function MazeGame({ onMenuClick, onBack, onNext, onRetry, userLoggedIn = false, currentSeason = "wiosna", isGameCompleted = false }: MazeGameProps) {
   // Season context
   const { selectedSeason, getThemeColors } = useSeason()
   const theme = getThemeColors()
@@ -38,7 +46,7 @@ export default function MazeGame({ onMenuClick }: MazeGameProps) {
   // Track mouse offset for dragging
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   // Game completion hook
-  const { recordCompletion, isLoggedIn } = useGameCompletion()
+  const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("maze-game")
 
   // Get images based on season
   const getCharacterImage = () => {
@@ -191,7 +199,7 @@ export default function MazeGame({ onMenuClick }: MazeGameProps) {
   const handleGameCompletion = async () => {
     try {
       // Record completion with the correct game ID
-      const success = await recordCompletion("maze-game")
+              const success = await recordCompletion()
 
       if (success) {
         setProgressSaved(true)
@@ -230,11 +238,11 @@ export default function MazeGame({ onMenuClick }: MazeGameProps) {
       {/* Header with title - matching exact structure from matching-game */}
       <div className="w-full flex justify-between items-center mb-2">
         <div className="relative w-16 h-16">
-          <Image
-            src={getSoundIcon() || "/placeholder.svg"}
-            alt="Sound"
-            fill
-            className="object-contain cursor-pointer"
+          <SoundButtonEnhanced
+            text={getTitleText()}
+            soundIcon={getSoundIcon() || "/images/sound_icon_dragon_page.svg"}
+            size="xl"
+            className="w-full h-full"
           />
         </div>
 
@@ -308,21 +316,82 @@ export default function MazeGame({ onMenuClick }: MazeGameProps) {
 
       {/* Success message - positioned closer to maze */}
       {isCompleted && successMessage && (
-        <div className="flex justify-center mt-4 mb-3">
-          <div className="bg-green-100 border-2 border-green-500 rounded-lg p-6 text-center max-w-md">
-            <div className="text-green-700 text-xl font-medium">🎉 {successMessage} 🎉</div>
-          </div>
-        </div>
+        <SuccessMessage message={successMessage} />
       )}
 
-      {/* Reset button - positioned closer to success message */}
-      {isCompleted && (
-        <div className="flex justify-center">
-          <button onClick={resetGame} className="bg-[#539e1b] text-white px-6 py-2 rounded-full font-bold">
-            Zagraj ponownie
-          </button>
+      {/* New Navigation Buttons */}
+      <div className="flex justify-center gap-4 mt-8 w-full">
+        {/* All buttons in same container with identical dimensions */}
+        <div className="flex gap-4 items-end">
+          {/* WRÓĆ Button - always available in maze-game */}
+          <div 
+            className="relative w-36 h-14 transition-all cursor-pointer hover:scale-105"
+            onClick={onBack}
+          >
+            <Image 
+              src={theme.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 
+              alt="Wróć button" 
+              fill 
+              className="object-contain" 
+            />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="flex items-center gap-2">
+                <div className="relative w-6 h-6">
+                  <Image 
+                    src="/images/strzalka_lewo.svg" 
+                    alt="Left arrow" 
+                    fill 
+                    className="object-contain" 
+                  />
+                </div>
+                <span className="font-sour-gummy font-bold text-lg text-white">WRÓĆ</span>
+              </div>
+            </div>
+          </div>
+
+          {/* JESZCZE RAZ Button - always visible, but only clickable when game is completed */}
+          <div 
+            className={`relative w-52 h-14 transition-all ${isCompleted ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed opacity-50'}`}
+            onClick={isCompleted ? resetGame : undefined}
+          >
+            <Image 
+              src={theme.jeszczeRazButton || "/images/jeszcze_raz_wiosna.svg"} 
+              alt="Jeszcze raz button" 
+              fill 
+              className="object-contain" 
+            />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="font-sour-gummy font-bold text-lg text-white">JESZCZE RAZ</span>
+            </div>
+          </div>
+
+          {/* DALEJ Button - only unlocked when game completed (for logged users) or always available (for non-logged users) */}
+          <div 
+            className={`relative w-36 h-14 transition-all ${(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-105'}`}
+            onClick={(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? undefined : onNext}
+          >
+            <Image 
+              src={theme.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 
+              alt="Dalej button" 
+              fill 
+              className="object-contain" 
+            />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="flex items-center gap-2">
+                <span className="font-sour-gummy font-bold text-lg text-white">DALEJ</span>
+                <div className="relative w-6 h-6">
+                  <Image 
+                    src="/images/strzalka_prawo.svg" 
+                    alt="Right arrow" 
+                    fill 
+                    className="object-contain" 
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   )
 }

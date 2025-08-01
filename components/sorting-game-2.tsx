@@ -4,13 +4,20 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import Image from "next/image"
-import { useGameCompletion } from "@/hooks/use-game-completion"
+import { useGameCompletionWithHistory } from "@/hooks/use-game-completion"
 import { getRandomSuccessMessage } from "@/lib/success-messages"
 import { useSeason } from "@/contexts/season-context"
 import SuccessMessage from "./success-message"
+import SoundButtonEnhanced from "./sound-button-enhanced"
 
 interface SortingGame2Props {
   onMenuClick: () => void
+  onBack?: () => void
+  onNext?: () => void
+  onRetry?: () => void
+  userLoggedIn?: boolean
+  currentSeason?: string
+  isGameCompleted?: boolean
 }
 
 interface RabbitItem {
@@ -20,13 +27,13 @@ interface RabbitItem {
   position: number | null
 }
 
-export default function SortingGame2({ onMenuClick }: SortingGame2Props) {
+export default function SortingGame2({ onMenuClick, onBack, onNext, onRetry, userLoggedIn = false, currentSeason = "wiosna", isGameCompleted = false }: SortingGame2Props) {
   // Season context
   const { selectedSeason, getThemeColors } = useSeason()
   const theme = getThemeColors()
 
   // Game completion hook
-  const { recordCompletion, isLoggedIn } = useGameCompletion()
+  const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("sorting-game-2")
 
   // Define the rabbit items with their sizes
   const [rabbitItems, setRabbitItems] = useState<RabbitItem[]>([
@@ -75,7 +82,7 @@ export default function SortingGame2({ onMenuClick }: SortingGame2Props) {
 
   // Handle game completion
   const handleGameCompletion = async () => {
-    const success = await recordCompletion("sorting-game-2")
+            const success = await recordCompletion()
     if (success) {
       setProgressSaved(true)
     }
@@ -177,11 +184,11 @@ export default function SortingGame2({ onMenuClick }: SortingGame2Props) {
       {/* Header with title */}
       <div className="w-full flex justify-between items-center mb-8">
         <div className="relative w-16 h-16">
-          <Image
-            src={theme.soundIcon || "/placeholder.svg"}
-            alt="Sound"
-            fill
-            className="object-contain cursor-pointer"
+          <SoundButtonEnhanced
+            text="UŁÓŻ DALEJ."
+            soundIcon={theme.soundIcon || "/images/sound_icon_dragon_page.svg"}
+            size="xl"
+            className="w-full h-full"
           />
         </div>
 
@@ -264,17 +271,78 @@ export default function SortingGame2({ onMenuClick }: SortingGame2Props) {
         {/* Success message */}
         {isCompleted && successMessage && <SuccessMessage message={successMessage} />}
 
-        {/* Reset button - only visible when game is completed */}
-        <div className="flex justify-center mt-8 relative z-20">
-          {isCompleted && (
-            <button
-              onClick={resetGame}
-              className="text-white px-8 py-3 rounded-full font-sour-gummy text-xl shadow-lg hover:opacity-90 transition-opacity"
-              style={{ backgroundColor: theme.buttonColor }}
+        {/* New Navigation Buttons */}
+        <div className="flex justify-center gap-4 mt-8 w-full">
+          {/* All buttons in same container with identical dimensions */}
+          <div className="flex gap-4 items-end">
+            {/* WRÓĆ Button - always available in sorting-game-2 */}
+            <div 
+              className="relative w-36 h-14 transition-all cursor-pointer hover:scale-105"
+              onClick={onBack}
             >
-              Wstecz
-            </button>
-          )}
+              <Image 
+                src={theme.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 
+                alt="Wróć button" 
+                fill 
+                className="object-contain" 
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="flex items-center gap-2">
+                  <div className="relative w-6 h-6">
+                    <Image 
+                      src="/images/strzalka_lewo.svg" 
+                      alt="Left arrow" 
+                      fill 
+                      className="object-contain" 
+                    />
+                  </div>
+                  <span className="font-sour-gummy font-bold text-lg text-white">WRÓĆ</span>
+                </div>
+              </div>
+            </div>
+
+            {/* JESZCZE RAZ Button - always visible, but only clickable when game is completed */}
+            <div 
+              className={`relative w-52 h-14 transition-all ${isCompleted ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed opacity-50'}`}
+              onClick={isCompleted ? resetGame : undefined}
+            >
+              <Image 
+                src={theme.jeszczeRazButton || "/images/jeszcze_raz_wiosna.svg"} 
+                alt="Jeszcze raz button" 
+                fill 
+                className="object-contain" 
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="font-sour-gummy font-bold text-lg text-white">JESZCZE RAZ</span>
+              </div>
+            </div>
+
+            {/* DALEJ Button - only unlocked when game completed (for logged users) or always available (for non-logged users) */}
+            <div 
+              className={`relative w-36 h-14 transition-all ${(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-105'}`}
+              onClick={(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? undefined : onNext}
+            >
+              <Image 
+                src={theme.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 
+                alt="Dalej button" 
+                fill 
+                className="object-contain" 
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="flex items-center gap-2">
+                  <span className="font-sour-gummy font-bold text-lg text-white">DALEJ</span>
+                  <div className="relative w-6 h-6">
+                    <Image 
+                      src="/images/strzalka_prawo.svg" 
+                      alt="Right arrow" 
+                      fill 
+                      className="object-contain" 
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

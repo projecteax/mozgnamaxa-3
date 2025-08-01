@@ -8,7 +8,8 @@ interface MedalDisplay8Props {
 }
 
 export default function MedalDisplay8({ onComplete }: MedalDisplay8Props) {
-  const { selectedSeason } = useSeason()
+  const { selectedSeason, getThemeColors } = useSeason()
+  const theme = getThemeColors()
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -18,35 +19,24 @@ export default function MedalDisplay8({ onComplete }: MedalDisplay8Props) {
     return () => clearTimeout(timer)
   }, [onComplete])
 
-  const getMedalAndBackground = () => {
+  const getMedalSrc = () => {
     switch (selectedSeason) {
       case "lato":
-        return {
-          medal: "/images/medal_08_summer.svg",
-          background: "bg-[#FFE082]",
-        }
+        return "/images/medal_08_summer.svg"
       case "jesien":
-        return {
-          medal: "/images/medal_08_autumn.svg",
-          background: "bg-[#FF8A65]",
-        }
+        return "/images/medal_08_autumn.svg"
       case "zima":
-        return {
-          medal: "/images/medal_08_winter.svg",
-          background: "bg-[#81D4FA]",
-        }
+        return "/images/medal_08_winter.svg"
       default: // wiosna
-        return {
-          medal: "/images/medal_08.svg",
-          background: "bg-[#C8E6C9]",
-        }
+        return "/images/medal_08.svg"
     }
   }
 
-  const { medal, background } = getMedalAndBackground()
-
   return (
-    <div className={`w-full h-screen ${background} flex items-center justify-center overflow-hidden relative`}>
+    <div 
+      className="w-full h-screen flex items-center justify-center overflow-hidden relative"
+      style={{ backgroundColor: theme.backgroundColor }}
+    >
       {/* Star background */}
       <div className="absolute inset-0 flex items-center justify-center z-0">
         <Image
@@ -62,7 +52,7 @@ export default function MedalDisplay8({ onComplete }: MedalDisplay8Props) {
       {/* Medal positioned on top of star */}
       <div className="relative z-10 flex items-center justify-center">
         <Image
-          src={medal || "/placeholder.svg"}
+          src={getMedalSrc() || "/placeholder.svg"}
           alt="Medal 08"
           width={200}
           height={200}

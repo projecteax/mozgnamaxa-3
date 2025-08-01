@@ -1,5 +1,6 @@
 "use client"
 import Image from "next/image"
+import SoundButtonEnhanced from "./sound-button-enhanced"
 import { useSeason } from "@/contexts/season-context"
 
 interface CongratulationsPage6Props {
@@ -7,7 +8,8 @@ interface CongratulationsPage6Props {
 }
 
 export default function CongratulationsPage6({ onStartClick }: CongratulationsPage6Props) {
-  const { selectedSeason } = useSeason()
+  const { selectedSeason, getThemeColors } = useSeason()
+  const theme = getThemeColors()
 
   const getSeasonContent = () => {
     switch (selectedSeason) {
@@ -21,7 +23,7 @@ export default function CongratulationsPage6({ onStartClick }: CongratulationsPa
               <p>przez 12 godzin dziennie!</p>
             </>
           ),
-          bgColor: "bg-[#FCFFD6]",
+          speechText: "A to ciekawe! Pszczoły latem są najbardziej pracowite – w upalne dni zbierają nektar nawet przez 12 godzin dziennie!",
           textColor: "text-[#FF8C00]",
         }
       case "jesien":
@@ -33,7 +35,7 @@ export default function CongratulationsPage6({ onStartClick }: CongratulationsPa
               <p>Lovelas.</p>
             </>
           ),
-          bgColor: "bg-[#FFEBE3]",
+          speechText: "A to zabawne! Jak nazywa się człowiek, który kocha drzewa? Lovelas.",
           textColor: "text-[#D2691E]",
         }
       case "zima":
@@ -41,12 +43,12 @@ export default function CongratulationsPage6({ onStartClick }: CongratulationsPa
           text: (
             <>
               <p className="mb-1">A to ciekawe!</p>
-              <p className="mb-1">Lód na jeziorach „śpiewa" – zamarzająca woda</p>
+              <p className="mb-1">Lód na jeziorach śpiewa – zamarzająca woda</p>
               <p className="mb-1">kurczy się i pęka, wydając tajemnicze,</p>
               <p>dźwięczne odgłosy.</p>
             </>
           ),
-          bgColor: "bg-[#C3F7FD]",
+          speechText: "A to ciekawe! Lód na jeziorach śpiewa – zamarzająca woda kurczy się i pęka, wydając tajemnicze, dźwięczne odgłosy.",
           textColor: "text-[#4682B4]",
         }
       default: // wiosna
@@ -59,7 +61,7 @@ export default function CongratulationsPage6({ onStartClick }: CongratulationsPa
               <p>temperatura wzrośnie wiosną.</p>
             </>
           ),
-          bgColor: "bg-[#edffe5]",
+          speechText: "A to ciekawe! Żaby i węże, zapadają w zimowy sen (hibernację) i budzą się gdy temperatura wzrośnie wiosną.",
           textColor: "text-[#539e1b]",
         }
     }
@@ -68,7 +70,8 @@ export default function CongratulationsPage6({ onStartClick }: CongratulationsPa
   const seasonContent = getSeasonContent()
 
   return (
-    <div className={`w-full h-screen ${seasonContent.bgColor} flex items-center justify-center px-12 overflow-hidden`}>
+    <div className="w-full h-screen flex items-center justify-center px-12 overflow-hidden"
+      style={{ backgroundColor: theme.backgroundColor }}>
       <div className="flex items-center justify-between w-full max-w-6xl gap-16">
         {/* Speech bubble with hibernation text - 150% larger with shadow */}
         <div className="relative w-[692px] h-[317px] flex-shrink-0 drop-shadow-lg">
@@ -104,16 +107,12 @@ export default function CongratulationsPage6({ onStartClick }: CongratulationsPa
 
           {/* Buttons positioned under the dragon */}
           <div className="flex items-center gap-8">
-            {/* Sound button without white circle, with shadow */}
-            <div className="w-16 h-16 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform drop-shadow-lg">
-              <Image
-                src="/images/sound_icon_dragon_page.svg"
-                alt="Sound"
-                width={40}
-                height={40}
-                className="object-contain"
-              />
-            </div>
+            {/* Sound button with speech functionality */}
+            <SoundButtonEnhanced 
+              text={seasonContent.speechText}
+              soundIcon={theme.soundIcon}
+              size="md"
+            />
 
             {/* START button with shadow */}
             <div
@@ -122,7 +121,7 @@ export default function CongratulationsPage6({ onStartClick }: CongratulationsPa
             >
               <Image src="/images/start_button.svg" alt="Start button background" fill className="object-contain" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-[#539e1b] font-bold text-2xl">START</span>
+                <span className="font-bold text-2xl" style={{ color: theme.buttonColor }}>START</span>
               </div>
             </div>
           </div>

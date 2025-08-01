@@ -1,13 +1,15 @@
 "use client"
 import Image from "next/image"
 import { useSeason } from "@/contexts/season-context"
+import SoundButtonEnhanced from "./sound-button-enhanced"
 
 interface CongratulationsPage2Props {
   onStartClick: () => void
 }
 
 export default function CongratulationsPage2({ onStartClick }: CongratulationsPage2Props) {
-  const { selectedSeason } = useSeason()
+  const { selectedSeason, getThemeColors } = useSeason()
+  const theme = getThemeColors()
 
   const getSeasonContent = () => {
     switch (selectedSeason) {
@@ -21,8 +23,9 @@ export default function CongratulationsPage2({ onStartClick }: CongratulationsPa
               <p>eteryczne z drzew iglastych.</p>
             </>
           ),
+          speechText: "A to ciekawe! Las pachnie intensywniej latem ze względu na wyższą temperaturę, dzięki której uwalniane są olejki eteryczne z drzew iglastych.",
           dragon: "/images/dragon_02_summer.svg",
-          bgColor: "#FCFFD6",
+          
           textColor: "text-[#FF8C00]",
         }
       case "jesien":
@@ -34,8 +37,9 @@ export default function CongratulationsPage2({ onStartClick }: CongratulationsPa
               <p>Błyskawicznie!</p>
             </>
           ),
+          speechText: "A to zabawne! Jak szybko przemieszcza się burza? Błyskawicznie!",
           dragon: "/images/dragon_02_autumn.svg",
-          bgColor: "#FFEBE3",
+          
           textColor: "text-[#D2691E]",
         }
       case "zima":
@@ -48,8 +52,9 @@ export default function CongratulationsPage2({ onStartClick }: CongratulationsPa
               <p>potencjalnych drapieżników.</p>
             </>
           ),
+          speechText: "A to ciekawe! Oczy reniferów w lecie są złote, a zimą zmieniają się na niebieskie – dzięki temu lepiej widzą potencjalnych drapieżników.",
           dragon: "/images/dragon_02_winter.svg",
-          bgColor: "#C3F7FD",
+          
           textColor: "text-[#4682B4]",
         }
       default: // wiosna
@@ -62,8 +67,9 @@ export default function CongratulationsPage2({ onStartClick }: CongratulationsPa
               <p>Nawet gdy ziemia jest jeszcze bardzo zimna!</p>
             </>
           ),
+          speechText: "A to ciekawe! Krokusy potrafią przebijać się przez śnieg, aby pokazać światu swoje kolory! Nawet gdy ziemia jest jeszcze bardzo zimna!",
           dragon: "/images/dragon_02.svg",
-          bgColor: "#edffe5",
+          
           textColor: "text-[#539e1b]",
         }
     }
@@ -74,7 +80,7 @@ export default function CongratulationsPage2({ onStartClick }: CongratulationsPa
   return (
     <div
       className="w-full h-screen flex items-center justify-center px-12 overflow-hidden"
-      style={{ backgroundColor: seasonContent.bgColor }}
+      style={{ backgroundColor: theme.backgroundColor }}
     >
       <div className="flex items-center justify-between w-full max-w-6xl gap-16">
         {/* Speech bubble with seasonal text - 150% larger with shadow */}
@@ -103,16 +109,12 @@ export default function CongratulationsPage2({ onStartClick }: CongratulationsPa
 
           {/* Buttons positioned under the dragon */}
           <div className="flex items-center gap-8">
-            {/* Sound button without white circle, with shadow */}
-            <div className="w-16 h-16 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform drop-shadow-lg">
-              <Image
-                src="/images/sound_icon_dragon_page.svg"
-                alt="Sound"
-                width={40}
-                height={40}
-                className="object-contain"
-              />
-            </div>
+            {/* Sound button with speech functionality */}
+            <SoundButtonEnhanced 
+              text={seasonContent.speechText}
+              soundIcon={theme.soundIcon}
+              size="md"
+            />
 
             {/* START button with shadow */}
             <div
@@ -121,7 +123,7 @@ export default function CongratulationsPage2({ onStartClick }: CongratulationsPa
             >
               <Image src="/images/start_button.svg" alt="Start button background" fill className="object-contain" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-[#539e1b] font-bold text-2xl">START</span>
+                <span className="font-bold text-2xl" style={{ color: theme.buttonColor }}>START</span>
               </div>
             </div>
           </div>

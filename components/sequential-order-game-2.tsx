@@ -4,13 +4,20 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import Image from "next/image"
-import { useGameCompletion } from "@/hooks/use-game-completion"
+import { useGameCompletionWithHistory } from "@/hooks/use-game-completion"
 import { getRandomSuccessMessage } from "@/lib/success-messages"
 import { useSeason } from "@/contexts/season-context"
 import SuccessMessage from "./success-message"
+import SoundButtonEnhanced from "./sound-button-enhanced"
 
 interface SequentialOrderGame2Props {
   onMenuClick: () => void
+  onBack?: () => void
+  onNext?: () => void
+  onRetry?: () => void
+  userLoggedIn?: boolean
+  currentSeason?: string
+  isGameCompleted?: boolean
 }
 
 interface PetalItem {
@@ -21,8 +28,8 @@ interface PetalItem {
   position: number | null
 }
 
-export default function SequentialOrderGame2({ onMenuClick }: SequentialOrderGame2Props) {
-  const { recordCompletion, isLoggedIn } = useGameCompletion()
+export default function SequentialOrderGame2({ onMenuClick, onBack, onNext, onRetry, userLoggedIn = false, currentSeason = "wiosna", isGameCompleted = false }: SequentialOrderGame2Props) {
+  const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("sequential-order-game-2")
   const { selectedSeason, getThemeColors } = useSeason()
   const theme = getThemeColors()
 
@@ -175,7 +182,7 @@ export default function SequentialOrderGame2({ onMenuClick }: SequentialOrderGam
 
         // Record completion in database
         if (isLoggedIn) {
-          recordCompletion("sequential-order-2")
+          recordCompletion()
           console.log("Game completion recorded in database")
         } else {
           console.log("User not logged in - completion not recorded")
@@ -216,19 +223,11 @@ export default function SequentialOrderGame2({ onMenuClick }: SequentialOrderGam
       {/* Header with title */}
       <div className="w-full flex justify-between items-center mb-8">
         <div className="relative w-16 h-16">
-          <Image
-            src={
-              selectedSeason === "lato"
-                ? "/images/sound_summer.svg"
-                : selectedSeason === "jesien"
-                  ? "/images/sound_autumn.svg"
-                  : selectedSeason === "zima"
-                    ? "/images/sound_winter.svg"
-                    : theme.soundIcon || "/placeholder.svg"
-            }
-            alt="Sound"
-            fill
-            className="object-contain cursor-pointer"
+          <SoundButtonEnhanced
+            text="UŁÓŻ PO KOLEI."
+            soundIcon={theme.soundIcon || "/images/sound_icon_dragon_page.svg"}
+            size="xl"
+            className="w-full h-full"
           />
         </div>
 
@@ -343,18 +342,79 @@ export default function SequentialOrderGame2({ onMenuClick }: SequentialOrderGam
         {/* Completion message */}
         {isCompleted && <SuccessMessage message={successMessage} />}
 
-        {/* Reset button - only visible when at least one petal is placed (besides the pre-placed one) */}
-        {(petalItems.filter((item) => item.placed).length > 1 || isCompleted) && (
-          <div className="flex justify-center mt-8">
-            <button
-              onClick={resetGame}
-              className="text-white px-8 py-3 rounded-full font-sour-gummy text-xl shadow-lg hover:opacity-90 transition-opacity"
-              style={{ backgroundColor: theme.buttonColor }}
+        {/* New Navigation Buttons */}
+        <div className="flex justify-center gap-4 mt-8 w-full">
+          {/* All buttons in same container with identical dimensions */}
+          <div className="flex gap-4 items-end">
+            {/* WRÓĆ Button - always available in sequential-order-game-2 */}
+            <div 
+              className="relative w-36 h-14 transition-all cursor-pointer hover:scale-105"
+              onClick={onBack}
             >
-              Wstecz
-            </button>
+              <Image 
+                src={theme.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 
+                alt="Wróć button" 
+                fill 
+                className="object-contain" 
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="flex items-center gap-2">
+                  <div className="relative w-6 h-6">
+                    <Image 
+                      src="/images/strzalka_lewo.svg" 
+                      alt="Left arrow" 
+                      fill 
+                      className="object-contain" 
+                    />
+                  </div>
+                  <span className="font-sour-gummy font-bold text-lg text-white">WRÓĆ</span>
+                </div>
+              </div>
+            </div>
+
+            {/* JESZCZE RAZ Button - always visible, but only clickable when game is completed */}
+            <div 
+              className={`relative w-52 h-14 transition-all ${isCompleted ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed opacity-50'}`}
+              onClick={isCompleted ? resetGame : undefined}
+            >
+              <Image 
+                src={theme.jeszczeRazButton || "/images/jeszcze_raz_wiosna.svg"} 
+                alt="Jeszcze raz button" 
+                fill 
+                className="object-contain" 
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="font-sour-gummy font-bold text-lg text-white">JESZCZE RAZ</span>
+              </div>
+            </div>
+
+            {/* DALEJ Button - only unlocked when game completed (for logged users) or always available (for non-logged users) */}
+            <div 
+              className={`relative w-36 h-14 transition-all ${(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-105'}`}
+              onClick={(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? undefined : onNext}
+            >
+              <Image 
+                src={theme.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 
+                alt="Dalej button" 
+                fill 
+                className="object-contain" 
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="flex items-center gap-2">
+                  <span className="font-sour-gummy font-bold text-lg text-white">DALEJ</span>
+                  <div className="relative w-6 h-6">
+                    <Image 
+                      src="/images/strzalka_prawo.svg" 
+                      alt="Right arrow" 
+                      fill 
+                      className="object-contain" 
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   )

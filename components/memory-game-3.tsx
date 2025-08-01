@@ -2,12 +2,19 @@
 
 import { useState, useEffect } from "react"
 import Image from "next/image"
-import { useGameCompletion } from "@/hooks/use-game-completion"
+import { useGameCompletionWithHistory } from "@/hooks/use-game-completion"
 import { getRandomSuccessMessage } from "@/lib/success-messages"
 import { useSeason } from "@/contexts/season-context"
+import SoundButtonEnhanced from "./sound-button-enhanced"
+import SuccessMessage from "./success-message"
 
 interface MemoryGameProps {
   onMenuClick: () => void
+  onBack?: () => void
+  onNext?: () => void
+  onRetry?: () => void
+  userLoggedIn?: boolean
+  currentSeason?: string
 }
 
 interface MemoryCard {
@@ -18,7 +25,7 @@ interface MemoryCard {
   isMatched: boolean
 }
 
-export default function MemoryGame3({ onMenuClick }: MemoryGameProps) {
+export default function MemoryGame3({ onMenuClick, onBack, onNext, onRetry, userLoggedIn = false, currentSeason = "wiosna", isGameCompleted = false }: MemoryGameProps) {
   const { selectedSeason, getThemeColors } = useSeason()
   const theme = getThemeColors()
 
@@ -37,7 +44,7 @@ export default function MemoryGame3({ onMenuClick }: MemoryGameProps) {
   // State for random success message
   const [successMessage, setSuccessMessage] = useState<string>("")
 
-  const { recordCompletion, isLoggedIn } = useGameCompletion()
+  const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("memory-game-3")
   const [progressSaved, setProgressSaved] = useState(false)
 
   // Helper function to get the correct image based on season
@@ -237,7 +244,7 @@ export default function MemoryGame3({ onMenuClick }: MemoryGameProps) {
 
   const handleGameCompletion = async () => {
     try {
-      await recordCompletion("memory-game-3")
+              await recordCompletion()
       setProgressSaved(true)
     } catch (error) {
       console.error("Failed to record completion:", error)
@@ -249,11 +256,11 @@ export default function MemoryGame3({ onMenuClick }: MemoryGameProps) {
       {/* Header with title */}
       <div className="w-full flex justify-between items-center mb-8">
         <div className="relative w-16 h-16">
-          <Image
-            src={theme.soundIcon || "/placeholder.svg"}
-            alt="Sound"
-            fill
-            className="object-contain cursor-pointer"
+          <SoundButtonEnhanced
+            text="ZNAJDŹ PARY"
+            soundIcon={theme.soundIcon || "/images/sound_icon_dragon_page.svg"}
+            size="xl"
+            className="w-full h-full"
           />
         </div>
 
@@ -316,19 +323,82 @@ export default function MemoryGame3({ onMenuClick }: MemoryGameProps) {
 
         {/* Success message */}
         {isCompleted && successMessage && (
-          <div className="mt-8 bg-green-100 border-2 border-green-500 rounded-lg p-4 text-center max-w-md">
-            <div className="text-green-700 text-xl font-medium">🎉 {successMessage} 🎉</div>
-          </div>
+          <SuccessMessage message={successMessage} />
         )}
 
-        {/* Reset button - only visible when game is completed */}
-        {isCompleted && (
-          <div className="flex flex-col items-center mt-8">
-            <button onClick={resetGame} className="bg-[#539e1b] text-white px-6 py-2 rounded-full font-bold">
-              Zagraj ponownie
-            </button>
+        {/* New Navigation Buttons */}
+        <div className="flex justify-center gap-4 mt-8 w-full">
+          {/* All buttons in same container with identical dimensions */}
+          <div className="flex gap-4 items-end">
+            {/* WRÓĆ Button - always available in memory-game-3 */}
+            <div 
+              className="relative w-36 h-14 transition-all cursor-pointer hover:scale-105"
+              onClick={onBack}
+            >
+              <Image 
+                src={theme.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 
+                alt="Wróć button" 
+                fill 
+                className="object-contain" 
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="flex items-center gap-2">
+                  <div className="relative w-6 h-6">
+                    <Image 
+                      src="/images/strzalka_lewo.svg" 
+                      alt="Left arrow" 
+                      fill 
+                      className="object-contain" 
+                    />
+                  </div>
+                  <span className="font-sour-gummy font-bold text-lg text-white">WRÓĆ</span>
+                </div>
+              </div>
+            </div>
+
+            {/* JESZCZE RAZ Button - always visible, but only clickable when game is completed */}
+            <div 
+              className={`relative w-52 h-14 transition-all ${isCompleted ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed opacity-50'}`}
+              onClick={isCompleted ? resetGame : undefined}
+            >
+              <Image 
+                src={theme.jeszczeRazButton || "/images/jeszcze_raz_wiosna.svg"} 
+                alt="Jeszcze raz button" 
+                fill 
+                className="object-contain" 
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="font-sour-gummy font-bold text-lg text-white">JESZCZE RAZ</span>
+              </div>
+            </div>
+
+            {/* DALEJ Button - only unlocked when game completed (for logged users) or always available (for non-logged users) */}
+            <div 
+              className={`relative w-36 h-14 transition-all ${(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-105'}`}
+              onClick={(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? undefined : onNext}
+            >
+              <Image 
+                src={theme.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 
+                alt="Dalej button" 
+                fill 
+                className="object-contain" 
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="flex items-center gap-2">
+                  <span className="font-sour-gummy font-bold text-lg text-white">DALEJ</span>
+                  <div className="relative w-6 h-6">
+                    <Image 
+                      src="/images/strzalka_prawo.svg" 
+                      alt="Right arrow" 
+                      fill 
+                      className="object-contain" 
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   )

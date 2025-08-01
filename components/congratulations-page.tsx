@@ -1,13 +1,15 @@
 "use client"
 import Image from "next/image"
 import { useSeason } from "@/contexts/season-context"
+import SoundButtonEnhanced from "./sound-button-enhanced"
 
 interface CongratulationsPageProps {
   onStartClick: () => void
 }
 
 export default function CongratulationsPage({ onStartClick }: CongratulationsPageProps) {
-  const { selectedSeason } = useSeason()
+  const { selectedSeason, getThemeColors } = useSeason()
+  const theme = getThemeColors()
 
   // Get season-specific content
   const getSeasonContent = () => {
@@ -21,10 +23,10 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
               <p>W nieparzyste!</p>
             </>
           ),
+          speechText: "A to zabawne! W jakie dni pokrzywa nie parzy? W nieparzyste!",
           dragonImage: "/images/dragon_01_summer.svg",
           soundIcon: "/images/sound_summer.svg",
           startButtonBg: "/images/start_summer.svg",
-          bgColor: "bg-[#FCFFD6]",
           textColor: "text-[#FF8C00]",
         }
       case "jesien":
@@ -36,10 +38,10 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
               <p>Wilgoć w powietrzu uwalnia aromaty z ziemi, grzybów i kory drzew.</p>
             </>
           ),
+          speechText: "A to ciekawe! Za jesienne zapachy nie odpowiadają tylko liście. Wilgoć w powietrzu uwalnia aromaty z ziemi, grzybów i kory drzew.",
           dragonImage: "/images/dragon_01_autumn.svg",
           soundIcon: "/images/sound_autumn.svg",
           startButtonBg: "/images/start_button.svg",
-          bgColor: "bg-[#FFEBE3]",
           textColor: "text-[#D2691E]",
         }
       case "zima":
@@ -51,10 +53,10 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
               <p>Narzeka.</p>
             </>
           ),
+          speechText: "A to zabawne! Co robi rzeka jak jej się coś nie podoba? Narzeka.",
           dragonImage: "/images/dragon_01_winter.svg",
           soundIcon: "/images/sound_winter.svg",
           startButtonBg: "/images/start_button.svg",
-          bgColor: "bg-[#C3F7FD]",
           textColor: "text-[#4682B4]",
         }
       default: // spring/wiosna
@@ -66,10 +68,9 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
               <p>Mizernie!</p>
             </>
           ),
+          speechText: "A to zabawne! Jak się czuje ogórek w śmietanie? Mizernie!",
           dragonImage: "/images/dragon_01.svg",
-          soundIcon: "/images/sound_icon_dragon_page.svg",
           startButtonBg: "/images/start_button.svg",
-          bgColor: "bg-[#edffe5]",
           textColor: "text-[#539e1b]",
         }
     }
@@ -78,7 +79,10 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
   const seasonContent = getSeasonContent()
 
   return (
-    <div className={`w-full h-screen ${seasonContent.bgColor} flex items-center justify-center px-12 overflow-hidden`}>
+    <div 
+      className="w-full h-screen flex items-center justify-center px-12 overflow-hidden"
+      style={{ backgroundColor: theme.backgroundColor }}
+    >
       <div className="flex items-center justify-between w-full max-w-6xl gap-16">
         {/* Speech bubble with joke text - 150% larger with shadow */}
         <div className="relative w-[692px] h-[317px] flex-shrink-0 drop-shadow-lg">
@@ -106,16 +110,12 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
 
           {/* Buttons positioned under the dragon */}
           <div className="flex items-center gap-8">
-            {/* Sound button without white circle, with shadow */}
-            <div className="w-16 h-16 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform drop-shadow-lg">
-              <Image
-                src={seasonContent.soundIcon || "/placeholder.svg"}
-                alt="Sound"
-                width={40}
-                height={40}
-                className="object-contain"
-              />
-            </div>
+            {/* Enhanced Sound button with better Polish pronunciation */}
+            <SoundButtonEnhanced 
+              text={seasonContent.speechText}
+              soundIcon={theme.soundIcon}
+              size="md"
+            />
 
             {/* START button with shadow */}
             <div

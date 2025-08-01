@@ -6,12 +6,20 @@ import { useState, useEffect } from "react"
 import Image from "next/image"
 
 // Add the import for useGameCompletion at the top of the file
-import { useGameCompletion } from "@/hooks/use-game-completion"
+import { useGameCompletionWithHistory } from "@/hooks/use-game-completion"
 import { getRandomSuccessMessage } from "@/lib/success-messages"
 import { useSeason } from "@/contexts/season-context"
+import SoundButtonEnhanced from "./sound-button-enhanced"
+import SuccessMessage from "./success-message"
 
 interface ConnectGameProps {
   onMenuClick: () => void
+  onBack?: () => void
+  onNext?: () => void
+  onRetry?: () => void
+  userLoggedIn?: boolean
+  currentSeason?: string
+  isGameCompleted?: boolean
   onComplete?: () => void
 }
 
@@ -36,9 +44,9 @@ function shuffleArray<T>(array: T[]): T[] {
   return arr
 }
 
-export default function ConnectGame({ onMenuClick, onComplete }: ConnectGameProps) {
+export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, userLoggedIn = false, currentSeason = "wiosna", isGameCompleted = false, onComplete }: ConnectGameProps) {
   // First, add a useGameCompletion hook at the top with other hooks
-  const { recordCompletion, isLoggedIn } = useGameCompletion()
+  const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("connect-game")
   const { selectedSeason, getThemeColors } = useSeason()
 
   // Define the game items with new SVG files
@@ -115,7 +123,7 @@ export default function ConnectGame({ onMenuClick, onComplete }: ConnectGameProp
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null)
 
   // State for tracking matched pairs
-  const [matchedPairs, setMatchedPairs] = useState<{ [key: string]: boolean }>({})
+  const [matchedPairs, setMatchedPairs] = useState<{ [key: string]: boolean }>()
 
   // State for tracking if all pairs are matched
   const [allMatched, setAllMatched] = useState(false)
@@ -378,7 +386,7 @@ export default function ConnectGame({ onMenuClick, onComplete }: ConnectGameProp
 
         // Record completion when all pairs are matched
         if (isLoggedIn) {
-          recordCompletion("connect-game")
+          recordCompletion()
         }
 
         // Trigger completion callback for medal sequence after 3 seconds
@@ -406,17 +414,20 @@ export default function ConnectGame({ onMenuClick, onComplete }: ConnectGameProp
 
   const themeColors = getThemeColors()
 
+  
+  
+
   return (
     <div className="w-full max-w-6xl" style={{ backgroundColor: themeColors.background }}>
       {/* Header with title */}
       <div className="w-full max-w-4xl mx-auto">
         <div className="w-full flex justify-between items-center mb-8">
           <div className="relative w-16 h-16">
-            <Image
-              src={themeColors.soundIcon || "/placeholder.svg"}
-              alt="Sound"
-              fill
-              className="object-contain cursor-pointer"
+            <SoundButtonEnhanced
+              text="POŁĄCZ."
+              soundIcon={themeColors.soundIcon || "/images/sound_icon_dragon_page.svg"}
+              size="xl"
+              className="w-full h-full"
             />
           </div>
 
@@ -562,25 +573,82 @@ export default function ConnectGame({ onMenuClick, onComplete }: ConnectGameProp
 
           {/* Success message */}
           {allMatched && successMessage && (
-            <div className="mt-8 text-center">
-              <div className="bg-green-100 border-2 border-green-500 rounded-lg p-6 mx-auto max-w-md">
-                <div className="text-3xl font-bold text-green-700 mb-2">🎉 {successMessage} 🎉</div>
-              </div>
-            </div>
+            <SuccessMessage message={successMessage} />
           )}
 
-          {/* Reset button - only visible when all pairs are matched */}
-          {allMatched && (
-            <div className="flex justify-center mt-8">
-              <button 
-                onClick={resetGame} 
-                className="text-white px-6 py-2 rounded-full font-sour-gummy text-lg shadow-lg hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: themeColors.buttonColor }}
+          {/* New Navigation Buttons */}
+          <div className="flex justify-center gap-4 mt-8 w-full">
+            {/* All buttons in same container with identical dimensions */}
+            <div className="flex gap-4 items-end">
+              {/* WRÓĆ Button - always available in connect-game */}
+              <div 
+                className="relative w-36 h-14 transition-all cursor-pointer hover:scale-105"
+                onClick={onBack}
               >
-                Wstecz
-              </button>
+                <Image 
+                  src={themeColors.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 
+                  alt="Wróć button" 
+                  fill 
+                  className="object-contain" 
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="flex items-center gap-2">
+                    <div className="relative w-6 h-6">
+                      <Image 
+                        src="/images/strzalka_lewo.svg" 
+                        alt="Left arrow" 
+                        fill 
+                        className="object-contain" 
+                      />
+                    </div>
+                    <span className="font-sour-gummy font-bold text-lg text-white">WRÓĆ</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* JESZCZE RAZ Button - always visible, but only clickable when game is completed */}
+              <div 
+                className={`relative w-52 h-14 transition-all ${allMatched ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed opacity-50'}`}
+                onClick={allMatched ? resetGame : undefined}
+              >
+                <Image 
+                  src={themeColors.jeszczeRazButton || "/images/jeszcze_raz_wiosna.svg"} 
+                  alt="Jeszcze raz button" 
+                  fill 
+                  className="object-contain" 
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="font-sour-gummy font-bold text-lg text-white">JESZCZE RAZ</span>
+                </div>
+              </div>
+
+              {/* DALEJ Button - only unlocked when game completed (for logged users) or always available (for non-logged users) */}
+              <div 
+                className={`relative w-36 h-14 transition-all ${(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-105'}`}
+                onClick={(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? undefined : onNext}
+              >
+                <Image 
+                  src={themeColors.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 
+                  alt="Dalej button" 
+                  fill 
+                  className="object-contain" 
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="flex items-center gap-2">
+                    <span className="font-sour-gummy font-bold text-lg text-white">DALEJ</span>
+                    <div className="relative w-6 h-6">
+                      <Image 
+                        src="/images/strzalka_prawo.svg" 
+                        alt="Right arrow" 
+                        fill 
+                        className="object-contain" 
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
       {!isLoggedIn && (

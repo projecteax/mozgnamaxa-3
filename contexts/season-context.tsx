@@ -14,6 +14,8 @@ interface SeasonContextType {
     menuIcon: string
     titleBox: string
     buttonColor: string
+    wrocDalejButton: string
+    jeszczeRazButton: string
   }
 }
 
@@ -32,6 +34,8 @@ export function SeasonProvider({ children }: { children: ReactNode }) {
           menuIcon: "/images/menu_winter.svg",
           titleBox: "/images/title_box_small_winter.svg",
           buttonColor: "#00abc6", // Blue for winter
+          wrocDalejButton: "/images/wroc_dalej_zima.svg",
+          jeszczeRazButton: "/images/jeszcze_raz_zima.svg",
         }
       case "lato":
         return {
@@ -41,6 +45,8 @@ export function SeasonProvider({ children }: { children: ReactNode }) {
           menuIcon: "/images/menu_summer.svg",
           titleBox: "/images/title_box_small_summer.svg",
           buttonColor: "#ffc402", // Yellow for summer
+          wrocDalejButton: "/images/wroc_dalej_lato.svg",
+          jeszczeRazButton: "/images/jeszcze_raz_lato.svg",
         }
       case "jesien":
         return {
@@ -50,6 +56,8 @@ export function SeasonProvider({ children }: { children: ReactNode }) {
           menuIcon: "/images/menu_autumn.svg",
           titleBox: "/images/title_box_small_autumn.svg",
           buttonColor: "#ed6b19", // Orange for autumn
+          wrocDalejButton: "/images/wroc_dalej_jesien.svg",
+          jeszczeRazButton: "/images/jeszcze_raz_jesien.svg",
         }
       default:
         return {
@@ -59,6 +67,8 @@ export function SeasonProvider({ children }: { children: ReactNode }) {
           menuIcon: "/images/menu_new.svg",
           titleBox: "/images/title_box_small.png",
           buttonColor: "#539e1b", // Green for spring
+          wrocDalejButton: "/images/wroc_dalej_wiosna.svg",
+          jeszczeRazButton: "/images/jeszcze_raz_wiosna.svg",
         }
     }
   }

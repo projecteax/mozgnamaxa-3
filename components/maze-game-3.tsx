@@ -4,18 +4,25 @@ import type React from "react"
 
 import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
-import { useGameCompletion } from "@/hooks/use-game-completion"
+import { useGameCompletionWithHistory } from "@/hooks/use-game-completion"
 import { getRandomSuccessMessage } from "@/lib/success-messages"
 import { useSeason } from "@/contexts/season-context"
 import SuccessMessage from "./success-message"
+import SoundButtonEnhanced from "./sound-button-enhanced"
 
 interface MazeGame3Props {
   onMenuClick: () => void
+  onBack?: () => void
+  onNext?: () => void
+  onRetry?: () => void
+  userLoggedIn?: boolean
+  currentSeason?: string
+  isGameCompleted?: boolean
 }
 
-export default function MazeGame3({ onMenuClick }: MazeGame3Props) {
+export default function MazeGame3({ onMenuClick, onBack, onNext, onRetry, userLoggedIn = false, currentSeason = "wiosna", isGameCompleted = false }: MazeGame3Props) {
   // Use the game completion hook
-  const { recordCompletion, isLoggedIn } = useGameCompletion()
+  const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("maze-game-3")
   // State to track if the game is completed
   const [isCompleted, setIsCompleted] = useState(false)
   // Reference to the butterfly element
@@ -33,7 +40,8 @@ export default function MazeGame3({ onMenuClick }: MazeGame3Props) {
   // Track mouse offset for dragging
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
 
-  const { selectedSeason, backgroundColor } = useSeason()
+  const { selectedSeason, getThemeColors } = useSeason()
+  const theme = getThemeColors()
   const isSummer = selectedSeason === "lato"
   const isAutumn = selectedSeason === "jesien"
   const isWinter = selectedSeason === "zima"
@@ -98,7 +106,7 @@ export default function MazeGame3({ onMenuClick }: MazeGame3Props) {
 
         // Record completion in database
         if (isLoggedIn) {
-          recordCompletion("maze-game-3")
+          recordCompletion()
         }
 
         // Center the butterfly on the target
@@ -137,24 +145,29 @@ export default function MazeGame3({ onMenuClick }: MazeGame3Props) {
     setButterflyPosition(initialPosition)
   }
 
+  // Get title text based on season
+  const getTitleText = () => {
+    if (isWinter) {
+      return "ZNAJDŹ DROGĘ DO IGLO."
+    } else if (isAutumn) {
+      return "ZNAJDŹ DROGĘ DO DZIUPLI."
+    } else if (isSummer) {
+      return "ZNAJDŹ DROGĘ NA SZCZYT."
+    } else {
+      return "ZNAJDŹ DROGĘ DO KWIATKA."
+    }
+  }
+
   return (
-    <div className="w-full max-w-4xl" style={{ backgroundColor }}>
+    <div className="w-full max-w-4xl" style={{ backgroundColor: theme.backgroundColor }}>
       {/* Header with title */}
       <div className="w-full flex justify-between items-center mb-8">
         <div className="relative w-16 h-16">
-          <Image
-            src={
-              isWinter
-                ? "/images/sound_winter.svg"
-                : isAutumn
-                  ? "/images/sound_autumn.svg"
-                  : isSummer
-                    ? "/images/sound_summer.svg"
-                    : "/images/sound_new.svg"
-            }
-            alt="Sound"
-            fill
-            className="object-contain cursor-pointer"
+          <SoundButtonEnhanced
+            text={getTitleText()}
+            soundIcon={theme.soundIcon || "/images/sound_icon_dragon_page.svg"}
+            size="xl"
+            className="w-full h-full"
           />
         </div>
 
@@ -174,7 +187,7 @@ export default function MazeGame3({ onMenuClick }: MazeGame3Props) {
             className="object-contain"
           />
           <span className="relative z-10 text-white text-2xl md:text-3xl font-sour-gummy font-thin tracking-wider">
-            {isWinter ? "ZNAJDŹ DROGĘ DO IGLO." : "ZNAJDŹ DROGĘ DO DZIUPLI."}
+            {getTitleText()}
           </span>
         </div>
 
@@ -310,11 +323,82 @@ export default function MazeGame3({ onMenuClick }: MazeGame3Props) {
       {isCompleted && (
         <div className="flex flex-col items-center mt-8">
           <SuccessMessage message={getRandomSuccessMessage()} />
-          <button onClick={resetGame} className="bg-[#539e1b] text-white px-6 py-3 rounded-full font-sour-gummy text-lg">
-            Zagraj ponownie
-          </button>
         </div>
       )}
+
+      {/* New Navigation Buttons - Always visible */}
+      <div className="flex justify-center gap-4 mt-8 w-full">
+        {/* All buttons in same container with identical dimensions */}
+        <div className="flex gap-4 items-end">
+          {/* WRÓĆ Button - always available in maze-game-3 */}
+          <div 
+            className="relative w-36 h-14 transition-all cursor-pointer hover:scale-105"
+            onClick={onBack}
+          >
+            <Image 
+              src={theme.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 
+              alt="Wróć button" 
+              fill 
+              className="object-contain" 
+            />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="flex items-center gap-2">
+                <div className="relative w-6 h-6">
+                  <Image 
+                    src="/images/strzalka_lewo.svg" 
+                    alt="Left arrow" 
+                    fill 
+                    className="object-contain" 
+                  />
+                </div>
+                <span className="font-sour-gummy font-bold text-lg text-white">WRÓĆ</span>
+              </div>
+            </div>
+          </div>
+
+          {/* JESZCZE RAZ Button - always visible, but only clickable when game is completed */}
+          <div 
+            className={`relative w-52 h-14 transition-all ${isCompleted ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed opacity-50'}`}
+            onClick={isCompleted ? resetGame : undefined}
+          >
+            <Image 
+              src={theme.jeszczeRazButton || "/images/jeszcze_raz_wiosna.svg"} 
+              alt="Jeszcze raz button" 
+              fill 
+              className="object-contain" 
+            />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="font-sour-gummy font-bold text-lg text-white">JESZCZE RAZ</span>
+            </div>
+          </div>
+
+          {/* DALEJ Button - only unlocked when game completed (for logged users) or always available (for non-logged users) */}
+          <div 
+            className={`relative w-36 h-14 transition-all ${(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-105'}`}
+            onClick={(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? undefined : onNext}
+          >
+            <Image 
+              src={theme.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 
+              alt="Dalej button" 
+              fill 
+              className="object-contain" 
+            />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="flex items-center gap-2">
+                <span className="font-sour-gummy font-bold text-lg text-white">DALEJ</span>
+                <div className="relative w-6 h-6">
+                  <Image 
+                    src="/images/strzalka_prawo.svg" 
+                    alt="Right arrow" 
+                    fill 
+                    className="object-contain" 
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

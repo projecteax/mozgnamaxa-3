@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useStudentProgress } from "@/hooks/use-student-progress"
 import MatchingGame from "@/components/matching-game"
 import SequenceGame from "@/components/sequence-game"
 import SequenceGame2 from "@/components/sequence-game-2"
@@ -210,7 +211,8 @@ export default function Home() {
   const [showMedalDisplay, setShowMedalDisplay] = useState(false)
   const [showProgressPage, setShowProgressPage] = useState(false)
   const { user } = useAuth()
-  const { setSelectedSeason, getThemeColors } = useSeason()
+  const { setSelectedSeason, getThemeColors, selectedSeason } = useSeason()
+  const { progress } = useStudentProgress()
 
   const [showMedalDisplay2, setShowMedalDisplay2] = useState(false)
   const [showProgressPage2, setShowProgressPage2] = useState(false)
@@ -400,6 +402,35 @@ export default function Home() {
     if (currentIndex < gameOrder.length - 1) {
       setCurrentGame(gameOrder[currentIndex + 1])
     }
+  }
+
+  // Special navigation for sequential-order-3 to go to matching-game in next season
+  const goToNextSeasonMatching = () => {
+    const seasonOrder = ["wiosna", "lato", "jesien", "zima"]
+    const currentSeasonIndex = seasonOrder.indexOf(selectedSeason)
+    const nextSeasonIndex = (currentSeasonIndex + 1) % seasonOrder.length
+    const nextSeason = seasonOrder[nextSeasonIndex]
+    
+    setSelectedSeason(nextSeason as "wiosna" | "lato" | "jesien" | "zima")
+    setCurrentGame("matching")
+  }
+
+  // Check if current game is completed by user
+  const isCurrentGameCompleted = () => {
+    if (!user || !progress) return false
+    
+    // Check if the game is completed in ANY season (not just the current selectedSeason)
+    const allSeasons = ['wiosna', 'lato', 'jesien', 'zima'] as const
+    for (const season of allSeasons) {
+      const seasonCompletedGames = progress.seasonProgress[season]?.completedGames || []
+      if (seasonCompletedGames.includes(currentGame)) {
+        console.log(`Game ${currentGame} is completed in season ${season}`)
+        return true
+      }
+    }
+    
+    console.log(`Game ${currentGame} is not completed in any season`)
+    return false
   }
 
   // Function to navigate to the previous game
@@ -1004,25 +1035,119 @@ export default function Home() {
     >
       {/* Game content */}
       {currentGame === "find-incorrect-ladybug" ? (
-        <FindIncorrectLadybugGame onMenuClick={toggleMenu} />
+        <FindIncorrectLadybugGame 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "sequential-order-3" ? (
-        <SequentialOrderGame3 onMenuClick={toggleMenu} onComplete={handleSequentialOrder3Complete} />
+        <SequentialOrderGame3 
+          onMenuClick={toggleMenu} 
+          onComplete={handleSequentialOrder3Complete}
+          onBack={goToPreviousGame}
+          onNext={goToNextSeasonMatching}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "pattern-completion" ? (
-        <PatternCompletionGame onMenuClick={toggleMenu} />
+        <PatternCompletionGame 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "sudoku" ? (
-        <SudokuGame onMenuClick={toggleMenu} onComplete={handleSudokuComplete} />
+        <SudokuGame 
+          onMenuClick={toggleMenu} 
+          onComplete={handleSudokuComplete}
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "memory-match-2x4" ? (
-        <MemoryMatchGame2x4 onMenuClick={toggleMenu} />
+        <MemoryMatchGame2x4 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "birds-puzzle" ? (
-        <BirdsPuzzleGame onMenuClick={toggleMenu} />
+        <BirdsPuzzleGame 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "find-6-differences" ? (
-        <Find6DifferencesGame onMenuClick={toggleMenu} onComplete={handleFind6DifferencesComplete} />
+        <Find6DifferencesGame 
+          onMenuClick={toggleMenu} 
+          onComplete={handleFind6DifferencesComplete}
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "branch-sequence" ? (
-        <BranchSequenceGame onMenuClick={toggleMenu} />
+        <BranchSequenceGame 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "find-flipped-rabbit" ? (
-        <FindFlippedRabbitGame onMenuClick={toggleMenu} />
+        <FindFlippedRabbitGame 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "find-missing-half" ? (
-        <FindMissingHalfGame onMenuClick={toggleMenu} onComplete={handleFindMissingHalfComplete} />
+        <FindMissingHalfGame 
+          onMenuClick={toggleMenu} 
+          onComplete={handleFindMissingHalfComplete}
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "student-panel" ? (
         <StudentPanel onMenuClick={toggleMenu} />
       ) : currentGame === "teacher-panel" ? (
@@ -1030,98 +1155,348 @@ export default function Home() {
       ) : currentGame === "maze-4" ? (
         <MazeGame4 onMenuClick={toggleMenu} />
       ) : currentGame === "maze-3" ? (
-        <MazeGame3 onMenuClick={toggleMenu} />
+        <MazeGame3 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "find-missing" ? (
-        <FindMissingGame onMenuClick={toggleMenu} />
+        <FindMissingGame 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "sequence-2" ? (
-        <SequenceGame2 onMenuClick={toggleMenu} onComplete={handleSequenceGame2Complete} />
+        <SequenceGame2 
+          onMenuClick={toggleMenu} 
+          onComplete={handleSequenceGame2Complete}
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "category-sorting-4" ? (
         <CategorySortingGame4 onMenuClick={toggleMenu} />
       ) : currentGame === "category-sorting-3" ? (
-        <CategorySortingGame3 onMenuClick={toggleMenu} />
+        <CategorySortingGame3 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "category-sorting-2" ? (
         <CategorySortingGame2 onMenuClick={toggleMenu} />
       ) : currentGame === "category-sorting" ? (
-        <CategorySortingGame onMenuClick={toggleMenu} />
+        <CategorySortingGame 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "memory" ? (
-        <MemoryGame onMenuClick={toggleMenu} onComplete={handleMemoryGameComplete} />
+        <MemoryGame 
+          onMenuClick={toggleMenu} 
+          onComplete={handleMemoryGameComplete}
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "memory-7" ? (
-        <MemoryGame7 onMenuClick={toggleMenu} />
+        <MemoryGame7 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "memory-6" ? (
         <MemoryGame6 onMenuClick={toggleMenu} />
       ) : currentGame === "memory-match" ? (
-        <MemoryMatchGame onMenuClick={toggleMenu} />
+        <MemoryMatchGame 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "memory-5" ? (
-        <MemoryGame5 onMenuClick={toggleMenu} onComplete={handleMemoryGame5Complete} />
+        <MemoryGame5 
+          onMenuClick={toggleMenu} 
+          onComplete={handleMemoryGame5Complete}
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "memory-4" ? (
-        <MemoryGame4 onMenuClick={toggleMenu} onComplete={handleMemoryGame4Complete} />
+        <MemoryGame4 
+          onMenuClick={toggleMenu} 
+          onComplete={handleMemoryGame4Complete}
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "puzzle-assembly-2" ? (
-        <PuzzleAssemblyGame2 onMenuClick={toggleMenu} />
+        <PuzzleAssemblyGame2 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "spot-difference-5" ? (
-        <SpotDifferenceGame5 onMenuClick={toggleMenu} onComplete={handleSpotDifference5Complete} />
+        <SpotDifferenceGame5 
+          onMenuClick={toggleMenu} 
+          onComplete={handleSpotDifference5Complete}
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "memory-3" ? (
-        <MemoryGame3 onMenuClick={toggleMenu} />
+        <MemoryGame3 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "maze-2" ? (
         <MazeGame2 onMenuClick={toggleMenu} />
       ) : currentGame === "maze" ? (
-        <MazeGame onMenuClick={toggleMenu} />
+        <MazeGame 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "easter-sequence" ? (
-        <EasterSequenceGame onMenuClick={toggleMenu} onComplete={handleEasterSequenceComplete} />
+        <EasterSequenceGame 
+          onMenuClick={toggleMenu} 
+          onComplete={handleEasterSequenceComplete}
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "easter-basket-2" ? (
         <EasterBasketGame2 onMenuClick={toggleMenu} />
       ) : currentGame === "easter-basket" ? (
-        <EasterBasketGame onMenuClick={toggleMenu} />
+        <EasterBasketGame 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "matching" ? (
-        <MatchingGame onMenuClick={toggleMenu} />
+        <MatchingGame 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset the game by refreshing the page or resetting state
+            window.location.reload()
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
+        />
       ) : currentGame === "sequence" ? (
-        <SequenceGame onMenuClick={toggleMenu} />
+        <SequenceGame 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
+        />
       ) : currentGame === "puzzle" ? (
-        <PuzzleGame onMenuClick={toggleMenu} />
+        <PuzzleGame 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
+        />
       ) : currentGame === "butterfly-pairs" ? (
-        <ButterflyPairsGame onMenuClick={toggleMenu} onComplete={handleButterflyPairsComplete} />
+        <ButterflyPairsGame 
+          onMenuClick={toggleMenu} 
+          onComplete={handleButterflyPairsComplete}
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
+        />
       ) : currentGame === "odd-one-out" ? (
-        <OddOneOutGame onMenuClick={toggleMenu} />
+        <OddOneOutGame 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
+        />
       ) : currentGame === "sorting" ? (
-        <SortingGame onMenuClick={toggleMenu} />
+        <SortingGame 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "sorting-3" ? (
         <SortingGame3 onMenuClick={toggleMenu} />
       ) : currentGame === "sorting-4" ? (
         <SortingGame4 onMenuClick={toggleMenu} />
       ) : currentGame === "sorting-2" ? (
-        <SortingGame2 onMenuClick={toggleMenu} />
+        <SortingGame2 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "memory-2" ? (
         <MemoryGame2 onMenuClick={toggleMenu} />
       ) : currentGame === "spot-difference" ? (
-        <SpotDifferenceGame onMenuClick={toggleMenu} />
+        <SpotDifferenceGame 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : currentGame === "sequential-order" ? (
         <SequentialOrderGame onMenuClick={toggleMenu} />
       ) : currentGame === "sequential-order-2" ? (
-        <SequentialOrderGame2 onMenuClick={toggleMenu} />
+        <SequentialOrderGame2 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       ) : (
-        <ConnectGame onMenuClick={toggleMenu} onComplete={handleConnectGameComplete} />
+        <ConnectGame 
+          onMenuClick={toggleMenu} 
+          onComplete={handleConnectGameComplete}
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+        />
       )}
 
-      {/* Navigation buttons */}
-      <div className="flex justify-center gap-4 mt-8 w-full">
-        <button
-          onClick={goToPreviousGame}
-          disabled={isFirstGame}
-          className={`px-6 py-3 rounded-full font-sour-gummy text-lg ${
-            isFirstGame ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#539e1b] text-white hover:bg-[#468619]"
-          }`}
-        >
-          Wróć
-        </button>
-        <button
-          onClick={goToNextGame}
-          disabled={isLastGame}
-          className={`px-6 py-3 rounded-full font-sour-gummy text-lg ${
-            isLastGame ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#539e1b] text-white hover:bg-gray-600"
-          }`}
-        >
-          Dalej
-        </button>
-      </div>
+      {/* Navigation buttons - hidden for games that have their own navigation */}
+      {!["matching", "sequence", "butterfly-pairs", "odd-one-out", "puzzle", "connect", "sorting", "category-sorting", "memory", "spot-difference", "easter-basket", "easter-sequence", "maze", "sorting-2", "memory-5", "memory-3", "puzzle-assembly-2", "spot-difference-5", "memory-7", "category-sorting-3", "sequence-2", "find-missing", "sequential-order-2", "memory-4", "find-6-differences", "branch-sequence", "find-flipped-rabbit", "find-missing-half", "memory-match", "maze-3", "birds-puzzle", "memory-match-2x4", "sudoku", "pattern-completion", "find-incorrect-ladybug", "sequential-order-3"].includes(currentGame) && (
+        <div className="flex justify-center gap-4 mt-8 w-full">
+          <button
+            onClick={goToPreviousGame}
+            disabled={isFirstGame}
+            className={`px-6 py-3 rounded-full font-sour-gummy text-lg ${
+              isFirstGame ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#539e1b] text-white hover:bg-[#468619]"
+            }`}
+          >
+            Wróć
+          </button>
+          <button
+            onClick={goToNextGame}
+            disabled={isLastGame}
+            className={`px-6 py-3 rounded-full font-sour-gummy text-lg ${
+              isLastGame ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#539e1b] text-white hover:bg-gray-600"
+            }`}
+          >
+            Dalej
+          </button>
+        </div>
+      )}
 
       {/* Progress indicator */}
       {user && currentGameId && !["teacher-panel", "student-panel"].includes(currentGame) && (

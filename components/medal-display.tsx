@@ -8,7 +8,8 @@ interface MedalDisplayProps {
 }
 
 export default function MedalDisplay({ onNextClick }: MedalDisplayProps) {
-  const { selectedSeason } = useSeason()
+  const { selectedSeason, getThemeColors } = useSeason()
+  const theme = getThemeColors()
 
   // Auto-redirect after 3 seconds
   useEffect(() => {
@@ -33,22 +34,10 @@ export default function MedalDisplay({ onNextClick }: MedalDisplayProps) {
     }
   }
 
-  const getBackgroundColor = () => {
-    switch (selectedSeason) {
-      case "lato":
-        return "bg-[#FFE082]"
-      case "jesien":
-        return "bg-[#FF8A65]"
-      case "zima":
-        return "bg-[#81D4FA]"
-      default: // wiosna
-        return "bg-[#C8E6C9]"
-    }
-  }
-
   return (
     <div
-      className={`w-full h-screen ${getBackgroundColor()} flex items-center justify-center overflow-hidden relative`}
+      className="w-full h-screen flex items-center justify-center overflow-hidden relative"
+      style={{ backgroundColor: theme.backgroundColor }}
     >
       {/* Star background */}
       <div className="absolute inset-0 flex items-center justify-center z-0">

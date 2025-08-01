@@ -91,14 +91,14 @@ export default function SeasonGamePopup({
 
         {/* Continue Game Button */}
         {nextGameAfterCompleted && (
-          <div className="mb-6 text-center">
-            <button
-              onClick={onContinueGame}
-              className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-8 py-4 rounded-full font-sour-gummy text-2xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
-            >
-              🎮 GRAJ DALEJ
-            </button>
-            <p className="text-sm font-sour-gummy text-gray-600 mt-2">
+          <div className="mb-6 text-center flex flex-col items-center">
+            <div className="relative w-48 h-12 cursor-pointer hover:scale-105 transition-transform" onClick={onContinueGame}>
+              <Image src="/images/button_default.svg" alt="Continue button background" fill className="object-contain" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="font-sour-gummy font-bold text-2xl" style={{ color: '#3E459C' }}>NASTĘPNA GRA</span>
+              </div>
+            </div>
+            <p className="text-sm font-sour-gummy mt-2" style={{ color: '#3E459C' }}>
               Następna gra: {nextGameAfterCompleted.name}
             </p>
           </div>

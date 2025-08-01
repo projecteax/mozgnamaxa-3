@@ -7,24 +7,25 @@ interface ProgressPage8Props {
 }
 
 export default function ProgressPage8({ onContinue }: ProgressPage8Props) {
-  const { selectedSeason } = useSeason()
+  const { selectedSeason, getThemeColors } = useSeason()
+  const theme = getThemeColors()
 
   const getSeasonalStyles = () => {
     switch (selectedSeason) {
       case "lato": // summer
         return {
-          background: "bg-[#FFE082]",
           medalSuffix: "_summer",
+          buttonColor: "#ffc402", // Yellow for summer
         }
       case "jesien": // autumn
         return {
-          background: "bg-[#FF8A65]",
           medalSuffix: "_autumn",
+          buttonColor: "#ed6b19", // Orange for autumn
         }
       case "zima": // winter
         return {
-          background: "bg-[#81D4FA]",
           medalSuffix: "_winter",
+          buttonColor: "#00abc6", // Blue for winter
         }
       default: // wiosna (spring)
         return {
@@ -34,7 +35,7 @@ export default function ProgressPage8({ onContinue }: ProgressPage8Props) {
     }
   }
 
-  const { background, medalSuffix } = getSeasonalStyles()
+  const { medalSuffix, buttonColor } = getSeasonalStyles()
 
   const handleDalejClick = () => {
     console.log("DALEJ button clicked from progress page 8")
@@ -42,7 +43,8 @@ export default function ProgressPage8({ onContinue }: ProgressPage8Props) {
   }
 
   return (
-    <div className={`w-full h-screen ${background} flex flex-col items-center justify-center px-12`}>
+    <div className="w-full h-screen flex flex-col items-center justify-center px-12"
+      style={{ backgroundColor: theme.backgroundColor }}>
       {/* Grid of boxes - enlarged by 200% */}
       <div className="grid grid-cols-6 gap-6 mb-16">
         {/* First box - active with medal 01 - enlarged from w-24 h-24 to w-48 h-48 */}
@@ -150,7 +152,7 @@ export default function ProgressPage8({ onContinue }: ProgressPage8Props) {
       >
         <Image src="/images/start_button.svg" alt="Continue button background" fill className="object-contain" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-[#539e1b] font-bold text-2xl">DALEJ</span>
+          <span className="font-bold text-2xl" style={{ color: buttonColor }}>DALEJ</span>
         </div>
       </div>
     </div>

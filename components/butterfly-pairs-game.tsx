@@ -3,13 +3,21 @@
 import type React from "react"
 import { useState, useCallback, useMemo } from "react"
 import Image from "next/image"
-import { useGameCompletion } from "@/hooks/use-game-completion"
+import { useGameCompletionWithHistory } from "@/hooks/use-game-completion"
 import { getRandomSuccessMessage } from "@/lib/success-messages"
 import { useSeason } from "@/contexts/season-context"
+import SoundButtonEnhanced from "./sound-button-enhanced"
+import SuccessMessage from "./success-message"
 
 interface ButterflyPairsGameProps {
   onMenuClick: () => void
   onComplete?: () => void
+  onBack?: () => void
+  onNext?: () => void
+  onRetry?: () => void
+  userLoggedIn?: boolean
+  currentSeason?: string
+  isGameCompleted?: boolean
 }
 
 interface ButterflyHalf {
@@ -20,7 +28,7 @@ interface ButterflyHalf {
   matched: boolean
 }
 
-export default function ButterflyPairsGame({ onMenuClick, onComplete }: ButterflyPairsGameProps) {
+export default function ButterflyPairsGame({ onMenuClick, onComplete, onBack, onNext, onRetry, userLoggedIn = false, currentSeason = "wiosna", isGameCompleted = false }: ButterflyPairsGameProps) {
   const { selectedSeason, getThemeColors } = useSeason()
   const theme = getThemeColors()
 
@@ -102,7 +110,7 @@ export default function ButterflyPairsGame({ onMenuClick, onComplete }: Butterfl
   const [successMessage, setSuccessMessage] = useState<string>("")
 
   // Use the game completion hook
-  const { recordCompletion, isLoggedIn } = useGameCompletion()
+  const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("butterfly-pairs-game")
 
   // Function to initialize and shuffle right halves
   const initializeRightHalves = useCallback(() => {
@@ -230,7 +238,7 @@ export default function ButterflyPairsGame({ onMenuClick, onComplete }: Butterfl
               : selectedSeason === "zima"
                 ? "butterfly-pairs-winter"
                 : "butterfly-pairs"
-        recordCompletion(gameId)
+                  recordCompletion()
 
         // Trigger the completion flow after 3 seconds to show success message
         if (onComplete) {
@@ -322,11 +330,11 @@ export default function ButterflyPairsGame({ onMenuClick, onComplete }: Butterfl
       {/* Header with title */}
       <div className="w-full flex justify-between items-center mb-8">
         <div className="relative w-16 h-16">
-          <Image
-            src={theme.soundIcon || "/placeholder.svg"}
-            alt="Sound"
-            fill
-            className="object-contain cursor-pointer"
+          <SoundButtonEnhanced
+            text="ZNAJDŹ PARY."
+            soundIcon={theme.soundIcon || "/images/sound_icon_dragon_page.svg"}
+            size="xl"
+            className="w-full h-full"
           />
         </div>
 
@@ -424,21 +432,82 @@ export default function ButterflyPairsGame({ onMenuClick, onComplete }: Butterfl
 
           {/* Success message */}
           {allMatched && successMessage && (
-            <div className="mt-8 text-center">
-              <div className="bg-green-100 border-2 border-green-500 rounded-lg p-6 mx-auto max-w-md">
-                <div className="text-3xl font-bold text-green-700 mb-2">🎉 {successMessage} 🎉</div>
-              </div>
-            </div>
+            <SuccessMessage message={successMessage} />
           )}
 
-          {/* Reset button - only visible when all pairs are matched */}
-          {allMatched && (
-            <div className="flex justify-center mt-8">
-              <button onClick={resetGame} className="bg-[#539e1b] text-white px-6 py-2 rounded-full font-bold">
-                Zagraj ponownie
-              </button>
+          {/* New Navigation Buttons */}
+          <div className="flex justify-center gap-4 mt-8 w-full">
+            {/* All buttons in same container with identical dimensions */}
+            <div className="flex gap-4 items-end">
+              {/* WRÓĆ Button - always available in butterfly-pairs-game */}
+              <div 
+                className="relative w-36 h-14 transition-all cursor-pointer hover:scale-105"
+                onClick={onBack}
+              >
+                <Image 
+                  src={theme.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 
+                  alt="Wróć button" 
+                  fill 
+                  className="object-contain" 
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="flex items-center gap-2">
+                    <div className="relative w-6 h-6">
+                      <Image 
+                        src="/images/strzalka_lewo.svg" 
+                        alt="Left arrow" 
+                        fill 
+                        className="object-contain" 
+                      />
+                    </div>
+                    <span className="font-sour-gummy font-bold text-lg text-white">WRÓĆ</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* JESZCZE RAZ Button - always visible, but only clickable when game is completed */}
+              <div 
+                className={`relative w-52 h-14 transition-all ${allMatched ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed opacity-50'}`}
+                onClick={allMatched ? resetGame : undefined}
+              >
+                <Image 
+                  src={theme.jeszczeRazButton || "/images/jeszcze_raz_wiosna.svg"} 
+                  alt="Jeszcze raz button" 
+                  fill 
+                  className="object-contain" 
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="font-sour-gummy font-bold text-lg text-white">JESZCZE RAZ</span>
+                </div>
+              </div>
+
+              {/* DALEJ Button - only unlocked when game completed (for logged users) or always available (for non-logged users) */}
+              <div 
+                className={`relative w-36 h-14 transition-all ${(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-105'}`}
+                onClick={(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? undefined : onNext}
+              >
+                <Image 
+                  src={theme.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 
+                  alt="Dalej button" 
+                  fill 
+                  className="object-contain" 
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="flex items-center gap-2">
+                    <span className="font-sour-gummy font-bold text-lg text-white">DALEJ</span>
+                    <div className="relative w-6 h-6">
+                      <Image 
+                        src="/images/strzalka_prawo.svg" 
+                        alt="Right arrow" 
+                        fill 
+                        className="object-contain" 
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          )}
+          </div>
 
           {/* Login reminder for non-logged in users */}
           {!isLoggedIn && (

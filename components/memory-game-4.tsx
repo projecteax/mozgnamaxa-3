@@ -2,13 +2,21 @@
 
 import { useState, useEffect } from "react"
 import Image from "next/image"
-import { useGameCompletion } from "@/hooks/use-game-completion"
+import { useGameCompletionWithHistory } from "@/hooks/use-game-completion"
 import { getRandomSuccessMessage } from "@/lib/success-messages"
 import { useSeason } from "@/contexts/season-context"
+import SoundButtonEnhanced from "./sound-button-enhanced"
+import SuccessMessage from "./success-message"
 
 interface MemoryGame4Props {
   onMenuClick: () => void
   onComplete?: () => void
+  onBack?: () => void
+  onNext?: () => void
+  onRetry?: () => void
+  userLoggedIn?: boolean
+  currentSeason?: string
+  isGameCompleted?: boolean
 }
 
 interface MemoryCard {
@@ -19,12 +27,13 @@ interface MemoryCard {
   isMatched: boolean
 }
 
-export default function MemoryGame4({ onMenuClick, onComplete }: MemoryGame4Props) {
+export default function MemoryGame4({ onMenuClick, onComplete, onBack, onNext, onRetry, userLoggedIn = false, currentSeason = "wiosna", isGameCompleted = false }: MemoryGame4Props) {
   // Use the game completion hook
-  const { recordCompletion, isLoggedIn } = useGameCompletion()
+  const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("memory-game-4")
 
   // Use season context
-  const { selectedSeason } = useSeason()
+  const { selectedSeason, getThemeColors } = useSeason()
+  const theme = getThemeColors()
 
   // Define the cards for the memory game
   const [cards, setCards] = useState<MemoryCard[]>([])
@@ -392,9 +401,7 @@ export default function MemoryGame4({ onMenuClick, onComplete }: MemoryGame4Prop
           setIsCompleted(true)
           setSuccessMessage(getRandomSuccessMessage())
           // Record completion for user stats
-          if (isLoggedIn) {
-            recordCompletion("memory-game-4")
-          }
+          recordCompletion()
           // Call onComplete after 3 seconds to show success message
           if (onComplete) {
             setTimeout(() => {
@@ -415,7 +422,7 @@ export default function MemoryGame4({ onMenuClick, onComplete }: MemoryGame4Prop
         }, 1500)
       }
     }
-  }, [flippedCards, cards, isLoggedIn, recordCompletion, onComplete])
+  }, [flippedCards, cards, recordCompletion, onComplete])
 
   const handleMedalComplete = () => {
     // This function is no longer needed as medal flow is removed
@@ -508,7 +515,12 @@ export default function MemoryGame4({ onMenuClick, onComplete }: MemoryGame4Prop
       {/* Header with title */}
       <div className="w-full flex justify-between items-center mb-8">
         <div className="relative w-16 h-16">
-          <Image src={soundIcon || "/placeholder.svg"} alt="Sound" fill className="object-contain cursor-pointer" />
+          <SoundButtonEnhanced
+            text="ZNAJDŹ PARY."
+            soundIcon={soundIcon || "/images/sound_icon_dragon_page.svg"}
+            size="xl"
+            className="w-full h-full"
+          />
         </div>
 
         <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
@@ -570,11 +582,83 @@ export default function MemoryGame4({ onMenuClick, onComplete }: MemoryGame4Prop
         {/* Success message */}
         {isCompleted && successMessage && (
           <div className="mt-8">
-            <div className="bg-green-100 border-2 border-green-500 rounded-lg p-6 text-center max-w-md mx-auto">
-              <div className="text-green-700 text-xl font-medium">🎉 {successMessage} 🎉</div>
-            </div>
+            <SuccessMessage message={successMessage} />
           </div>
         )}
+
+        {/* New Navigation Buttons */}
+        <div className="flex justify-center gap-4 mt-8 w-full">
+          {/* All buttons in same container with identical dimensions */}
+          <div className="flex gap-4 items-end">
+            {/* WRÓĆ Button - always available in memory-game-4 */}
+            <div 
+              className="relative w-36 h-14 transition-all cursor-pointer hover:scale-105"
+              onClick={onBack}
+            >
+              <Image 
+                src={theme.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 
+                alt="Wróć button" 
+                fill 
+                className="object-contain" 
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="flex items-center gap-2">
+                  <div className="relative w-6 h-6">
+                    <Image 
+                      src="/images/strzalka_lewo.svg" 
+                      alt="Left arrow" 
+                      fill 
+                      className="object-contain" 
+                    />
+                  </div>
+                  <span className="font-sour-gummy font-bold text-lg text-white">WRÓĆ</span>
+                </div>
+              </div>
+            </div>
+
+            {/* JESZCZE RAZ Button - always visible, but only clickable when game is completed */}
+            <div 
+              className={`relative w-52 h-14 transition-all ${isCompleted ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed opacity-50'}`}
+              onClick={isCompleted ? resetGame : undefined}
+            >
+              <Image 
+                src={theme.jeszczeRazButton || "/images/jeszcze_raz_wiosna.svg"} 
+                alt="Jeszcze raz button" 
+                fill 
+                className="object-contain" 
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="font-sour-gummy font-bold text-lg text-white">JESZCZE RAZ</span>
+              </div>
+            </div>
+
+            {/* DALEJ Button - only unlocked when game completed (for logged users) or always available (for non-logged users) */}
+            <div 
+              className={`relative w-36 h-14 transition-all ${(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-105'}`}
+              onClick={(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? undefined : onNext}
+            >
+              <Image 
+                src={theme.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 
+                alt="Dalej button" 
+                fill 
+                className="object-contain" 
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="flex items-center gap-2">
+                  <span className="font-sour-gummy font-bold text-lg text-white">DALEJ</span>
+                  <div className="relative w-6 h-6">
+                    <Image 
+                      src="/images/strzalka_prawo.svg" 
+                      alt="Right arrow" 
+                      fill 
+                      className="object-contain" 
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )

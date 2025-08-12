@@ -204,14 +204,7 @@ export default function MemoryGame2({ onMenuClick }: MemoryGame2Props) {
           ))}
         </div>
 
-        {/* Reset button - only visible when game is completed */}
-        {isCompleted && (
-          <div className="flex justify-center mt-8">
-            <button onClick={resetGame} className="bg-[#539e1b] text-white px-6 py-2 rounded-full font-bold">
-              Zagraj ponownie
-            </button>
-          </div>
-        )}
+        {/* Reset button removed as per requirement */}
       </div>
 
       {/* Login reminder for non-logged in users */}

@@ -548,13 +548,10 @@ export default function MemoryMatchGame2x4({ onMenuClick }: MemoryMatchGame2x4Pr
         </div>
       </div>
 
-      {/* Success message and button - only visible when the game is complete */}
+      {/* Success message - only visible when the game is complete; retry button removed */}
       {isCompleted && (
         <div className="flex flex-col items-center mt-8">
           <SuccessMessage message={successMessage} />
-          <button onClick={resetGame} className="bg-[#539e1b] text-white px-6 py-3 rounded-full font-sour-gummy text-lg">
-            Zagraj ponownie
-          </button>
         </div>
       )}
     </div>

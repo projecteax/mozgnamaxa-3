@@ -295,21 +295,7 @@ export default function FindMissingGame({ onMenuClick, onBack, onNext, onRetry, 
             </div>
           </div>
 
-          {/* JESZCZE RAZ Button - always visible, but only clickable when game is completed */}
-          <div 
-            className={`relative w-52 h-14 transition-all ${isCompleted ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed opacity-50'}`}
-            onClick={isCompleted ? resetGame : undefined}
-          >
-            <Image 
-              src={theme.jeszczeRazButton || "/images/jeszcze_raz_wiosna.svg"} 
-              alt="Jeszcze raz button" 
-              fill 
-              className="object-contain" 
-            />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="font-sour-gummy font-bold text-lg text-white">JESZCZE RAZ</span>
-            </div>
-          </div>
+          {/* Retry button removed */}
 
           {/* DALEJ Button - only unlocked when game completed (for logged users) or always available (for non-logged users) */}
           <div 

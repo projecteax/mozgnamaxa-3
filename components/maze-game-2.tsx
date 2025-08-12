@@ -199,14 +199,7 @@ export default function MazeGame2({ onMenuClick }: MazeGame2Props) {
           </div>
         )}
 
-        {/* Reset button - only visible when game is completed, positioned below the success message */}
-        {isCompleted && (
-          <div className="absolute left-1/2 transform -translate-x-1/2" style={{ top: "calc(50% + 340px)" }}>
-            <button onClick={resetGame} className="bg-[#539e1b] text-white px-6 py-2 rounded-full font-bold">
-              Zagraj ponownie
-            </button>
-          </div>
-        )}
+        {/* Retry button removed as per requirement */}
       </div>
     </div>
   )

@@ -54,6 +54,17 @@ const GAMES_LIST = [
   { id: "pattern-completion", name: "UZUPEŁNIJ WZÓR." },
   { id: "find-incorrect-ladybug", name: "ZNAJDŹ BŁĘDNĄ BIEDRONKĘ." },
   { id: "sequential-order-3", name: "UŁÓŻ PO KOLEI." },
+  // Remaining games from gameOrder
+  { id: "memory-2", name: "ZNAJDŹ PARY." },
+  { id: "memory-6", name: "ZNAJDŹ PARY." },
+  { id: "sorting-3", name: "UŁÓŻ DALEJ." },
+  { id: "sorting-4", name: "UŁÓŻ DALEJ." },
+  { id: "sequential-order", name: "UŁÓŻ PO KOLEI." },
+  { id: "category-sorting-2", name: "PODZIEL OBRAZKI." },
+  { id: "category-sorting-4", name: "PODZIEL OBRAZKI." },
+  { id: "easter-basket-2", name: "WYBIERZ, CO NIE PASUJE DO KOSZYCZKA." },
+  { id: "maze-2", name: "ZNAJDŹ DROGĘ DO GNIAZDA." },
+  { id: "maze-4", name: "ZNAJDŹ DROGĘ DO GNIAZDA." },
 ]
 
 // Seasons mapping
@@ -111,45 +122,46 @@ export default function StudentProgressMenu({ onGameStart, onMenuClick }: Studen
   const completedGames = progress?.completedGames || []
   const gameCompletionCounts = progress?.gameCompletionCounts || {}
 
-  // Calculate progress - 144 total games (36 per season)
-  const totalGames = 144 // 36 games per season * 4 seasons
+  // Calculate progress - 50 total games (all games in the order)
+  const totalGames = 50 // Total number of games in the order
   const gamesPerSeason = 36
   const medalsPerSeason = 12 // medal every 3 games
   const completedCount = completedGames.length
   const medals = progress?.medals || Math.floor(completedCount / 3)
   const progressPercent = (completedCount / totalGames) * 100
 
-  // Determine next game and season
+  // Determine next game and season based on sequential progression
   const getNextGameInfo = () => {
     // Early return if progress is not available
     if (!progress) {
       return null
     }
     
-    // Check each season to find the next available game
-    for (let seasonIndex = 0; seasonIndex < 4; seasonIndex++) {
+    // Check each season in order (spring -> summer -> autumn -> winter)
+    for (let seasonIndex = 0; seasonIndex < SEASONS.length; seasonIndex++) {
       const seasonId = SEASONS[seasonIndex].id as keyof typeof progress.seasonProgress
       const seasonCompletedGames = progress?.seasonProgress?.[seasonId]?.completedGames || []
       
-      // If this season has uncompleted games, return the first one
+      // If this season is not complete (less than 36 games), find the next game
       if (seasonCompletedGames.length < gamesPerSeason) {
-        const nextGameIndex = seasonIndex * gamesPerSeason + seasonCompletedGames.length
+        // Find which game number they should play next (0-35)
+        const nextGameIndexInSeason = seasonCompletedGames.length
         
-        // Check if the game index is within bounds
-        if (nextGameIndex < GAMES_LIST.length) {
-          const nextGame = GAMES_LIST[nextGameIndex]
-          if (nextGame) {
-            return {
-              gameIndex: nextGameIndex,
-              seasonId: seasonId,
-              gameName: nextGame.name
-            }
+        // Make sure we don't go beyond 36 games
+        if (nextGameIndexInSeason < gamesPerSeason && nextGameIndexInSeason < GAMES_LIST.length) {
+          const nextGame = GAMES_LIST[nextGameIndexInSeason]
+          
+          return {
+            gameIndex: nextGameIndexInSeason, // Local index for this season (0-35)
+            seasonId: seasonId,
+            gameName: nextGame.name,
+            seasonIndex: seasonIndex
           }
         }
       }
     }
     
-    // If all games are completed, return null
+    // If all games in all seasons are completed, return null
     return null
   }
 
@@ -202,9 +214,8 @@ export default function StudentProgressMenu({ onGameStart, onMenuClick }: Studen
     const nextGameInSeason = getNextGameInSeason(selectedSeasonPopup.seasonIndex)
     if (nextGameInSeason) {
       setSelectedSeason(selectedSeasonPopup.season.id as any)
-      // Calculate the global game index for this game
-      const globalGameIndex = selectedSeasonPopup.seasonIndex * gamesPerSeason + nextGameInSeason.index
-      onGameStart(globalGameIndex)
+      // Use the local game index directly (0-35) since all seasons use the same 36 games
+      onGameStart(nextGameInSeason.index)
     }
     setSelectedSeasonPopup(null)
   }
@@ -235,8 +246,8 @@ export default function StudentProgressMenu({ onGameStart, onMenuClick }: Studen
       }
     }
     
-    // Find the first uncompleted game in this season
-    for (let i = 0; i < GAMES_LIST.length; i++) {
+    // Find the first uncompleted game in this season - only check first 36 games
+    for (let i = 0; i < gamesPerSeason && i < GAMES_LIST.length; i++) {
       const game = GAMES_LIST[i]
       if (game && !seasonCompletedGames.includes(game.id)) {
         return {
@@ -252,10 +263,10 @@ export default function StudentProgressMenu({ onGameStart, onMenuClick }: Studen
   }
 
   const handleContinueGame = () => {
-    if (nextGameInfo && nextGameInfo.gameIndex < GAMES_LIST.length) {
-      // Set season based on the next game's season
+    if (nextGameInfo) {
+      // Set the season for the next game
       setSelectedSeason(nextGameInfo.seasonId as any)
-      // Pass the global game index to onGameStart
+      // Use the local game index directly (0-35) since all seasons use the same 36 games
       onGameStart(nextGameInfo.gameIndex)
     }
   }
@@ -302,7 +313,7 @@ export default function StudentProgressMenu({ onGameStart, onMenuClick }: Studen
       </div>
 
               {/* Continue Playing Button */}
-        {nextGameIndex < totalGames && (
+        {nextGameInfo && (
           <div className="mb-8 text-center flex flex-col items-center">
             <div className="relative w-48 h-12 cursor-pointer hover:scale-105 transition-transform" onClick={handleContinueGame}>
               <Image src="/images/button_default.svg" alt="Continue button background" fill className="object-contain" />
@@ -311,7 +322,7 @@ export default function StudentProgressMenu({ onGameStart, onMenuClick }: Studen
               </div>
             </div>
             <p className="text-sm font-sour-gummy mt-2" style={{ color: '#3E459C' }}>
-              Następna gra: {nextGameInfo?.gameName || GAMES_LIST[nextGameIndex]?.name}
+              Następna gra: {nextGameInfo.gameName}
             </p>
           </div>
         )}

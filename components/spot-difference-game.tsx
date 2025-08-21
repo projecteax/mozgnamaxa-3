@@ -62,7 +62,7 @@ export default function SpotDifferenceGame({ onMenuClick, onBack, onNext, onRetr
       return [
         { id: 1, name: "animal", xProp: 6 / 15, yProp: 3 / 11, radius: 30, found: false },
         { id: 2, name: "egg", xProp: 8 / 15, yProp: 5 / 11, radius: 30, found: false },
-        { id: 3, name: "bow", xProp: 10 / 15, yProp: 6 / 11, radius: 60, found: false },
+        { id: 3, name: "bow", xProp: 10 / 15, yProp: 6 / 11, radius: 30, found: false },
       ]
     }
   }

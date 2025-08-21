@@ -18,6 +18,7 @@ interface PuzzleGameProps {
   userLoggedIn?: boolean
   currentSeason?: string
   isGameCompleted?: boolean
+  onComplete?: () => void
 }
 
 interface PuzzlePiece {
@@ -27,7 +28,7 @@ interface PuzzlePiece {
   currentPosition: number | null
 }
 
-export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userLoggedIn = false, currentSeason = "wiosna", isGameCompleted = false }: PuzzleGameProps) {
+export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userLoggedIn = false, currentSeason = "wiosna", isGameCompleted = false, onComplete }: PuzzleGameProps) {
   const { selectedSeason, getThemeColors } = useSeason()
   const themeColors = getThemeColors()
 
@@ -108,7 +109,7 @@ export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userL
   const [successMessage, setSuccessMessage] = useState<string>("")
 
   // Use the game completion hook
-  const { recordCompletion, isLoggedIn } = useGameCompletionWithHistory("puzzle-game")
+  const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("puzzle-game")
 
   // Piece dimensions - enlarged by 300% (3x the previous size)
   const pieceWidth = Math.round(112 * 0.2 * 5 * 0.2 * 3)
@@ -234,6 +235,13 @@ export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userL
         // Record completion when game is finished
         if (isLoggedIn) {
           recordCompletion()
+        }
+
+        // Call completion callback after 3 seconds to show success message
+        if (onComplete) {
+          setTimeout(() => {
+            onComplete()
+          }, 3000) // 3 second delay
         }
       }
     }, 100)
@@ -396,10 +404,10 @@ export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userL
 
 
 
-              {/* DALEJ Button - only unlocked when game completed (for logged users) or always available (for non-logged users) */}
+              {/* DALEJ Button - disabled when not completed or when completed and waiting for medal */}
               <div 
-                className={`relative w-36 h-14 transition-all ${(userLoggedIn && !isGameCompleted) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-105'}`}
-                onClick={(userLoggedIn && !isGameCompleted) ? undefined : onNext}
+                className={`relative w-36 h-14 transition-all ${(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) || isCompleted ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-105'}`}
+                onClick={(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) || isCompleted ? undefined : onNext}
               >
                 <Image 
                   src={themeColors.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 

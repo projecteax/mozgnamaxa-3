@@ -16,9 +16,11 @@ import app from "@/lib/firebase"
 interface AuthContextType {
   user: User | null
   register: (email: string, password: string) => Promise<any>
+  createUserWithoutSignIn: (email: string, password: string) => Promise<any>
   login: (email: string, password: string) => Promise<any>
   logout: () => Promise<void>
   resetPassword: (email: string) => Promise<void>
+  setAuthListenerEnabled: (enabled: boolean) => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -26,19 +28,39 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const [authListenerEnabled, setAuthListenerEnabled] = useState(true)
   const auth = getAuth(app)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user)
-      setLoading(false)
+      if (authListenerEnabled) {
+        setUser(user)
+        setLoading(false)
+      }
     })
 
     return () => unsubscribe()
-  }, [auth])
+  }, [auth, authListenerEnabled])
 
   const register = async (email: string, password: string) => {
     const result = await createUserWithEmailAndPassword(auth, email, password)
+    return result.user
+  }
+
+  const createUserWithoutSignIn = async (email: string, password: string) => {
+    // Temporarily disable auth state listener to prevent redirection
+    const currentUser = auth.currentUser
+    
+    // Create the new user (this will sign them in)
+    const result = await createUserWithEmailAndPassword(auth, email, password)
+    
+    // Immediately sign out the newly created user
+    await signOut(auth)
+    
+    // If there was a previous user, we need to sign them back in
+    // This is a limitation of Firebase Auth - we can't create users without signing them in
+    // So we'll need to handle this differently
+    
     return result.user
   }
 
@@ -58,9 +80,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const value = {
     user,
     register,
+    createUserWithoutSignIn,
     login,
     logout,
     resetPassword,
+    setAuthListenerEnabled,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

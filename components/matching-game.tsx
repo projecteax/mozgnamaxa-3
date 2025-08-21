@@ -276,33 +276,44 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
             ))}
           </div>
           <div className="flex gap-2 w-full mt-8">
-            {scrambledTargetItems.map((item) => (
-              <div
-                key={`dropzone-${item.id}`}
-                data-id={item.id}
-                className="relative h-[140px] w-[140px]"
-                onDragOver={handleDragOver}
-                onDrop={(e) => handleDrop(e, item.id)}
-                onTouchEnd={handleTouchEnd}
-              >
-                <Image src="/images/white_box_medium.svg" alt="Box" fill className="object-contain" priority />
-                {correctItems.includes(item.id) && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="relative h-[80px] w-[80px]">
-                      <Image
-                        src={item.image || "/placeholder.svg"}
-                        alt={item.name}
-                        fill
-                        className="object-contain"
-                        style={{
-                          filter: "drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.25))",
-                        }}
-                      />
+            {scrambledTargetItems.map((item, index) => {
+              const isAvailable = correctItems.length === index && !correctItems.includes(item.id)
+              const isFilled = correctItems.includes(item.id)
+              
+              return (
+                <div
+                  key={`dropzone-${item.id}`}
+                  data-id={item.id}
+                  className={`relative h-[140px] w-[140px] ${!isAvailable && !isFilled ? 'opacity-40' : ''}`}
+                  onDragOver={isAvailable ? handleDragOver : undefined}
+                  onDrop={isAvailable ? (e) => handleDrop(e, item.id) : undefined}
+                  onTouchEnd={isAvailable ? handleTouchEnd : undefined}
+                >
+                  <Image 
+                    src="/images/white_box_medium.svg" 
+                    alt="Box" 
+                    fill 
+                    className="object-contain" 
+                    priority 
+                  />
+                  {isFilled && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="relative h-[80px] w-[80px]">
+                        <Image
+                          src={item.image || "/placeholder.svg"}
+                          alt={item.name}
+                          fill
+                          className="object-contain"
+                          style={{
+                            filter: "drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.25))",
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            ))}
+                  )}
+                </div>
+              )
+            })}
           </div>
         </div>
 

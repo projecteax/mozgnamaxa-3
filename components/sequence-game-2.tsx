@@ -345,10 +345,10 @@ export default function SequenceGame2({ onMenuClick, onComplete, onBack, onNext,
 
           {/* Retry button removed */}
 
-          {/* DALEJ Button - only unlocked when game completed (for logged users) or always available (for non-logged users) */}
+          {/* DALEJ Button - disabled when not completed or when completed and waiting for medal */}
           <div 
-            className={`relative w-36 h-14 transition-all ${(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-105'}`}
-            onClick={(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? undefined : onNext}
+            className={`relative w-36 h-14 transition-all ${(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) || isCompleted ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-105'}`}
+            onClick={(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) || isCompleted ? undefined : onNext}
           >
             <Image 
               src={theme.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 

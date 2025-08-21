@@ -4,6 +4,46 @@ import { useState } from "react"
 import Image from "next/image"
 import { useSeason } from "@/contexts/season-context"
 
+// Game module mapping for consistent display
+const gameModuleMapping: Record<string, { module: string, task: string, polishName: string }> = {
+  "matching": { module: "MODUŁ 1", task: "ZADANIE 1", polishName: "Ułóż tak samo" },
+  "sequence": { module: "MODUŁ 1", task: "ZADANIE 2", polishName: "Co pasuje? Uzupełnij" },
+  "butterfly-pairs": { module: "MODUŁ 1", task: "ZADANIE 3", polishName: "Znajdź pary" },
+  "odd-one-out": { module: "MODUŁ 2", task: "ZADANIE 1", polishName: "Wybierz, co nie pasuje" },
+  "puzzle": { module: "MODUŁ 2", task: "ZADANIE 2", polishName: "Ułóż obrazek" },
+  "connect": { module: "MODUŁ 2", task: "ZADANIE 3", polishName: "Połącz" },
+  "sorting": { module: "MODUŁ 3", task: "ZADANIE 1", polishName: "Ułóż dalej" },
+  "category-sorting": { module: "MODUŁ 3", task: "ZADANIE 2", polishName: "Podziel obrazki" },
+  "memory": { module: "MODUŁ 3", task: "ZADANIE 3", polishName: "Znajdź pary (Pamięć)" },
+  "spot-difference": { module: "MODUŁ 4", task: "ZADANIE 1", polishName: "Znajdź 3 różnice" },
+  "easter-basket": { module: "MODUŁ 4", task: "ZADANIE 2", polishName: "Wybierz, co nie pasuje do koszyczka" },
+  "easter-sequence": { module: "MODUŁ 4", task: "ZADANIE 3", polishName: "Co pasuje? Uzupełnij. Wielkanoc" },
+  "maze": { module: "MODUŁ 5", task: "ZADANIE 1", polishName: "Znajdź drogę do gniazda" },
+  "sorting-2": { module: "MODUŁ 5", task: "ZADANIE 2", polishName: "Ułóż dalej 2" },
+  "memory-5": { module: "MODUŁ 5", task: "ZADANIE 3", polishName: "Znajdź pary 5" },
+  "memory-3": { module: "MODUŁ 6", task: "ZADANIE 1", polishName: "Znajdź pary 3" },
+  "puzzle-assembly-2": { module: "MODUŁ 6", task: "ZADANIE 2", polishName: "Ułóż obrazek - farma" },
+  "spot-difference-5": { module: "MODUŁ 6", task: "ZADANIE 3", polishName: "Znajdź 5 różnic" },
+  "memory-7": { module: "MODUŁ 7", task: "ZADANIE 1", polishName: "Znajdź pary 7" },
+  "category-sorting-3": { module: "MODUŁ 7", task: "ZADANIE 2", polishName: "Podziel obrazki 3" },
+  "sequence-2": { module: "MODUŁ 7", task: "ZADANIE 3", polishName: "Co pasuje? Uzupełnij 2" },
+  "find-missing": { module: "MODUŁ 8", task: "ZADANIE 1", polishName: "Zaznacz to, czego brakuje na obrazku" },
+  "sequential-order-2": { module: "MODUŁ 8", task: "ZADANIE 2", polishName: "Ułóż po kolei 2" },
+  "memory-4": { module: "MODUŁ 8", task: "ZADANIE 3", polishName: "Znajdź pary 4" },
+  "memory-match": { module: "MODUŁ 9", task: "ZADANIE 1", polishName: "Zapamiętaj i ułóż tak samo" },
+  "maze-3": { module: "MODUŁ 9", task: "ZADANIE 2", polishName: "Znajdź drogę do kwiatka" },
+  "find-missing-half": { module: "MODUŁ 9", task: "ZADANIE 3", polishName: "Znajdź brakującą połowę" },
+  "find-flipped-rabbit": { module: "MODUŁ 10", task: "ZADANIE 1", polishName: "Znajdź odwróconego króliczka" },
+  "branch-sequence": { module: "MODUŁ 10", task: "ZADANIE 2", polishName: "Dokończ układanie" },
+  "find-6-differences": { module: "MODUŁ 10", task: "ZADANIE 3", polishName: "Znajdź 6 różnic" },
+  "birds-puzzle": { module: "MODUŁ 11", task: "ZADANIE 1", polishName: "Ułóż obrazek - ptaki" },
+  "memory-match-2x4": { module: "MODUŁ 11", task: "ZADANIE 2", polishName: "Zapamiętaj i ułóż tak samo 2x4" },
+  "sudoku": { module: "MODUŁ 11", task: "ZADANIE 3", polishName: "Uzupełnij sudoku" },
+  "pattern-completion": { module: "MODUŁ 12", task: "ZADANIE 1", polishName: "Co pasuje? Uzupełnij - wzór" },
+  "find-incorrect-ladybug": { module: "MODUŁ 12", task: "ZADANIE 2", polishName: "Znajdź nieprawidłową biedronkę" },
+  "sequential-order-3": { module: "MODUŁ 12", task: "ZADANIE 3", polishName: "Ułóż po kolei" },
+}
+
 interface SeasonGamePopupProps {
   isOpen: boolean
   onClose: () => void
@@ -173,13 +213,28 @@ export default function SeasonGamePopup({
                       {isCompleted ? '✅' : isNextGame ? '▶️' : '🔒'}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className={`font-sour-gummy font-bold text-lg truncate ${isClickable ? 'text-gray-800' : 'text-gray-500'}`}>
-                        {game.name}
-                      </h3>
-                      <div className="flex items-center justify-between">
-                        <p className="text-sm font-sour-gummy text-gray-600">
-                          Gra #{gameIndex + 1}
-                        </p>
+                      {(() => {
+                        const mapping = gameModuleMapping[game.id]
+                        if (mapping) {
+                          return (
+                            <>
+                              <h3 className={`font-sour-gummy font-bold text-lg truncate ${isClickable ? 'text-gray-800' : 'text-gray-500'}`}>
+                                {mapping.module} {mapping.task}
+                              </h3>
+                              <p className={`font-sour-gummy text-sm ${isClickable ? 'text-gray-600' : 'text-gray-400'}`}>
+                                {mapping.polishName}
+                              </p>
+                            </>
+                          )
+                        } else {
+                          return (
+                            <h3 className={`font-sour-gummy font-bold text-lg truncate ${isClickable ? 'text-gray-800' : 'text-gray-500'}`}>
+                              {game.name}
+                            </h3>
+                          )
+                        }
+                      })()}
+                      <div className="flex items-center justify-between mt-1">
                         <div className="text-sm font-sour-gummy">
                           {isCompleted ? (
                             <span className="text-green-700 font-bold">
@@ -225,7 +280,7 @@ export default function SeasonGamePopup({
                 Postęp w sezonie {season.name}:
               </span>
               <div className="text-sm text-gray-600 mt-1">
-                {completedGames.filter(gameId => games.some(g => g.id === gameId)).length} / {games.length} gier ukończonych
+                {completedGames.filter(gameId => games.some(g => g.id === gameId)).length} / 36 gier ukończonych
               </div>
             </div>
             <div className="text-right">

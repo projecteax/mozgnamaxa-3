@@ -40,13 +40,5 @@ export default function GameProgress({ gameId }: GameProgressProps) {
     return null
   }
 
-  return (
-    <div className="w-full max-w-md mx-auto mt-4 text-center">
-      <div className="bg-white rounded-lg shadow-sm p-3">
-        <p className="text-gray-700">
-          Ukończono: <span className="font-bold text-[#539e1b]">{completionCount}</span> razy
-        </p>
-      </div>
-    </div>
-  )
+  return null
 }

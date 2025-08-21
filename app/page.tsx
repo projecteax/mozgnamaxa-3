@@ -274,6 +274,8 @@ export default function Home() {
     | "game"
   >("welcome")
 
+  const [isCreatingStudent, setIsCreatingStudent] = useState(false)
+
   // Check for redirect on component mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -284,11 +286,41 @@ export default function Home() {
         setCurrentGame(redirectToGame as GameType)
         setCurrentView("game")
       }
+      
+      // Clear gameInProgress flag when navigating away from game view
+      if (currentView !== "game" && localStorage.getItem("gameInProgress") === "true") {
+        localStorage.removeItem("gameInProgress")
+        console.log("Cleared gameInProgress flag")
+      }
     }
-  }, [])
+  }, [currentView])
 
   // Handle user authentication redirection
   useEffect(() => {
+    // Don't redirect if we're in the middle of creating a student account
+    if (isCreatingStudent) {
+      console.log("Creating student account, skipping redirection")
+      return
+    }
+
+    // Don't redirect if a game is currently in progress
+    if (typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true") {
+      console.log("Game in progress, skipping redirection")
+      return
+    }
+
+    // Don't redirect if we're on any dragon welcome page (user is in the middle of starting a game)
+    if (currentView && currentView.startsWith("dragon-welcome")) {
+      console.log("On dragon welcome page, skipping redirection")
+      return
+    }
+
+    // Don't redirect if we're currently in a game
+    if (currentView === "game") {
+      console.log("Currently in game, skipping redirection")
+      return
+    }
+
     if (user) {
       console.log("User authenticated, checking role...")
       const checkUserRole = async () => {
@@ -310,8 +342,18 @@ export default function Home() {
             }
           }
           
-          // If no teacher data found or no unique_code, redirect to season selection
-          console.log("User is a student, redirecting to season selection")
+          // Check if user is a student by looking in students collection
+          const studentQuery = query(collection(db, "students"), where("uid", "==", user.uid))
+          const studentSnapshot = await getDocs(studentQuery)
+          
+          if (!studentSnapshot.empty) {
+            console.log("User is a student, redirecting to season selection")
+            setCurrentView("season-selection")
+            return
+          }
+          
+          // If no data found in either collection, default to season selection
+          console.log("User data not found, redirecting to season selection")
           setCurrentView("season-selection")
         } catch (error) {
           console.error("Error checking user type:", error)
@@ -320,9 +362,19 @@ export default function Home() {
         }
       }
       
-      checkUserRole()
+      // Add a small delay to ensure Firebase Auth state is fully settled
+      setTimeout(() => {
+        checkUserRole()
+      }, 100)
+    } else {
+      // If no user, make sure we're not in teacher panel
+      if (currentView === "teacher-panel") {
+        setCurrentView("main-menu")
+      }
     }
-  }, [user])
+  }, [user, currentView, isCreatingStudent])
+
+
 
   // Define the game order based on the menu
   const gameOrder: GameType[] = [
@@ -687,6 +739,8 @@ export default function Home() {
     setCurrentGame("maze") // Start with maze game
   }
 
+
+
   // Welcome screen handler
   const handleWelcomeStart = () => {
     setCurrentView("main-menu")
@@ -720,7 +774,7 @@ export default function Home() {
 
   const handleLoginSuccess = async () => {
     // The actual redirection will be handled by useEffect when user state changes
-    console.log("Login successful, waiting for user state to update...")
+    console.log("Login/Registration successful, waiting for user state to update...")
   }
 
   const handleStudentLoginSuccess = async () => {
@@ -736,9 +790,7 @@ export default function Home() {
     setCurrentView("student-register")
   }
 
-  const handleGoToSeasonSelection = () => {
-    setCurrentView("season-selection")
-  }
+
 
   // Handle first dragon welcome screen START button - goes to first game
   const handleDragonStart = () => {
@@ -765,12 +817,53 @@ export default function Home() {
     setCurrentView("dragon-welcome")
   }
 
+  // Map game index to dragon welcome page - only for specific milestone games
+  const getDragonWelcomeForGameIndex = (gameIndex: number): string | null => {
+    // Dragon screens should only appear for specific milestone games: 1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34
+    // Converting to 0-based index: 0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33
+    const dragonWelcomeMap: Record<number, string> = {
+      0: "dragon-welcome",      // Game 1 (matching)
+      3: "dragon-welcome-2",    // Game 4 (odd-one-out) 
+      6: "dragon-welcome-3",    // Game 7 (sorting)
+      9: "dragon-welcome-4",    // Game 10 (spot-difference)
+      12: "dragon-welcome-5",   // Game 13 (maze)
+      15: "dragon-welcome-6",   // Game 16
+      18: "dragon-welcome-7",   // Game 19
+      21: "dragon-welcome-8",   // Game 22
+      24: "dragon-welcome-9",   // Game 25
+      27: "dragon-welcome-10",  // Game 28
+      30: "dragon-welcome-11",  // Game 31
+      33: "dragon-welcome-12",  // Game 34
+    }
+    
+    return dragonWelcomeMap[gameIndex] || null
+  }
+
   // Handle game start from student progress menu
   const handleGameStartFromProgress = (gameIndex: number) => {
     if (gameIndex < gameOrder.length) {
       setCurrentGame(gameOrder[gameIndex])
-      setCurrentView("game")
+      // Only show dragon welcome page for milestone games, otherwise go directly to game
+      const dragonWelcomePage = getDragonWelcomeForGameIndex(gameIndex)
+      if (dragonWelcomePage) {
+        // This is a milestone game - show dragon welcome first
+        setCurrentView(dragonWelcomePage as any)
+        localStorage.setItem("gameInProgress", "true")
+      } else {
+        // Regular game - go directly to the game
+        setCurrentView("game")
+      }
     }
+  }
+
+  // Dynamic handler for dragon welcome Start button - goes to the currently selected game
+  const handleDragonWelcomeStart = () => {
+    setCurrentView("game")
+    // Clear the gameInProgress flag since we're now going to the game
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem("gameInProgress")
+    }
+    // The currentGame is already set correctly from handleGameStartFromProgress
   }
 
   const isFirstGame = gameOrder.indexOf(currentGame) === 0
@@ -858,42 +951,62 @@ export default function Home() {
   }
 
   if (currentView === "dragon-welcome-4") {
-    return <CongratulationsPage4 onStartClick={handleDragon4Start} />
+    // Check if we're coming from progress menu (gameInProgress flag is set)
+    const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
+    return <CongratulationsPage4 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon4Start} />
   }
 
   if (currentView === "dragon-welcome-5") {
-    return <CongratulationsPage5 onStartClick={handleDragon5Start} />
+    // Check if we're coming from progress menu (gameInProgress flag is set)
+    const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
+    return <CongratulationsPage5 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon5Start} />
   }
 
   if (currentView === "dragon-welcome-6") {
-    return <CongratulationsPage6 onStartClick={handleDragon6Start} />
+    // Check if we're coming from progress menu (gameInProgress flag is set)
+    const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
+    return <CongratulationsPage6 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon6Start} />
   }
 
   if (currentView === "dragon-welcome-7") {
-    return <CongratulationsPage7 onStartClick={handleDragon7Start} />
+    // Check if we're coming from progress menu (gameInProgress flag is set)
+    const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
+    return <CongratulationsPage7 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon7Start} />
   }
 
   if (currentView === "dragon-welcome-8") {
-    return <CongratulationsPage8 onStartClick={handleDragon8Start} />
+    // Check if we're coming from progress menu (gameInProgress flag is set)
+    const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
+    return <CongratulationsPage8 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon8Start} />
   }
 
   if (currentView === "dragon-welcome-9") {
-    return <CongratulationsPage9 onStartClick={handleDragon9Start} />
+    // Check if we're coming from progress menu (gameInProgress flag is set)
+    const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
+    return <CongratulationsPage9 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon9Start} />
   }
 
   if (currentView === "dragon-welcome-10") {
-    return <CongratulationsPage10 onStartClick={handleDragon10Start} />
+    // Check if we're coming from progress menu (gameInProgress flag is set)
+    const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
+    return <CongratulationsPage10 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon10Start} />
   }
 
   if (currentView === "dragon-welcome-11") {
-    return <CongratulationsPage11 onStartClick={handleDragon11Start} />
+    // Check if we're coming from progress menu (gameInProgress flag is set)
+    const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
+    return <CongratulationsPage11 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon11Start} />
   }
 
   if (currentView === "dragon-welcome-12") {
-    return <CongratulationsPage12 onStartClick={handleDragon12Start} />
+    // Check if we're coming from progress menu (gameInProgress flag is set)
+    const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
+    return <CongratulationsPage12 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon12Start} />
   }
   if (currentView === "dragon-welcome-13") {
-    return <CongratulationsPage13 onStartClick={handleDragon13Start} />
+    // Check if we're coming from progress menu (gameInProgress flag is set)
+    const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
+    return <CongratulationsPage13 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon13Start} />
   }
 
   // Render based on current view
@@ -931,15 +1044,21 @@ export default function Home() {
   }
 
   if (currentView === "dragon-welcome") {
-    return <CongratulationsPage onStartClick={handleDragonStart} />
+    // Check if we're coming from progress menu (gameInProgress flag is set)
+    const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
+    return <CongratulationsPage onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragonStart} />
   }
 
   if (currentView === "dragon-welcome-2") {
-    return <CongratulationsPage2 onStartClick={handleDragon2Start} />
+    // Check if we're coming from progress menu (gameInProgress flag is set)
+    const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
+    return <CongratulationsPage2 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon2Start} />
   }
 
   if (currentView === "dragon-welcome-3") {
-    return <CongratulationsPage3 onStartClick={handleDragon3Start} />
+    // Check if we're coming from progress menu (gameInProgress flag is set)
+    const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
+    return <CongratulationsPage3 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon3Start} />
   }
 
   if (currentView === "student-login") {
@@ -1007,7 +1126,11 @@ export default function Home() {
   }
 
   if (currentView === "teacher-panel") {
-    return <TeacherPanel onMenuClick={toggleMenu} onGoToSeasonSelection={handleGoToSeasonSelection} />
+    return <TeacherPanel 
+      onMenuClick={toggleMenu} 
+      isCreatingStudent={isCreatingStudent}
+      setIsCreatingStudent={setIsCreatingStudent}
+    />
   }
 
   if (currentView === "forgot-password") {
@@ -1057,17 +1180,17 @@ export default function Home() {
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
         />
-      ) : currentGame === "pattern-completion" ? (
-        <PatternCompletionGame 
-          onMenuClick={toggleMenu} 
-          onBack={goToPreviousGame}
-          onNext={goToNextGame}
-          onRetry={() => {
-            // Reset handled internally
-          }}
-          userLoggedIn={!!user}
-          currentSeason={selectedSeason}
-        />
+              ) : currentGame === "pattern-completion" ? (
+          <PatternCompletionGame 
+            onMenuClick={toggleMenu} 
+            onBack={goToPreviousGame}
+            onNext={goToNextGame}
+            onRetry={() => {
+              // Reset handled internally
+            }}
+            userLoggedIn={!!user}
+            currentSeason={selectedSeason}
+          />
       ) : currentGame === "sudoku" ? (
         <SudokuGame 
           onMenuClick={toggleMenu} 
@@ -1091,17 +1214,17 @@ export default function Home() {
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
         />
-      ) : currentGame === "birds-puzzle" ? (
-        <BirdsPuzzleGame 
-          onMenuClick={toggleMenu} 
-          onBack={goToPreviousGame}
-          onNext={goToNextGame}
-          onRetry={() => {
-            // Reset handled internally
-          }}
-          userLoggedIn={!!user}
-          currentSeason={selectedSeason}
-        />
+              ) : currentGame === "birds-puzzle" ? (
+          <BirdsPuzzleGame 
+            onMenuClick={toggleMenu} 
+            onBack={goToPreviousGame}
+            onNext={goToNextGame}
+            onRetry={() => {
+              // Reset handled internally
+            }}
+            userLoggedIn={!!user}
+            currentSeason={selectedSeason}
+          />
       ) : currentGame === "find-6-differences" ? (
         <Find6DifferencesGame 
           onMenuClick={toggleMenu} 
@@ -1114,28 +1237,28 @@ export default function Home() {
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
         />
-      ) : currentGame === "branch-sequence" ? (
-        <BranchSequenceGame 
-          onMenuClick={toggleMenu} 
-          onBack={goToPreviousGame}
-          onNext={goToNextGame}
-          onRetry={() => {
-            // Reset handled internally
-          }}
-          userLoggedIn={!!user}
-          currentSeason={selectedSeason}
-        />
-      ) : currentGame === "find-flipped-rabbit" ? (
-        <FindFlippedRabbitGame 
-          onMenuClick={toggleMenu} 
-          onBack={goToPreviousGame}
-          onNext={goToNextGame}
-          onRetry={() => {
-            // Reset handled internally
-          }}
-          userLoggedIn={!!user}
-          currentSeason={selectedSeason}
-        />
+              ) : currentGame === "branch-sequence" ? (
+          <BranchSequenceGame 
+            onMenuClick={toggleMenu} 
+            onBack={goToPreviousGame}
+            onNext={goToNextGame}
+            onRetry={() => {
+              // Reset handled internally
+            }}
+            userLoggedIn={!!user}
+            currentSeason={selectedSeason}
+          />
+              ) : currentGame === "find-flipped-rabbit" ? (
+          <FindFlippedRabbitGame 
+            onMenuClick={toggleMenu} 
+            onBack={goToPreviousGame}
+            onNext={goToNextGame}
+            onRetry={() => {
+              // Reset handled internally
+            }}
+            userLoggedIn={!!user}
+            currentSeason={selectedSeason}
+          />
       ) : currentGame === "find-missing-half" ? (
         <FindMissingHalfGame 
           onMenuClick={toggleMenu} 
@@ -1151,7 +1274,11 @@ export default function Home() {
       ) : currentGame === "student-panel" ? (
         <StudentPanel onMenuClick={toggleMenu} />
       ) : currentGame === "teacher-panel" ? (
-        <TeacherPanel onMenuClick={toggleMenu} onGoToSeasonSelection={handleGoToSeasonSelection} />
+        <TeacherPanel 
+          onMenuClick={toggleMenu} 
+          isCreatingStudent={isCreatingStudent}
+          setIsCreatingStudent={setIsCreatingStudent}
+        />
       ) : currentGame === "maze-4" ? (
         <MazeGame4 onMenuClick={toggleMenu} />
       ) : currentGame === "maze-3" ? (
@@ -1346,43 +1473,43 @@ export default function Home() {
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
         />
-      ) : currentGame === "matching" ? (
-        <MatchingGame 
-          onMenuClick={toggleMenu} 
-          onBack={goToPreviousGame}
-          onNext={goToNextGame}
-          onRetry={() => {
-            // Reset the game by refreshing the page or resetting state
-            window.location.reload()
-          }}
-          userLoggedIn={!!user}
-          currentSeason={selectedSeason}
-          isGameCompleted={isCurrentGameCompleted()}
-        />
-      ) : currentGame === "sequence" ? (
-        <SequenceGame 
-          onMenuClick={toggleMenu} 
-          onBack={goToPreviousGame}
-          onNext={goToNextGame}
-          onRetry={() => {
-            // Reset handled internally
-          }}
-          userLoggedIn={!!user}
-          currentSeason={selectedSeason}
-          isGameCompleted={isCurrentGameCompleted()}
-        />
-      ) : currentGame === "puzzle" ? (
-        <PuzzleGame 
-          onMenuClick={toggleMenu} 
-          onBack={goToPreviousGame}
-          onNext={goToNextGame}
-          onRetry={() => {
-            // Reset handled internally
-          }}
-          userLoggedIn={!!user}
-          currentSeason={selectedSeason}
-          isGameCompleted={isCurrentGameCompleted()}
-        />
+              ) : currentGame === "matching" ? (
+          <MatchingGame 
+            onMenuClick={toggleMenu} 
+            onBack={goToPreviousGame}
+            onNext={goToNextGame}
+            onRetry={() => {
+              // Reset the game by refreshing the page or resetting state
+              window.location.reload()
+            }}
+            userLoggedIn={!!user}
+            currentSeason={selectedSeason}
+            isGameCompleted={isCurrentGameCompleted()}
+          />
+              ) : currentGame === "sequence" ? (
+          <SequenceGame 
+            onMenuClick={toggleMenu} 
+            onBack={goToPreviousGame}
+            onNext={goToNextGame}
+            onRetry={() => {
+              // Reset handled internally
+            }}
+            userLoggedIn={!!user}
+            currentSeason={selectedSeason}
+            isGameCompleted={isCurrentGameCompleted()}
+          />
+              ) : currentGame === "puzzle" ? (
+          <PuzzleGame 
+            onMenuClick={toggleMenu} 
+            onBack={goToPreviousGame}
+            onNext={goToNextGame}
+            onRetry={() => {
+              // Reset handled internally
+            }}
+            userLoggedIn={!!user}
+            currentSeason={selectedSeason}
+            isGameCompleted={isCurrentGameCompleted()}
+          />
       ) : currentGame === "butterfly-pairs" ? (
         <ButterflyPairsGame 
           onMenuClick={toggleMenu} 
@@ -1396,29 +1523,29 @@ export default function Home() {
           currentSeason={selectedSeason}
           isGameCompleted={isCurrentGameCompleted()}
         />
-      ) : currentGame === "odd-one-out" ? (
-        <OddOneOutGame 
-          onMenuClick={toggleMenu} 
-          onBack={goToPreviousGame}
-          onNext={goToNextGame}
-          onRetry={() => {
-            // Reset handled internally
-          }}
-          userLoggedIn={!!user}
-          currentSeason={selectedSeason}
-          isGameCompleted={isCurrentGameCompleted()}
-        />
-      ) : currentGame === "sorting" ? (
-        <SortingGame 
-          onMenuClick={toggleMenu} 
-          onBack={goToPreviousGame}
-          onNext={goToNextGame}
-          onRetry={() => {
-            // Reset handled internally
-          }}
-          userLoggedIn={!!user}
-          currentSeason={selectedSeason}
-        />
+              ) : currentGame === "odd-one-out" ? (
+          <OddOneOutGame 
+            onMenuClick={toggleMenu} 
+            onBack={goToPreviousGame}
+            onNext={goToNextGame}
+            onRetry={() => {
+              // Reset handled internally
+            }}
+            userLoggedIn={!!user}
+            currentSeason={selectedSeason}
+            isGameCompleted={isCurrentGameCompleted()}
+          />
+              ) : currentGame === "sorting" ? (
+          <SortingGame 
+            onMenuClick={toggleMenu} 
+            onBack={goToPreviousGame}
+            onNext={goToNextGame}
+            onRetry={() => {
+              // Reset handled internally
+            }}
+            userLoggedIn={!!user}
+            currentSeason={selectedSeason}
+          />
       ) : currentGame === "sorting-3" ? (
         <SortingGame3 onMenuClick={toggleMenu} />
       ) : currentGame === "sorting-4" ? (
@@ -1474,29 +1601,7 @@ export default function Home() {
         />
       )}
 
-      {/* Navigation buttons - hidden for games that have their own navigation */}
-      {!["matching", "sequence", "butterfly-pairs", "odd-one-out", "puzzle", "connect", "sorting", "category-sorting", "memory", "spot-difference", "easter-basket", "easter-sequence", "maze", "sorting-2", "memory-5", "memory-3", "puzzle-assembly-2", "spot-difference-5", "memory-7", "category-sorting-3", "sequence-2", "find-missing", "sequential-order-2", "memory-4", "find-6-differences", "branch-sequence", "find-flipped-rabbit", "find-missing-half", "memory-match", "maze-3", "birds-puzzle", "memory-match-2x4", "sudoku", "pattern-completion", "find-incorrect-ladybug", "sequential-order-3"].includes(currentGame) && (
-        <div className="flex justify-center gap-4 mt-8 w-full">
-          <button
-            onClick={goToPreviousGame}
-            disabled={isFirstGame}
-            className={`px-6 py-3 rounded-full font-sour-gummy text-lg ${
-              isFirstGame ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#539e1b] text-white hover:bg-[#468619]"
-            }`}
-          >
-            Wróć
-          </button>
-          <button
-            onClick={goToNextGame}
-            disabled={isLastGame}
-            className={`px-6 py-3 rounded-full font-sour-gummy text-lg ${
-              isLastGame ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#539e1b] text-white hover:bg-gray-600"
-            }`}
-          >
-            Dalej
-          </button>
-        </div>
-      )}
+
 
       {/* Progress indicator */}
       {user && currentGameId && !["teacher-panel", "student-panel"].includes(currentGame) && (

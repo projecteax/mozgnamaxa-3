@@ -52,7 +52,7 @@ export default function SeasonSelectionMenu({ onSeasonSelect, onMenuClick }: Sea
           {/* Jesień (Autumn) button */}
           <button
             onClick={() => onSeasonSelect("jesien")}
-            className="relative w-64 h-32 bg-[#d4c4b0] rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-200 flex items-center justify-center group"
+            className="relative w-64 h-32 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-200 flex items-center justify-center group"
           >
             <span className="text-4xl font-bold text-[#ed6b19] font-sour-gummy group-hover:scale-105 transition-transform duration-200">
               JESIEŃ
@@ -62,7 +62,7 @@ export default function SeasonSelectionMenu({ onSeasonSelect, onMenuClick }: Sea
           {/* Zima (Winter) button */}
           <button
             onClick={() => onSeasonSelect("zima")}
-            className="relative w-64 h-32 bg-[#d4c4b0] rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-200 flex items-center justify-center group"
+            className="relative w-64 h-32 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-200 flex items-center justify-center group"
           >
             <span className="text-4xl font-bold text-[#00abc6] font-sour-gummy group-hover:scale-105 transition-transform duration-200">
               ZIMA

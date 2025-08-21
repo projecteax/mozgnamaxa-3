@@ -6,6 +6,8 @@ interface StudentProgressTableProps {
   studentName: string
   progress: any
   onBack: () => void
+  onDeleteStudent?: () => void
+  studentId?: string
 }
 
 // Game name mapping from database game IDs to title box names
@@ -64,9 +66,50 @@ const gameNames: Record<string, string> = {
   "findIncorrectLadybug": "ZNAJDŹ NIEPRAWIDŁOWĄ BIEDRONKĘ.",
 }
 
-export default function StudentProgressTable({ studentName, progress, onBack }: StudentProgressTableProps) {
+// New mapping for module and task format
+const gameModuleMapping: Record<string, { module: string, task: string, polishName: string }> = {
+  "matching-game": { module: "MODUŁ 1", task: "ZADANIE 1", polishName: "Ułóż tak samo" },
+  "sequence-game": { module: "MODUŁ 1", task: "ZADANIE 2", polishName: "Co pasuje? Uzupełnij" },
+  "butterfly-pairs-game": { module: "MODUŁ 1", task: "ZADANIE 3", polishName: "Znajdź pary" },
+  "odd-one-out-game": { module: "MODUŁ 2", task: "ZADANIE 1", polishName: "Wybierz, co nie pasuje" },
+  "puzzle-game": { module: "MODUŁ 2", task: "ZADANIE 2", polishName: "Ułóż obrazek" },
+  "connect-game": { module: "MODUŁ 2", task: "ZADANIE 3", polishName: "Połącz" },
+  "sorting-game": { module: "MODUŁ 3", task: "ZADANIE 1", polishName: "Ułóż dalej" },
+  "category-sorting-game": { module: "MODUŁ 3", task: "ZADANIE 2", polishName: "Podziel obrazki" },
+  "memory-game": { module: "MODUŁ 3", task: "ZADANIE 3", polishName: "Znajdź pary (Pamięć)" },
+  "spot-difference-game": { module: "MODUŁ 4", task: "ZADANIE 1", polishName: "Znajdź 3 różnice" },
+  "easter-basket-game": { module: "MODUŁ 4", task: "ZADANIE 2", polishName: "Wybierz, co nie pasuje do koszyczka" },
+  "easter-sequence-game": { module: "MODUŁ 4", task: "ZADANIE 3", polishName: "Co pasuje? Uzupełnij. Wielkanoc" },
+  "maze-game": { module: "MODUŁ 5", task: "ZADANIE 1", polishName: "Znajdź drogę do gniazda" },
+  "sorting-game-2": { module: "MODUŁ 5", task: "ZADANIE 2", polishName: "Ułóż dalej 2" },
+  "memory-game-5": { module: "MODUŁ 5", task: "ZADANIE 3", polishName: "Znajdź pary 5" },
+  "memory-game-3": { module: "MODUŁ 6", task: "ZADANIE 1", polishName: "Znajdź pary 3" },
+  "puzzle-assembly-game-2": { module: "MODUŁ 6", task: "ZADANIE 2", polishName: "Ułóż obrazek - farma" },
+  "spot-difference-game-5": { module: "MODUŁ 6", task: "ZADANIE 3", polishName: "Znajdź 5 różnic" },
+  "memory-game-7": { module: "MODUŁ 7", task: "ZADANIE 1", polishName: "Znajdź pary 7" },
+  "category-sorting-game-3": { module: "MODUŁ 7", task: "ZADANIE 2", polishName: "Podziel obrazki 3" },
+  "sequence-game-2": { module: "MODUŁ 7", task: "ZADANIE 3", polishName: "Co pasuje? Uzupełnij 2" },
+  "find-missing-game": { module: "MODUŁ 8", task: "ZADANIE 1", polishName: "Zaznacz to, czego brakuje na obrazku" },
+  "sequential-order-game-2": { module: "MODUŁ 8", task: "ZADANIE 2", polishName: "Ułóż po kolei 2" },
+  "memory-game-4": { module: "MODUŁ 8", task: "ZADANIE 3", polishName: "Znajdź pary 4" },
+  "memory-match-game": { module: "MODUŁ 9", task: "ZADANIE 1", polishName: "Zapamiętaj i ułóż tak samo" },
+  "maze-game-3": { module: "MODUŁ 9", task: "ZADANIE 2", polishName: "Znajdź drogę do kwiatka" },
+  "find-missing-half-game": { module: "MODUŁ 9", task: "ZADANIE 3", polishName: "Znajdź brakującą połowę" },
+  "find-flipped-rabbit-game": { module: "MODUŁ 10", task: "ZADANIE 1", polishName: "Znajdź odwróconego króliczka" },
+  "branch-sequence-game": { module: "MODUŁ 10", task: "ZADANIE 2", polishName: "Dokończ układanie" },
+  "find-6-differences-game": { module: "MODUŁ 10", task: "ZADANIE 3", polishName: "Znajdź 6 różnic" },
+  "birds-puzzle-game": { module: "MODUŁ 11", task: "ZADANIE 1", polishName: "Ułóż obrazek - ptaki" },
+  "memory-match-game-2x4": { module: "MODUŁ 11", task: "ZADANIE 2", polishName: "Zapamiętaj i ułóż tak samo 2x4" },
+  "sudoku-game": { module: "MODUŁ 11", task: "ZADANIE 3", polishName: "Uzupełnij sudoku" },
+  "pattern-completion-game": { module: "MODUŁ 12", task: "ZADANIE 1", polishName: "Co pasuje? Uzupełnij - wzór" },
+  "find-incorrect-ladybug-game": { module: "MODUŁ 12", task: "ZADANIE 2", polishName: "Znajdź nieprawidłową biedronkę" },
+  "sequential-order-game-3": { module: "MODUŁ 12", task: "ZADANIE 3", polishName: "Ułóż po kolei" },
+}
+
+export default function StudentProgressTable({ studentName, progress, onBack, onDeleteStudent, studentId }: StudentProgressTableProps) {
   const [sortBy, setSortBy] = useState<"name" | "completions">("name")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   const handleSort = (column: "name" | "completions") => {
     if (sortBy === column) {
@@ -95,7 +138,7 @@ export default function StudentProgressTable({ studentName, progress, onBack }: 
   }
   
   // Function to get display name for a game ID (extract base game ID from gameId-season format)
-  const getDisplayName = (gameKey: string): string => {
+  const getDisplayName = (gameKey: string): { module: string, task: string, polishName: string, technicalName: string } => {
     // Extract the base game ID from the gameId-englishSeason format
     const parts = gameKey.split('-')
     const englishSeasons = ['spring', 'summer', 'autumn', 'winter']
@@ -107,63 +150,33 @@ export default function StudentProgressTable({ studentName, progress, onBack }: 
       baseGameId = parts.slice(0, -1).join('-')
     }
     
-    const gameIdMap: Record<string, string> = {
-      // Exact mappings based on menu order and titles
-      'matching-game': 'Ułóż tak samo',
-      'sequence-game': 'Co pasuje? Uzupełnij',
-      'butterfly-pairs-game': 'Znajdź pary',
-      'odd-one-out-game': 'Wybierz, co nie pasuje',
-      'puzzle-game': 'Ułóż obrazek',
-      'connect-game': 'Połącz',
-      'sorting-game': 'Ułóż dalej',
-      'category-sorting-game': 'Podziel obrazki',
-      'memory-game': 'Znajdź pary (Pamięć)',
-      'spot-difference-game': 'Znajdź 3 różnice',
-      'spot-differences-game': 'Znajdź 3 różnice',
-      'easter-basket-game': 'Wybierz, co nie pasuje do koszyczka',
-      'easter-sequence-game': 'Co pasuje? Uzupełnij. Wielkanoc',
-      'maze-game': 'Znajdź drogę do gniazda',
-      'sorting-game-2': 'Ułóż dalej 2',
-      'memory-game-5': 'Znajdź pary 5',
-      'memory-game-3': 'Znajdź pary 3',
-      'puzzle-assembly-game-2': 'Ułóż obrazek - farma',
-      'spot-difference-game-5': 'Znajdź 5 różnic',
-      'spot-differences-game-2': 'Znajdź 5 różnic',
-      'memory-game-7': 'Znajdź pary 7',
-      'category-sorting-game-3': 'Podziel obrazki 3',
-      'sequence-game-2': 'Co pasuje? Uzupełnij 2',
-      'find-missing-game': 'Zaznacz to, czego brakuje na obrazku',
-      'sequential-order-game-2': 'Ułóż po kolei 2',
-      'memory-game-4': 'Znajdź pary 4',
-      'memory-match-game': 'Zapamiętaj i ułóż tak samo',
-      'maze-game-3': 'Znajdź drogę do kwiatka',
-      'find-missing-half-game': 'Znajdź brakującą połowę',
-      'find-flipped-rabbit-game': 'Znajdź odwróconego króliczka',
-      'branch-sequence-game': 'Dokończ układanie',
-      'find-6-differences-game': 'Znajdź 6 różnic',
-      'birds-puzzle-game': 'Ułóż obrazek - ptaki',
-      'memory-match-game-2x4': 'Zapamiętaj i ułóż tak samo 2x4',
-      'sudoku-game': 'Uzupełnij sudoku',
-      'pattern-completion-game': 'Co pasuje? Uzupełnij - wzór',
-      'find-incorrect-ladybug-game': 'Znajdź nieprawidłową biedronkę',
-      'sequential-order-game-3': 'Ułóż po kolei',
-      'sorting-game-3': 'Ułóż dalej 3',
-      'sorting-game-4': 'Ułóż dalej 4',
-      'category-sorting-game-2': 'Podziel obrazki 2',
-      'category-sorting-game-4': 'Podziel obrazki 4',
-      'memory-game-2': 'Znajdź pary 2',
-      'memory-game-6': 'Znajdź pary 6',
-      'maze-game-2': 'Znajdź drogę do gniazda 2',
-      'maze-game-4': 'Znajdź drogę do gniazda 4',
-      'easter-basket-game-2': 'Wybierz, co nie pasuje do koszyczka 2',
-      'sequential-order-game': 'Ułóż po kolei',
+    const mapping = gameModuleMapping[baseGameId]
+    if (mapping) {
+      return {
+        module: mapping.module,
+        task: mapping.task,
+        polishName: mapping.polishName,
+        technicalName: baseGameId
+      }
     }
     
-    return gameIdMap[baseGameId] || baseGameId
+    // Fallback for unmapped games
+    return {
+      module: "MODUŁ ?",
+      task: "ZADANIE ?",
+      polishName: baseGameId,
+      technicalName: baseGameId
+    }
   }
 
   // Create a map to aggregate data by display name
-  const aggregatedGames = new Map<string, { name: string, technicalName: string, seasons: Record<string, number> }>()
+  const aggregatedGames = new Map<string, { 
+    module: string, 
+    task: string, 
+    polishName: string, 
+    technicalName: string, 
+    seasons: Record<string, number> 
+  }>()
   
   // Process the new flat structure: gameResults -> gameId-englishSeason -> completed
   Object.entries(gameResults).forEach(([gameKey, gameData]: [string, any]) => {
@@ -181,24 +194,27 @@ export default function StudentProgressTable({ studentName, progress, onBack }: 
     }
     const polishSeason = seasonMap[englishSeason] || englishSeason
     
-    const displayName = getDisplayName(gameKey)
-    console.log(`Processing game: ${gameKey} -> baseGameId: ${baseGameId} -> displayName: ${displayName} (season: ${polishSeason})`)
+    const displayInfo = getDisplayName(gameKey)
+    const displayKey = `${displayInfo.module} ${displayInfo.task}`
+    console.log(`Processing game: ${gameKey} -> baseGameId: ${baseGameId} -> displayKey: ${displayKey} (season: ${polishSeason})`)
     
     // Debug: Log if we get a raw game ID instead of a display name
-    if (displayName === baseGameId) {
+    if (displayInfo.polishName === baseGameId) {
       console.log(`⚠️ WARNING: No mapping found for ${baseGameId} from ${gameKey}`)
     }
     
-    if (!aggregatedGames.has(displayName)) {
-      aggregatedGames.set(displayName, {
-        name: displayName,
-        technicalName: baseGameId,
+    if (!aggregatedGames.has(displayKey)) {
+      aggregatedGames.set(displayKey, {
+        module: displayInfo.module,
+        task: displayInfo.task,
+        polishName: displayInfo.polishName,
+        technicalName: displayInfo.technicalName,
         seasons: { wiosna: 0, lato: 0, jesien: 0, zima: 0 }
       })
     }
-    const game = aggregatedGames.get(displayName)!
+    const game = aggregatedGames.get(displayKey)!
     game.seasons[polishSeason] += gameData.completed || 0
-    console.log(`Added ${gameData.completed || 0} completions for ${displayName} in ${polishSeason}`)
+    console.log(`Added ${gameData.completed || 0} completions for ${displayKey} in ${polishSeason}`)
   })
   
   // Debug: Log all game keys to see what's missing
@@ -231,40 +247,30 @@ export default function StudentProgressTable({ studentName, progress, onBack }: 
   const missingGames = Array.from(processedGames).filter(gameId => !gameIdMapKeys.includes(gameId))
   console.log('Missing games from gameIdMap:', missingGames)
 
-  console.log('Aggregated games:', Array.from(aggregatedGames.entries()).map(([name, game]) => ({ name, total: Object.values(game.seasons).reduce((sum: number, count: number) => sum + count, 0) })))
+  console.log('Aggregated games:', Array.from(aggregatedGames.entries()).map(([key, game]) => ({ key, module: game.module, task: game.task, total: Object.values(game.seasons).reduce((sum: number, count: number) => sum + count, 0) })))
   
   const sortedGames = Array.from(aggregatedGames.entries())
-    .map(([displayName, game]) => ({
-      id: displayName,
-      name: game.name,
+    .map(([displayKey, game]) => ({
+      id: displayKey,
+      module: game.module,
+      task: game.task,
+      polishName: game.polishName,
       technicalName: game.technicalName,
       seasons: game.seasons,
       totalCompletions: Object.values(game.seasons).reduce((sum: number, count: number) => sum + count, 0)
     }))
     .sort((a, b) => {
       if (sortBy === "name") {
-        // Sort by menu order using display names
-          const menuOrderNames = [
-    "Ułóż tak samo", "Co pasuje? Uzupełnij", "Znajdź pary", "Wybierz, co nie pasuje",
-    "Ułóż obrazek", "Połącz", "Ułóż dalej", "Podziel obrazki", "Znajdź pary (Pamięć)",
-    "Znajdź 3 różnice", "Wybierz, co nie pasuje do koszyczka", "Co pasuje? Uzupełnij. Wielkanoc",
-    "Znajdź drogę do gniazda", "Ułóż dalej 2", "Znajdź pary 5", "Znajdź pary 3",
-    "Ułóż obrazek - farma", "Znajdź 5 różnic", "Znajdź pary 7", "Podziel obrazki 3",
-    "Co pasuje? Uzupełnij 2", "Zaznacz to, czego brakuje na obrazku", "Ułóż po kolei 2",
-    "Znajdź pary 4", "Zapamiętaj i ułóż tak samo", "Znajdź drogę do kwiatka",
-    "Znajdź brakującą połowę", "Znajdź odwróconego króliczka", "Dokończ układanie",
-    "Znajdź 6 różnic", "Ułóż obrazek - ptaki", "Zapamiętaj i ułóż tak samo 2x4",
-    "Uzupełnij sudoku", "Co pasuje? Uzupełnij - wzór", "Znajdź nieprawidłową biedronkę",
-    "Ułóż po kolei", "Ułóż dalej 3", "Ułóż dalej 4", "Podziel obrazki 2", "Podziel obrazki 4",
-    "Znajdź pary 2", "Znajdź pary 6", "Znajdź drogę do gniazda 2", "Znajdź drogę do gniazda 4",
-    "Wybierz, co nie pasuje do koszyczka 2", "Ułóż po kolei"
-  ]
-        const aIndex = menuOrderNames.indexOf(a.name)
-        const bIndex = menuOrderNames.indexOf(b.name)
-        if (aIndex === -1 && bIndex === -1) return 0
-        if (aIndex === -1) return 1
-        if (bIndex === -1) return -1
-        return sortOrder === "asc" ? aIndex - bIndex : bIndex - aIndex
+        // Sort by module and task number
+        const aModuleNum = parseInt(a.module.replace('MODUŁ ', ''))
+        const bModuleNum = parseInt(b.module.replace('MODUŁ ', ''))
+        const aTaskNum = parseInt(a.task.replace('ZADANIE ', ''))
+        const bTaskNum = parseInt(b.task.replace('ZADANIE ', ''))
+        
+        if (aModuleNum !== bModuleNum) {
+          return sortOrder === "asc" ? aModuleNum - bModuleNum : bModuleNum - aModuleNum
+        }
+        return sortOrder === "asc" ? aTaskNum - bTaskNum : bTaskNum - aTaskNum
       } else {
         return sortOrder === "asc" ? a.totalCompletions - b.totalCompletions : b.totalCompletions - a.totalCompletions
       }
@@ -305,12 +311,22 @@ export default function StudentProgressTable({ studentName, progress, onBack }: 
     <div className="w-full max-w-4xl min-h-screen bg-[#e3f7ff] p-4">
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-4xl font-bold text-[#3e459c] font-dongle">Postępy ucznia: {studentName}</h2>
-        <button
-          onClick={onBack}
-          className="px-6 py-3 bg-[#3e459c] hover:bg-[#2d3a8c] text-white rounded-full font-bold text-xl transition-colors font-dongle"
-        >
-          Powrót
-        </button>
+        <div className="flex gap-4">
+          {onDeleteStudent && (
+            <button
+              onClick={() => setShowDeleteConfirm(true)}
+              className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-full font-bold text-xl transition-colors font-dongle"
+            >
+              Usuń ucznia
+            </button>
+          )}
+          <button
+            onClick={onBack}
+            className="px-6 py-3 bg-[#3e459c] hover:bg-[#2d3a8c] text-white rounded-full font-bold text-xl transition-colors font-dongle"
+          >
+            Powrót
+          </button>
+        </div>
       </div>
 
       <div className="bg-white p-8 rounded-2xl shadow-lg mb-8">
@@ -362,8 +378,10 @@ export default function StudentProgressTable({ studentName, progress, onBack }: 
                   >
                     <td className="py-3 px-4 font-dongle text-xl">
                       <div>
-                        <div className="font-bold">{game.name}</div>
-                        <div className="text-sm text-gray-500 font-mono">{game.technicalName}</div>
+                        <div className="font-bold text-[#3e459c]">{game.module} {game.task}</div>
+                        <div className="text-sm text-gray-600">
+                          {game.polishName}
+                        </div>
                       </div>
                     </td>
                     <td className="py-3 px-4 text-center font-bold font-dongle text-xl text-[#3e459c]">
@@ -388,6 +406,36 @@ export default function StudentProgressTable({ studentName, progress, onBack }: 
           </table>
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md mx-4">
+            <h3 className="text-2xl font-bold text-red-600 mb-4 font-dongle">Potwierdź usunięcie</h3>
+            <p className="text-lg mb-6 font-dongle">
+              Czy na pewno chcesz usunąć ucznia <strong>{studentName}</strong>? 
+              Ta operacja jest nieodwracalna i usunie wszystkie dane ucznia z bazy danych.
+            </p>
+            <div className="flex gap-4 justify-end">
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-full font-bold text-lg transition-colors font-dongle"
+              >
+                Anuluj
+              </button>
+              <button
+                onClick={() => {
+                  setShowDeleteConfirm(false)
+                  onDeleteStudent?.()
+                }}
+                className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-full font-bold text-lg transition-colors font-dongle"
+              >
+                Usuń na zawsze
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

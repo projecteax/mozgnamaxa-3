@@ -3,6 +3,9 @@
 import type React from "react"
 
 import { useState } from "react"
+import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore"
+import { createUserWithEmailAndPassword } from "firebase/auth"
+import { db } from "@/lib/firebase"
 import { useAuth } from "@/contexts/auth-context"
 
 interface StudentLoginFormProps {
@@ -32,8 +35,56 @@ export default function StudentLoginForm({ onRegisterClick, onForgotPasswordClic
     try {
       // Add "00" to the 4-digit code to create the 6-character password
       const password = `${code}00`
-      await login(email, password)
-      onSuccess()
+      
+      // First try to log in normally
+      try {
+        await login(email, password)
+        onSuccess()
+        return
+      } catch (loginError: any) {
+        // If login fails, check if student exists in our database but doesn't have Firebase Auth account yet
+        if (loginError.code === "auth/user-not-found" || loginError.code === "auth/invalid-credential") {
+          console.log("User not found in Firebase Auth, checking students collection...")
+          
+          // Check if student exists in students collection
+          const studentsQuery = query(
+            collection(db, "students"),
+            where("email", "==", email),
+            where("password", "==", password),
+            where("authCreated", "==", false)
+          )
+          const studentsSnapshot = await getDocs(studentsQuery)
+          
+          if (!studentsSnapshot.empty) {
+            // Student exists but doesn't have Firebase Auth account yet - create it
+            const studentDoc = studentsSnapshot.docs[0]
+            const studentData = studentDoc.data()
+            
+            console.log("Creating Firebase Auth account for student...")
+            
+            // Create Firebase Auth account
+            const authResult = await createUserWithEmailAndPassword(
+              (await import("firebase/auth")).getAuth(),
+              email,
+              password
+            )
+            
+            // Update student document with real Firebase UID and mark auth as created
+            await updateDoc(doc(db, "students", studentDoc.id), {
+              uid: authResult.user.uid,
+              authCreated: true,
+              password: null // Remove password from storage for security
+            })
+            
+            console.log("Firebase Auth account created successfully")
+            onSuccess()
+            return
+          }
+        }
+        
+        // If we get here, either login failed for other reasons or student doesn't exist
+        throw loginError
+      }
     } catch (error: any) {
       setError("Nieprawidłowy email lub kod nauczyciela")
     } finally {

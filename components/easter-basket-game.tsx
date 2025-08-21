@@ -67,7 +67,7 @@ export default function EasterBasketGame({ onMenuClick, onBack, onNext, onRetry,
       summerImage: "/images/banana_summer.svg",
       autumnImage: "/images/zebra_autumn.svg",
       winterImage: "/images/bike_winter.svg",
-      isCorrect: true, // This is the item that doesn't belong
+      isCorrect: false, // Correct for autumn/winter, but not spring/summer
       category: "non-easter",
       position: "top-[60px] left-[50%] transform -translate-x-1/2",
       size: "h-24 w-24",
@@ -89,7 +89,7 @@ export default function EasterBasketGame({ onMenuClick, onBack, onNext, onRetry,
       summerImage: "/images/toothbrush_summer.svg",
       autumnImage: "/images/fox_autumn.svg",
       winterImage: "/images/party_hat_winter.svg",
-      isCorrect: false, // This was the correct item for spring/summer, but not for autumn/winter
+      isCorrect: true, // Correct for spring/summer, but not for autumn/winter
       category: "non-easter",
       position: "top-[200px] left-[50%] transform -translate-x-1/2",
       size: "h-24 w-24",

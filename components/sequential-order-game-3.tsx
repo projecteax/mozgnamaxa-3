@@ -267,10 +267,10 @@ export default function SequentialOrderGame3({ onMenuClick, onComplete, onBack, 
 
           {/* Retry button removed */}
 
-          {/* DALEJ Button - only unlocked when game completed (for logged users) or always available (for non-logged users) */}
+          {/* DALEJ Button - disabled when not completed or when completed and waiting for medal */}
           <div 
-                          className={`relative w-36 h-14 transition-all ${(userLoggedIn && !isGameComplete && !isHistoricallyCompleted) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-105'}`}
-                          onClick={(userLoggedIn && !isGameComplete && !isHistoricallyCompleted) ? undefined : onNext}
+                          className={`relative w-36 h-14 transition-all ${(userLoggedIn && !isGameComplete && !isHistoricallyCompleted) || isGameComplete ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-105'}`}
+                          onClick={(userLoggedIn && !isGameComplete && !isHistoricallyCompleted) || isGameComplete ? undefined : onNext}
           >
             <Image 
               src={theme.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 

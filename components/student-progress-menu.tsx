@@ -76,7 +76,7 @@ const SEASONS = [
     bgColor: "bg-green-50",
     borderColor: "border-green-700",
     icon: "🌸",
-    description: "Rozpocznij swoją przygodę!"
+    description: "Rozpocznij wiosenną przygodę!"
   },
   { 
     id: "lato", 
@@ -103,7 +103,7 @@ const SEASONS = [
     bgColor: "bg-blue-50",
     borderColor: "border-blue-300",
     icon: "❄️",
-    description: "Zimowe przygody!"
+    description: "Czas na zimowe odkrycia!"
   }
 ]
 
@@ -122,11 +122,26 @@ export default function StudentProgressMenu({ onGameStart, onMenuClick }: Studen
   const completedGames = progress?.completedGames || []
   const gameCompletionCounts = progress?.gameCompletionCounts || {}
 
-  // Calculate progress - 50 total games (all games in the order)
-  const totalGames = 50 // Total number of games in the order
+  // Calculate progress - 144 total games (36 per season * 4 seasons)
+  const totalGames = 144 // Total number of games (36 per season * 4 seasons)
   const gamesPerSeason = 36
   const medalsPerSeason = 12 // medal every 3 games
-  const completedCount = completedGames.length
+  
+  // Calculate total completed games from all seasons
+  const calculateTotalCompletedGames = () => {
+    if (!progress?.seasonProgress) return 0
+    
+    let totalCompleted = 0
+    SEASONS.forEach(season => {
+      const seasonKey = season.id as keyof typeof progress.seasonProgress
+      const seasonCompletedGames = progress.seasonProgress?.[seasonKey]?.completedGames || []
+      totalCompleted += seasonCompletedGames.length
+    })
+    
+    return totalCompleted
+  }
+  
+  const completedCount = calculateTotalCompletedGames()
   const medals = progress?.medals || Math.floor(completedCount / 3)
   const progressPercent = (completedCount / totalGames) * 100
 
@@ -321,9 +336,6 @@ export default function StudentProgressMenu({ onGameStart, onMenuClick }: Studen
                 <span className="font-sour-gummy font-bold text-2xl" style={{ color: '#3E459C' }}>GRAJ DALEJ</span>
               </div>
             </div>
-            <p className="text-sm font-sour-gummy mt-2" style={{ color: '#3E459C' }}>
-              Następna gra: {nextGameInfo.gameName}
-            </p>
           </div>
         )}
 
@@ -454,21 +466,7 @@ export default function StudentProgressMenu({ onGameStart, onMenuClick }: Studen
         })}
       </div>
 
-      {/* All games completed */}
-      {completedCount >= totalGames && (
-        <div className="mt-8 text-center p-8 bg-gradient-to-r from-yellow-100 to-yellow-200 rounded-3xl border-4 border-yellow-400">
-          <div className="text-6xl mb-4">🎉</div>
-          <h2 className="text-4xl font-sour-gummy font-bold text-yellow-800 mb-2">
-            Gratulacje!
-          </h2>
-          <p className="text-xl font-sour-gummy text-yellow-700">
-            Ukończyłeś wszystkie 144 gry we wszystkich porach roku!
-          </p>
-          <div className="text-2xl mt-4">
-            🏅 {medals} medali zdobytych (z 48 możliwych)!
-          </div>
-        </div>
-      )}
+
 
       {/* Season Game Selection Popup */}
       {selectedSeasonPopup && progress && (
@@ -476,7 +474,7 @@ export default function StudentProgressMenu({ onGameStart, onMenuClick }: Studen
           isOpen={true}
           onClose={handleClosePopup}
           season={selectedSeasonPopup.season}
-          games={GAMES_LIST} // All 36 games (same for each season)
+          games={GAMES_LIST.slice(0, 36)} // Only first 36 games (same for each season)
           completedGames={progress?.seasonProgress?.[selectedSeasonPopup.season.id as keyof typeof progress.seasonProgress]?.completedGames || []}
           gameCompletionCounts={gameCompletionCounts}
           onGameSelect={handleGameSelectFromPopup}

@@ -104,32 +104,46 @@ export default function MemoryMatchGame({ onMenuClick, onBack, onNext, onRetry, 
     }
   }
 
+  // Fisher-Yates shuffle function
+  const shuffleArray = <T,>(array: T[]): T[] => {
+    const shuffled = [...array]
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    }
+    return shuffled
+  }
+
   const getDraggableItems = () => {
+    let items
     if (isSummer) {
-      return [
+      items = [
         { id: "sunglasses", image: "/images/sunglasses_summer.svg", name: "Sunglasses", placed: false },
         { id: "umbrella", image: "/images/umbrella_summer.svg", name: "Umbrella", placed: false },
         { id: "towel", image: "/images/towel_summer.svg", name: "Towel", placed: false },
       ]
     } else if (isAutumn) {
-      return [
+      items = [
         { id: "boots", image: "/images/boots_autumn.svg", name: "Boots", placed: false },
         { id: "umbrella", image: "/images/umbrella_autumn.svg", name: "Umbrella", placed: false },
         { id: "sweater", image: "/images/sweater_autumn.svg", name: "Sweater", placed: false },
       ]
     } else if (isWinter) {
-      return [
+      items = [
         { id: "angel", image: "/images/angel_winter.svg", name: "Angel", placed: false },
         { id: "bell", image: "/images/bell_winter.svg", name: "Bell", placed: false },
         { id: "lights", image: "/images/lights_winter.svg", name: "Lights", placed: false },
       ]
     } else {
-      return [
+      items = [
         { id: "snail", image: "/images/snail.svg", name: "Snail", placed: false },
         { id: "frog", image: "/images/frog.svg", name: "Frog", placed: false },
         { id: "grass", image: "/images/grass.svg", name: "Grass", placed: false },
       ]
     }
+    
+    // Return shuffled items to randomize the order
+    return shuffleArray(items)
   }
 
   const getDropZones = () => {
@@ -305,13 +319,8 @@ export default function MemoryMatchGame({ onMenuClick, onBack, onNext, onRetry, 
     // Reset drop zones
     setDropZones((prevZones) => prevZones.map((zone) => ({ ...zone, itemId: null })))
 
-    // Reset draggable items - all available again
-    setDraggableItems((prevItems) =>
-      prevItems.map((item) => ({
-        ...item,
-        placed: false,
-      })),
-    )
+    // Reset and reshuffle draggable items - all available again in random order
+    setDraggableItems(getDraggableItems())
 
     // Reset memory items
     setMemoryItems((prevItems) => prevItems.map((item) => ({ ...item, revealed: false })))

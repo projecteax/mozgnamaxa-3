@@ -486,9 +486,9 @@ export default function FindMissingHalfGame({ onMenuClick, onComplete, onBack, o
 
                   {/* Show matched pair or individual left half */}
                   {shouldShowMatchedPairHere ? (
-                    // Show complete matched pair using simple positioning
+                    // Show complete matched pair using flexbox for proper alignment
                     <div
-                      className="relative z-10"
+                      className="relative z-10 flex items-center"
                       style={{
                         width: "auto",
                         height: "auto",
@@ -503,7 +503,6 @@ export default function FindMissingHalfGame({ onMenuClick, onComplete, onBack, o
                           width: "auto",
                           transform: "scale(1.2)",
                           display: "block",
-                          float: "left",
                         }}
                       />
                       <img
@@ -514,11 +513,9 @@ export default function FindMissingHalfGame({ onMenuClick, onComplete, onBack, o
                           width: "auto",
                           transform: "scale(1.2)",
                           display: "block",
-                          float: "left",
-                          marginLeft: "0px", // Set to 0px for all seasons to ensure proper alignment
+                          marginLeft: leftHalf.pairId === "01" || leftHalf.pairId === "02" ? "7.5px" : "4px", // Extra spacing for first two pairs
                         }}
                       />
-                      <div style={{ clear: "both" }}></div>
                     </div>
                   ) : !isLeftMatched ? (
                     // Show draggable left half
@@ -577,9 +574,9 @@ export default function FindMissingHalfGame({ onMenuClick, onComplete, onBack, o
 
                   {/* Show matched pair or individual right half */}
                   {shouldShowMatchedPairHere ? (
-                    // Show complete matched pair using simple positioning
+                    // Show complete matched pair using flexbox for proper alignment
                     <div
-                      className="relative z-10"
+                      className="relative z-10 flex items-center"
                       style={{
                         width: "auto",
                         height: "auto",
@@ -594,7 +591,6 @@ export default function FindMissingHalfGame({ onMenuClick, onComplete, onBack, o
                           width: "auto",
                           transform: "scale(1.2)",
                           display: "block",
-                          float: "left",
                         }}
                       />
                       <img
@@ -605,11 +601,9 @@ export default function FindMissingHalfGame({ onMenuClick, onComplete, onBack, o
                           width: "auto",
                           transform: "scale(1.2)",
                           display: "block",
-                          float: "left",
-                          marginLeft: "0px", // Set to 0px for all seasons to ensure proper alignment
+                          marginLeft: rightHalf.pairId === "01" || rightHalf.pairId === "02" ? "7.5px" : "4px", // Extra spacing for first two pairs
                         }}
                       />
-                      <div style={{ clear: "both" }}></div>
                     </div>
                   ) : !isRightMatched ? (
                     // Show draggable right half

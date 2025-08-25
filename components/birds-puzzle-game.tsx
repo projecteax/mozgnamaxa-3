@@ -94,10 +94,10 @@ export default function BirdsPuzzleGame({ onMenuClick, onBack, onNext, onRetry, 
       id: "zone1",
       sequence: 1,
       polygon: [
-        [0, 0],
-        [66, 0],
-        [15.9, 300],
-        [0, 300],
+        [2, 0], // Moved 2px to the right
+        [68, 0], // Moved 2px to the right
+        [17.9, 300], // Moved 2px to the right
+        [2, 300], // Moved 2px to the right
       ],
     },
     {
@@ -144,10 +144,10 @@ export default function BirdsPuzzleGame({ onMenuClick, onBack, onNext, onRetry, 
       id: "zone6",
       sequence: 6,
       polygon: [
-        [282, 0],
-        [300, 0],
-        [300, 300],
-        [235.8, 300],
+        [279, 0], // Moved 3px to the left
+        [297, 0], // Moved 3px to the left
+        [297, 300], // Moved 3px to the left
+        [232.8, 300], // Moved 3px to the left
       ],
     },
   ]
@@ -302,7 +302,7 @@ export default function BirdsPuzzleGame({ onMenuClick, onBack, onNext, onRetry, 
       <div className="w-full flex justify-between items-center mb-8">
         <div className="relative w-16 h-16">
           <SoundButtonEnhanced
-            text="UŁÓŻ OBRAZEK"
+            text="UŁÓŻ OBRAZEK."
             soundIcon={seasonImages.sound || "/images/sound_icon_dragon_page.svg"}
             size="xl"
             className="w-full h-full"
@@ -311,7 +311,7 @@ export default function BirdsPuzzleGame({ onMenuClick, onBack, onNext, onRetry, 
 
         <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
           <Image src={seasonImages.titleBox || "/placeholder.svg"} alt="Title box" fill className="object-contain" />
-          <span className="relative z-10 text-white text-2xl md:text-3xl font-sour-gummy font-thin">UŁÓŻ OBRAZEK</span>
+          <span className="relative z-10 text-white text-2xl md:text-3xl font-sour-gummy font-thin">UŁÓŻ OBRAZEK.</span>
         </div>
 
         <div className="relative w-16 h-16" onClick={onMenuClick}>

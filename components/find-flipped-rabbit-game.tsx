@@ -63,11 +63,20 @@ export default function FindFlippedRabbitGame({ onMenuClick, onBack, onNext, onR
     : isAutumn
       ? "/images/squirrel_autumn.svg"
       : isSummer
-        ? "/images/banana_summer.svg"
+        ? "/images/summer_ball.svg"
       : "/images/rabbit.svg"
 
   // Get season-specific title text
   const getTitleText = () => {
+    if (isSummer) {
+      return "KTÓRA PIŁKA SIĘ RÓŻNI?"
+    }
+    if (isAutumn) {
+      return "KTÓRA WIEWIÓRKA SIĘ RÓŻNI?"
+    }
+    if (isWinter) {
+      return "KTÓRY BAŁWAN SIĘ RÓŻNI?"
+    }
     return "KTÓRY ZAJĄC SIĘ RÓŻNI?"
   }
 
@@ -123,7 +132,7 @@ export default function FindFlippedRabbitGame({ onMenuClick, onBack, onNext, onR
         <div className="relative flex items-center justify-center">
           <Image
             src={gameIcon || "/placeholder.svg"}
-            alt={isWinter ? "Snowman" : isAutumn ? "Squirrel" : isSummer ? "Rabbit" : "Rabbit"}
+            alt={isWinter ? "Snowman" : isAutumn ? "Squirrel" : isSummer ? "Ball" : "Rabbit"}
             width={96}
             height={96}
             className={`${isFlipped ? "scale-x-[-1]" : ""} transition-transform duration-200`}
@@ -144,7 +153,7 @@ export default function FindFlippedRabbitGame({ onMenuClick, onBack, onNext, onR
       <div className="w-full flex justify-between items-center mb-8">
         <div className="relative w-16 h-16">
           <SoundButtonEnhanced
-            text="KTÓRY ZAJĄC SIĘ RÓŻNI?"
+            text={getTitleText()}
             soundIcon={soundIcon || "/images/sound_icon_dragon_page.svg"}
             size="xl"
             className="w-full h-full"
@@ -154,7 +163,7 @@ export default function FindFlippedRabbitGame({ onMenuClick, onBack, onNext, onR
         <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
           <Image src={titleBox || "/placeholder.svg"} alt="Title box" fill className="object-contain" />
           <span
-            className={`relative z-10 text-white font-sour-gummy font-thin ${isWinter ? "text-lg md:text-xl" : "text-2xl md:text-3xl"}`}
+            className="relative z-10 text-white font-sour-gummy font-thin text-2xl md:text-3xl"
           >
             {getTitleText()}
           </span>

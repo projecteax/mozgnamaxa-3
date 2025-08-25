@@ -37,11 +37,11 @@ export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userL
     switch (selectedSeason) {
       case "jesien":
         return [
-          "/images/puzzle_field_01_autumn.png",
-          "/images/puzzle_field_02_autumn.png",
-          "/images/puzzle_field_03_autumn.png",
-          "/images/puzzle_field_04_autumn.png",
-          "/images/puzzle_field_05_autumn.png",
+          "/images/puzzle-game/autumn_p1.png",
+          "/images/puzzle-game/autumn_p2.png",
+          "/images/puzzle-game/autumn_p3.png",
+          "/images/puzzle-game/autumn_p4.png",
+          "/images/puzzle-game/autumn_p5.png",
         ]
       case "lato":
         return [

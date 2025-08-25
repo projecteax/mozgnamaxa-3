@@ -562,7 +562,7 @@ export default function MemoryGame4({ onMenuClick, onComplete, onBack, onNext, o
                   {/* Box background - using matching game white box */}
                   <div className="absolute inset-0">
                     <Image
-                      src={card.isMatched ? "/images/white_box_medium_success.svg" : "/images/white_box_medium.svg"}
+                      src="/images/white_box_medium.svg"
                       alt="Card background"
                       fill
                       className="object-contain"

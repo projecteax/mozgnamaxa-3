@@ -144,7 +144,7 @@ export default function PuzzleAssemblyGame2({ onMenuClick, onBack, onNext, onRet
       filled: false,
       width: 142.05 * 1.76,
       height: 200 * 1.76,
-      x: 0,
+      x: -1,
       y: 0,
       shape: "rectangle",
       active: false, // Initially inactive
@@ -155,7 +155,7 @@ export default function PuzzleAssemblyGame2({ onMenuClick, onBack, onNext, onRet
       filled: false,
       width: 149.32 * 1.76,
       height: 200 * 1.76,
-      x: (200 - 149.32) * 1.76,
+      x: Math.round((200 - 149.32) * 1.76) - 2,
       y: 0,
       shape: "rectangle",
       active: false, // Initially inactive
@@ -166,8 +166,8 @@ export default function PuzzleAssemblyGame2({ onMenuClick, onBack, onNext, onRet
       filled: false,
       width: 65.87 * 1.76,
       height: 144.17 * 1.76,
-      x: (200 - 65.87) * 1.76,
-      y: (200 - 144.17) * 1.76,
+      x: Math.round((200 - 65.87) * 1.76) - 3,
+      y: Math.round((200 - 144.17) * 1.76),
       shape: "triangle",
       trianglePoints: [
         { x: 65.87 * 1.76, y: 0 },
@@ -369,7 +369,15 @@ export default function PuzzleAssemblyGame2({ onMenuClick, onBack, onNext, onRet
         height: 144.17 * 1.76,
       },
     ])
-    setDropAreas((prev) => prev.map((a, index) => ({ ...a, filled: false, active: index === 0 }))) // Only first zone active
+    setDropAreas((prev) => prev.map((a, index) => ({ 
+      ...a, 
+      filled: false, 
+      active: index === 0,
+      x: a.id === "empty_02" ? -1 :
+         a.id === "empty_03" ? Math.round((200 - 149.32) * 1.76) - 2 : 
+         a.id === "empty_04" ? Math.round((200 - 65.87) * 1.76) - 3 : a.x,
+      y: a.id === "empty_04" ? Math.round((200 - 144.17) * 1.76) : a.y
+    }))) // Only first zone active
     setPlacedPieces({})
     setGameCompleted(false)
     setDraggedPiece(null)
@@ -447,15 +455,18 @@ export default function PuzzleAssemblyGame2({ onMenuClick, onBack, onNext, onRet
                   }}
                   className="absolute pointer-events-none"
                   style={{
-                    left: `${area.x}px`,
-                    top: `${area.y}px`,
-                    width: `${area.width}px`,
-                    height: `${area.height}px`,
+                    left: `${Math.round(area.x)}px`,
+                    top: `${Math.round(area.y)}px`,
+                    width: `${Math.round(area.width)}px`,
+                    height: `${Math.round(area.height)}px`,
                     zIndex: area.shape === "triangle" ? 30 : 20,
+                    margin: 0,
+                    padding: 0,
+                    border: 'none',
                   }}
                 >
                   {/* Show only the colored shapes - white for active, grey for inactive */}
-                  <div className="relative w-full h-full">
+                  <div className="relative w-full h-full" style={{ margin: 0, padding: 0 }}>
                     <Image
                       src={area.src || "/placeholder.svg"}
                       alt={`Drop area ${area.id}`}
@@ -463,6 +474,8 @@ export default function PuzzleAssemblyGame2({ onMenuClick, onBack, onNext, onRet
                       className="object-contain"
                       style={{
                         filter: area.active ? "brightness(0) invert(1)" : "brightness(0) invert(0.5)",
+                        margin: 0,
+                        padding: 0,
                       }}
                     />
                   </div>
@@ -479,11 +492,14 @@ export default function PuzzleAssemblyGame2({ onMenuClick, onBack, onNext, onRet
                     key={`placed-${pieceId}`}
                     className="absolute pointer-events-none"
                     style={{
-                      left: `${position.x}px`,
-                      top: `${position.y}px`,
-                      width: `${piece.width}px`,
-                      height: `${piece.height}px`,
+                      left: `${Math.round(position.x)}px`,
+                      top: `${Math.round(position.y)}px`,
+                      width: `${Math.round(piece.width)}px`,
+                      height: `${Math.round(piece.height)}px`,
                       zIndex: 40, // Placed pieces on top
+                      margin: 0,
+                      padding: 0,
+                      border: 'none',
                     }}
                   >
                     <Image
@@ -491,6 +507,10 @@ export default function PuzzleAssemblyGame2({ onMenuClick, onBack, onNext, onRet
                       alt={`Placed ${pieceId}`}
                       fill
                       className="object-contain"
+                      style={{
+                        margin: 0,
+                        padding: 0,
+                      }}
                     />
                   </div>
                 )

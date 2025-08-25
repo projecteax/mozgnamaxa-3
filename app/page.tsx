@@ -675,14 +675,9 @@ export default function Home() {
     setCurrentView("dragon-welcome-13")
   }
 
-  // Handle thirteenth dragon welcome screen START button - goes to matching game in summer
+  // Handle thirteenth dragon welcome screen START button - goes to season selection menu
   const handleDragon13Start = () => {
-    setCurrentView("game")
-    setCurrentGame("matching")
-    // Set season to summer for the matching game
-    if (setSelectedSeason) {
-      setSelectedSeason("lato")
-    }
+    setCurrentView("season-selection")
   }
 
   // Handle twelfth dragon welcome screen START button - goes to pattern-completion

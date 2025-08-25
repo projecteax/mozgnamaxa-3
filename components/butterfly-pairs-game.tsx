@@ -289,7 +289,7 @@ export default function ButterflyPairsGame({ onMenuClick, onComplete, onBack, on
         case "cloud":
           return "-ml-1"
         case "sun":
-          return "-ml-0" // No margin for sun as the new assets should connect seamlessly
+          return "-ml-[1px]" // Move right half 1px to the left for proper alignment
         case "rainbow":
           return "-ml-1"
         default:
@@ -313,7 +313,7 @@ export default function ButterflyPairsGame({ onMenuClick, onComplete, onBack, on
         case "boot":
           return "-ml-1"
         case "hat":
-          return "-ml-1"
+          return "-ml-[8px]" // Move right half 8px to the left for proper alignment
         case "glove":
           return "-ml-1"
         default:

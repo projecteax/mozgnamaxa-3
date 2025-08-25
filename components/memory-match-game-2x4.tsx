@@ -71,10 +71,10 @@ export default function MemoryMatchGame2x4({ onMenuClick, onBack, onNext, onRetr
     // Update items based on season
     const newMemoryItems = isWinter
       ? [
-          { id: "santa", image: "/images/santa_winter.svg", name: "Santa", revealed: false },
-          { id: "elf", image: "/images/elf_winter.svg", name: "Elf", revealed: false },
-          { id: "reindeer", image: "/images/raindeer_winter.svg", name: "Reindeer", revealed: false },
-          { id: "gift", image: "/images/gift_winter.svg", name: "Gift", revealed: false },
+          { id: "mors", image: "/images/memory-match-game-2x4/mors.svg", name: "Mors", revealed: false },
+          { id: "pinguin", image: "/images/memory-match-game-2x4/pinguin.svg", name: "Pinguin", revealed: false },
+          { id: "polar_bear", image: "/images/memory-match-game-2x4/polar_bear.svg", name: "Polar Bear", revealed: false },
+          { id: "white_fox", image: "/images/memory-match-game-2x4/white_fox.svg", name: "White Fox", revealed: false },
         ]
       : isAutumn
         ? [
@@ -304,14 +304,14 @@ export default function MemoryMatchGame2x4({ onMenuClick, onBack, onNext, onRetr
   const getItemImage = (itemId: string) => {
     if (isWinter) {
       switch (itemId) {
-        case "santa":
-          return "/images/santa_winter.svg"
-        case "elf":
-          return "/images/elf_winter.svg"
-        case "reindeer":
-          return "/images/raindeer_winter.svg"
-        case "gift":
-          return "/images/gift_winter.svg"
+        case "mors":
+          return "/images/memory-match-game-2x4/mors.svg"
+        case "pinguin":
+          return "/images/memory-match-game-2x4/pinguin.svg"
+        case "polar_bear":
+          return "/images/memory-match-game-2x4/polar_bear.svg"
+        case "white_fox":
+          return "/images/memory-match-game-2x4/white_fox.svg"
         default:
           return "/placeholder.svg"
       }
@@ -371,21 +371,8 @@ export default function MemoryMatchGame2x4({ onMenuClick, onBack, onNext, onRetr
         </div>
 
         <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
-          <Image
-            src={
-              isWinter
-                ? "/images/title_box_small_winter.svg"
-                : isAutumn
-                  ? "/images/title_box_small_autumn.svg"
-                  : isSummer
-                    ? "/images/title_box_small_summer.svg"
-                    : "/images/green_large_box.svg"
-            }
-            alt="Title box"
-            fill
-            className="object-contain"
-          />
-          <span className="relative z-10 text-white text-sm md:text-lg font-sour-gummy font-thin tracking-wider">
+          <Image src={theme.titleBox || "/placeholder.svg"} alt="Title box" fill className="object-contain" />
+          <span className="relative z-10 text-white text-2xl md:text-3xl font-sour-gummy font-thin">
             ZAPAMIĘTAJ I UŁÓŻ TAK SAMO.
           </span>
         </div>
@@ -432,7 +419,13 @@ export default function MemoryMatchGame2x4({ onMenuClick, onBack, onNext, onRetr
                     }`}
                   >
                     <div className="relative h-24 w-24">
-                      <Image src={item.image || "/placeholder.svg"} alt={item.name} fill className="object-contain" />
+                      <Image 
+                        src={item.image || "/placeholder.svg"} 
+                        alt={item.name} 
+                        fill 
+                        className="object-contain"
+                        style={{ transform: isWinter ? "scale(0.8)" : "none" }}
+                      />
                     </div>
                   </div>
 
@@ -484,6 +477,7 @@ export default function MemoryMatchGame2x4({ onMenuClick, onBack, onNext, onRetr
                           alt={zone.itemId}
                           fill
                           className="object-contain"
+                          style={{ transform: isWinter ? "scale(0.8)" : "none" }}
                         />
                       </div>
                     </div>
@@ -506,7 +500,13 @@ export default function MemoryMatchGame2x4({ onMenuClick, onBack, onNext, onRetr
                     draggable
                     onDragStart={() => handleDragStart(item.id)}
                   >
-                    <Image src={item.image || "/placeholder.svg"} alt={item.name} fill className="object-contain" />
+                    <Image 
+                      src={item.image || "/placeholder.svg"} 
+                      alt={item.name} 
+                      fill 
+                      className="object-contain"
+                      style={{ transform: isWinter ? "scale(0.8)" : "none" }}
+                    />
                   </div>
                 )
               })}
@@ -523,7 +523,13 @@ export default function MemoryMatchGame2x4({ onMenuClick, onBack, onNext, onRetr
                     draggable
                     onDragStart={() => handleDragStart(item.id)}
                   >
-                    <Image src={item.image || "/placeholder.svg"} alt={item.name} fill className="object-contain" />
+                    <Image 
+                      src={item.image || "/placeholder.svg"} 
+                      alt={item.name} 
+                      fill 
+                      className="object-contain"
+                      style={{ transform: isWinter ? "scale(0.8)" : "none" }}
+                    />
                   </div>
                 )
               })}
@@ -540,7 +546,13 @@ export default function MemoryMatchGame2x4({ onMenuClick, onBack, onNext, onRetr
                     draggable
                     onDragStart={() => handleDragStart(item.id)}
                   >
-                    <Image src={item.image || "/placeholder.svg"} alt={item.name} fill className="object-contain" />
+                    <Image 
+                      src={item.image || "/placeholder.svg"} 
+                      alt={item.name} 
+                      fill 
+                      className="object-contain"
+                      style={{ transform: isWinter ? "scale(0.8)" : "none" }}
+                    />
                   </div>
                 )
               })}

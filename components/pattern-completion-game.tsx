@@ -54,22 +54,22 @@ export default function PatternCompletionGame({ onMenuClick, onBack, onNext, onR
     if (isWinter) {
       switch (itemType) {
         case "worm":
-          return "/images/sequence_winter_01.svg"
+          return "/images/pattern-completion-game/winter_pattern_1.svg"
         case "cocoon":
-          return "/images/sequence_winter_02.svg"
+          return "/images/pattern-completion-game/winter_pattern_2.svg"
         case "butterfly":
-          return "/images/sequence_winter_03.svg"
+          return "/images/pattern-completion-game/winter_pattern_3.svg"
         default:
           return "/placeholder.svg"
       }
     } else if (isAutumn) {
       switch (itemType) {
         case "worm":
-          return "/images/pattern_autumn_01.svg"
+          return "/images/pattern-completion-game/hedge_red.svg"
         case "cocoon":
-          return "/images/pattern_autumn_02.svg"
+          return "/images/pattern-completion-game/hedge_orange.svg"
         case "butterfly":
-          return "/images/pattern_autumn_03.svg"
+          return "/images/pattern-completion-game/hedge_green.svg"
         default:
           return "/placeholder.svg"
       }

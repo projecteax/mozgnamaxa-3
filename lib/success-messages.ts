@@ -51,9 +51,9 @@ const SUCCESS_MESSAGES = [
   "To się nazywa precyzja.",
   "O to chodziło!",
   "Profeska.",
-  "Brawo ty!",
+  "Brawo Ty!",
   "Wspaniała przygoda!",
-  "Ale z ciebie mądra głowa!",
+  "Ale z Ciebie mądra głowa!",
 ]
 
 export function getRandomSuccessMessage(): string {

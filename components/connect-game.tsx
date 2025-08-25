@@ -244,70 +244,124 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
     )
 
     // Build and shuffle left and right items for other seasons
-    const left = shuffleArray([
-      {
-        id: "single-leaf",
-        image: "/images/leaf_green_autumn.svg",
-        springImage: "/images/leaf_green_spring.svg",
-        autumnImage: "/images/onion_autumn.svg",
-        winterImage: "/images/person_winter.svg",
-        pairId: selectedSeason === "zima" ? "person" : selectedSeason === "jesien" ? "onion" : "leaf",
-        isLeft: true,
-        matched: false,
-      },
-      {
-        id: "single-hedgehog",
-        image: "/images/hedgehog_autumn.svg",
-        springImage: "/images/hedgehog_spring.svg",
-        autumnImage: "/images/carrot_autumn.svg",
-        winterImage: "/images/cookie_winter.svg",
-        pairId: selectedSeason === "zima" ? "cookie" : selectedSeason === "jesien" ? "carrot" : "hedgehog",
-        isLeft: true,
-        matched: false,
-      },
-      {
-        id: "single-nut",
-        image: "/images/husselnut_autumn.svg",
-        springImage: "/images/husselnut_spring.svg",
-        autumnImage: "/images/beetroot_autumn.svg",
-        winterImage: "/images/ball_winter.svg",
-        pairId: selectedSeason === "zima" ? "ball" : selectedSeason === "jesien" ? "beetroot" : "nut",
-        isLeft: true,
-        matched: false,
-      },
-    ])
-    const right = shuffleArray([
-      {
-        id: "set-of-leaves",
-        image: "/images/leaf_orange_autumn.svg",
-        springImage: "/images/leaf_orange_spring.svg",
-        autumnImage: "/images/onion_autumn_multiple.svg",
-        winterImage: "/images/people_winter.svg",
-        pairId: selectedSeason === "zima" ? "person" : selectedSeason === "jesien" ? "onion" : "leaf",
-        isLeft: false,
-        matched: false,
-      },
-      {
-        id: "set-of-hedgehogs",
-        image: "/images/squirel_autumn.svg",
-        springImage: "/images/squirel_spring.svg",
-        autumnImage: "/images/carrot_autumn_multiple.svg",
-        winterImage: "/images/cookies_winter.svg",
-        pairId: selectedSeason === "zima" ? "cookie" : selectedSeason === "jesien" ? "carrot" : "hedgehog",
-        isLeft: false,
-        matched: false,
-      },
-      {
-        id: "set-of-nuts",
-        image: "/images/zoladz_autumn.svg",
-        springImage: "/images/zoladz_spring.svg",
-        autumnImage: "/images/beetroot_autumn_multiple.svg",
-        winterImage: "/images/balls_multiple_winter.svg",
-        pairId: selectedSeason === "zima" ? "ball" : selectedSeason === "jesien" ? "beetroot" : "nut",
-        isLeft: false,
-        matched: false,
-      },
-    ])
+    const left = shuffleArray(
+      selectedSeason === "lato" 
+        ? [
+            // Summer-specific items
+            {
+              id: "single-digger",
+              image: "/images/digger.svg",
+              pairId: "digger",
+              isLeft: true,
+              matched: false,
+            },
+            {
+              id: "single-sun",
+              image: "/images/sun_summer.svg",
+              pairId: "sun",
+              isLeft: true,
+              matched: false,
+            },
+            {
+              id: "single-flamingo",
+              image: "/images/flamingo_summer.svg",
+              pairId: "flamingo",
+              isLeft: true,
+              matched: false,
+            },
+          ]
+        : [
+            {
+              id: "single-leaf",
+              image: "/images/leaf_green_autumn.svg",
+              springImage: "/images/leaf_green_spring.svg",
+              autumnImage: "/images/onion_autumn.svg",
+              winterImage: "/images/person_winter.svg",
+              pairId: selectedSeason === "zima" ? "person" : selectedSeason === "jesien" ? "onion" : "leaf",
+              isLeft: true,
+              matched: false,
+            },
+            {
+              id: "single-hedgehog",
+              image: "/images/hedgehog_autumn.svg",
+              springImage: "/images/hedgehog_spring.svg",
+              autumnImage: "/images/carrot_autumn.svg",
+              winterImage: "/images/cookie_winter.svg",
+              pairId: selectedSeason === "zima" ? "cookie" : selectedSeason === "jesien" ? "carrot" : "hedgehog",
+              isLeft: true,
+              matched: false,
+            },
+            {
+              id: "single-nut",
+              image: "/images/husselnut_autumn.svg",
+              springImage: "/images/husselnut_spring.svg",
+              autumnImage: "/images/beetroot_autumn.svg",
+              winterImage: "/images/ball_winter.svg",
+              pairId: selectedSeason === "zima" ? "ball" : selectedSeason === "jesien" ? "beetroot" : "nut",
+              isLeft: true,
+              matched: false,
+            },
+          ]
+    )
+    const right = shuffleArray(
+      selectedSeason === "lato"
+        ? [
+            // Summer-specific right items
+            {
+              id: "set-of-bucket",
+              image: "/images/bucket_summer.svg",
+              pairId: "digger",
+              isLeft: false,
+              matched: false,
+            },
+            {
+              id: "set-of-sunglasses",
+              image: "/images/sunglasses_summer.svg",
+              pairId: "sun",
+              isLeft: false,
+              matched: false,
+            },
+            {
+              id: "set-of-swimsuit",
+              image: "/images/swimsuit_summer.svg",
+              pairId: "flamingo",
+              isLeft: false,
+              matched: false,
+            },
+          ]
+        : [
+            {
+              id: "set-of-leaves",
+              image: "/images/leaf_orange_autumn.svg",
+              springImage: "/images/leaf_orange_spring.svg",
+              autumnImage: "/images/onion_autumn_multiple.svg",
+              winterImage: "/images/people_winter.svg",
+              pairId: selectedSeason === "zima" ? "person" : selectedSeason === "jesien" ? "onion" : "leaf",
+              isLeft: false,
+              matched: false,
+            },
+            {
+              id: "set-of-hedgehogs",
+              image: "/images/squirel_autumn.svg",
+              springImage: "/images/squirel_spring.svg",
+              autumnImage: "/images/carrot_autumn_multiple.svg",
+              winterImage: "/images/cookies_winter.svg",
+              pairId: selectedSeason === "zima" ? "cookie" : selectedSeason === "jesien" ? "carrot" : "hedgehog",
+              isLeft: false,
+              matched: false,
+            },
+            {
+              id: "set-of-nuts",
+              image: "/images/zoladz_autumn.svg",
+              springImage: "/images/zoladz_spring.svg",
+              autumnImage: "/images/beetroot_autumn_multiple.svg",
+              winterImage: "/images/balls_multiple_winter.svg",
+              pairId: selectedSeason === "zima" ? "ball" : selectedSeason === "jesien" ? "beetroot" : "nut",
+              isLeft: false,
+              matched: false,
+            },
+          ]
+    )
     setLeftItems(left)
     setRightItems(right)
   }, [selectedSeason])
@@ -453,7 +507,7 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
           {/* Game container */}
           <div className="flex justify-between w-full max-w-4xl">
             {/* Left column - single items */}
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-16">
               {leftItems.map((item) => (
                 <div key={item.id} className="relative">
                   {item.matched ? (
@@ -465,7 +519,7 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
                           src={getImageForSeason(item) || "/placeholder.svg"}
                           alt={`Single ${item.pairId}`}
                           fill
-                          className="object-contain"
+                          className={`object-contain ${selectedSeason === "lato" ? "scale-80" : ""}`}
                         />
                       </div>
 
@@ -475,7 +529,7 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
                           src={getImageForSeason(rightItems.find((right) => right.pairId === item.pairId)!) || ""}
                           alt={`Set of ${item.pairId}s`}
                           fill
-                          className="object-contain"
+                          className={`object-contain ${selectedSeason === "lato" ? "scale-80" : ""}`}
                         />
                       </div>
                     </div>
@@ -520,7 +574,7 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
             </div>
 
             {/* Right column - sets of items */}
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-16">
               {rightItems.map((item) => (
                 <div key={item.id} className={`relative ${item.matched ? "opacity-0" : ""}`}>
                   {/* Extended drop zone with areas on both sides */}
@@ -546,6 +600,9 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
                           alt={`Set of ${item.pairId}s`}
                           fill
                           className="object-contain"
+                          style={{
+                            transform: selectedSeason === "lato" ? "scale(0.8)" : selectedSeason === "jesien" ? "scale(1.3)" : "none"
+                          }}
                         />
                       </div>
                     </div>

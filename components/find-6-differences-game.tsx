@@ -71,13 +71,13 @@ export default function Find6DifferencesGame({ onMenuClick, onComplete, onBack, 
       ]
     } else {
       return [
-        // Spring differences with original locations and original circle size
-        { id: 1, name: "difference-1", xProp: 0.45, yProp: 0.18, radius: 60, found: false },
-        { id: 2, name: "difference-2", xProp: 0.7, yProp: 0.2, radius: 60, found: false },
-        { id: 3, name: "difference-3", xProp: 0.15, yProp: 0.4, radius: 60, found: false },
-        { id: 4, name: "difference-4", xProp: 0.85, yProp: 0.43, radius: 60, found: false },
-        { id: 5, name: "difference-5", xProp: 0.7, yProp: 0.6, radius: 60, found: false },
-        { id: 6, name: "difference-6", xProp: 0.25, yProp: 0.85, radius: 60, found: false },
+        // Spring differences with original locations and 40px radius circles
+        { id: 1, name: "difference-1", xProp: 0.45, yProp: 0.18, radius: 40, found: false },
+        { id: 2, name: "difference-2", xProp: 0.7, yProp: 0.2, radius: 40, found: false },
+        { id: 3, name: "difference-3", xProp: 0.15, yProp: 0.4, radius: 40, found: false },
+        { id: 4, name: "difference-4", xProp: 0.85, yProp: 0.43, radius: 40, found: false },
+        { id: 5, name: "difference-5", xProp: 0.7, yProp: 0.6, radius: 40, found: false },
+        { id: 6, name: "difference-6", xProp: 0.25, yProp: 0.85, radius: 40, found: false },
       ]
     }
   }
@@ -231,7 +231,7 @@ export default function Find6DifferencesGame({ onMenuClick, onComplete, onBack, 
       <div className="w-full flex justify-between items-center mb-8">
         <div className="relative w-16 h-16">
           <SoundButtonEnhanced
-            text="ZNAJDŹ 6 RÓŻNIC"
+            text="ZNAJDŹ 6 RÓŻNIC."
             soundIcon={theme.soundIcon || "/images/sound_icon_dragon_page.svg"}
             size="xl"
             className="w-full h-full"
@@ -241,7 +241,7 @@ export default function Find6DifferencesGame({ onMenuClick, onComplete, onBack, 
         <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
           <Image src={getTitleBoxImage() || "/placeholder.svg"} alt="Title box" fill className="object-contain" />
           <span className="relative z-10 text-white text-2xl md:text-3xl font-bold font-sour-gummy">
-            ZNAJDŹ 6 RÓŻNIC
+            ZNAJDŹ 6 RÓŻNIC.
           </span>
         </div>
 

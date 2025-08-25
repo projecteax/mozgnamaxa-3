@@ -167,7 +167,7 @@ export default function SequenceGame2({ onMenuClick, onComplete, onBack, onNext,
         }
       }
     } else {
-      setErrorMessage("Przykro mi to tutaj nie pasuje")
+      setErrorMessage(null)
     }
 
     setDraggedItem(null)

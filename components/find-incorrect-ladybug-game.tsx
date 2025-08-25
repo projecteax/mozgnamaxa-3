@@ -79,22 +79,22 @@ export default function FindIncorrectLadybugGame({ onMenuClick, onBack, onNext, 
       correctImage = "/images/elf_correct_winter.svg"
       incorrectImage = "/images/elf_incorrect_winter.svg"
       altText = "Elf"
-      titleText = "KTÓRY ELF SIĘ RÓŻNI"
+      titleText = "KTÓRY ELF SIĘ RÓŻNI?"
     } else if (isAutumn) {
-      correctImage = "/images/mushroom_red_autumn.svg"
-      incorrectImage = "/images/mushroom_red_autumn_incorrect.svg"
-      altText = "Grzyb"
-      titleText = "KTÓRY GRZYB SIĘ RÓŻNI"
+      correctImage = "/images/ludzik_correct.svg"
+      incorrectImage = "/images/ludzik_incorrect.svg"
+      altText = "Ludzik"
+      titleText = "KTÓRY LUDZIK SIĘ RÓŻNI?"
     } else if (selectedSeason === "lato") {
       correctImage = "/images/sunflower_summer.svg"
       incorrectImage = "/images/incorrect_sunflower_summer.svg"
       altText = "Sunflower"
-      titleText = "KTÓRY SŁONECZNIK SIĘ RÓŻNI"
+      titleText = "KTÓRY SŁONECZNIK SIĘ RÓŻNI?"
     } else {
       correctImage = "/images/ladybug.svg"
       incorrectImage = "/images/incorrect_ladybug.svg"
       altText = "Ladybug"
-      titleText = "KTÓRA BIEDRONKA SIĘ RÓŻNI"
+      titleText = "KTÓRA BIEDRONKA SIĘ RÓŻNI?"
     }
 
     return (
@@ -104,13 +104,6 @@ export default function FindIncorrectLadybugGame({ onMenuClick, onBack, onNext, 
         onClick={() => handleLadybugClick(index)}
       >
         <div className="relative flex items-center justify-center">
-          {/* Shadow for autumn mushrooms */}
-          {isAutumn && (
-            <div
-              className="absolute inset-0 bg-black/20 rounded-full blur-sm transform translate-y-1"
-              style={{ width: "80%", height: "20%", bottom: "-5px", left: "10%" }}
-            />
-          )}
           <Image
             src={isIncorrect ? incorrectImage : correctImage}
             alt={altText}
@@ -139,13 +132,13 @@ export default function FindIncorrectLadybugGame({ onMenuClick, onBack, onNext, 
   // Get title text based on season
   const getTitleText = () => {
     if (isWinter) {
-      return "KTÓRY ELF SIĘ RÓŻNI"
+      return "KTÓRY ELF SIĘ RÓŻNI?"
     } else if (isAutumn) {
-      return "KTÓRY GRZYB SIĘ RÓŻNI"
+      return "KTÓRY LUDZIK SIĘ RÓŻNI?"
     } else if (selectedSeason === "lato") {
-      return "KTÓRY SŁONECZNIK SIĘ RÓŻNI"
+      return "KTÓRY SŁONECZNIK SIĘ RÓŻNI?"
     } else {
-      return "KTÓRA BIEDRONKA SIĘ RÓŻNI"
+      return "KTÓRA BIEDRONKA SIĘ RÓŻNI?"
     }
   }
 

@@ -257,7 +257,7 @@ export default function MemoryGame3({ onMenuClick, onBack, onNext, onRetry, user
       <div className="w-full flex justify-between items-center mb-8">
         <div className="relative w-16 h-16">
           <SoundButtonEnhanced
-            text="ZNAJDŹ PARY"
+            text="ZNAJDŹ PARY."
             soundIcon={theme.soundIcon || "/images/sound_icon_dragon_page.svg"}
             size="xl"
             className="w-full h-full"
@@ -266,7 +266,7 @@ export default function MemoryGame3({ onMenuClick, onBack, onNext, onRetry, user
 
         <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
           <Image src={theme.titleBox || "/placeholder.svg"} alt="Title box" fill className="object-contain" />
-          <span className="relative z-10 text-white text-2xl md:text-3xl font-sour-gummy font-thin">ZNAJDŹ PARY</span>
+          <span className="relative z-10 text-white text-2xl md:text-3xl font-sour-gummy font-thin">ZNAJDŹ PARY.</span>
         </div>
 
         <div className="relative w-16 h-16" onClick={onMenuClick}>

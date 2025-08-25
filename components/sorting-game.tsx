@@ -60,7 +60,7 @@ export default function SortingGame({ onMenuClick, onBack, onNext, onRetry, user
       return "/images/snowflake_01_winter.svg"
     }
     if (selectedSeason === "jesien") {
-      return "/images/mushroom_brown_autumn.png"
+      return "/images/mushroom_brown_autumn.svg"
     }
     return selectedSeason === "lato" ? "/images/duck_summer.svg" : "/images/butterfly_02.png"
   }

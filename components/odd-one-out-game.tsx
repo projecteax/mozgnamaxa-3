@@ -204,6 +204,7 @@ export default function OddOneOutGame({ onMenuClick, onBack, onNext, onRetry, us
                     className="object-contain"
                     style={{
                       filter: isCompleted && item.isCorrect ? "drop-shadow(0 0 8px #539e1b)" : "none",
+                      transform: (selectedSeason === "jesien" && item.id === "stork") || (selectedSeason === "zima" && item.id === "stork") ? "scale(0.75)" : "none",
                     }}
                   />
                 </div>

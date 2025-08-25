@@ -133,7 +133,7 @@ export default function BranchSequenceGame({ onMenuClick, onBack, onNext, onRetr
       : isSummer
         ? "/images/title_box_small_summer.svg"
         : "/images/title_box_small.png"
-  const titleText = isWinter ? "DOKOŃCZ UKŁADANIE" : isAutumn ? "DOKOŃCZ UKŁADANIE" : "DOKOŃCZ UKŁADANIE"
+  const titleText = isWinter ? "DOKOŃCZ UKŁADANIE." : isAutumn ? "DOKOŃCZ UKŁADANIE." : "DOKOŃCZ UKŁADANIE."
 
   return (
     <div className="w-full max-w-6xl">
@@ -141,7 +141,7 @@ export default function BranchSequenceGame({ onMenuClick, onBack, onNext, onRetr
       <div className="w-full flex justify-between items-center mb-12">
         <div className="relative w-16 h-16">
           <SoundButtonEnhanced
-            text="DOKOŃCZ UKŁADANIE"
+            text="DOKOŃCZ UKŁADANIE."
             soundIcon={theme.soundIcon || "/images/sound_icon_dragon_page.svg"}
             size="xl"
             className="w-full h-full"

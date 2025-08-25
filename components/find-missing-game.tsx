@@ -57,7 +57,7 @@ export default function FindMissingGame({ onMenuClick, onBack, onNext, onRetry, 
         { id: "duck", name: "Duck", image: "/images/duck_02_summer.svg", isCorrect: false },
         { id: "tomato", name: "Tomato", image: "/images/tomato_summer.svg", isCorrect: false },
         { id: "ball", name: "Pink Ball", image: "/images/pink_ball_summer.svg", isCorrect: true }, // This is the correct answer
-        { id: "wheel", name: "Rescue Wheel", image: "/images/rescue_wheel_summer.svg", isCorrect: false },
+        { id: "butterfly", name: "Orange Butterfly", image: "/images/butterfly_orange_new.svg", isCorrect: false },
       ]
     } else {
       return [
@@ -224,7 +224,7 @@ export default function FindMissingGame({ onMenuClick, onBack, onNext, onRetry, 
                 src={options[2].image || "/placeholder.svg"}
                 alt={options[2].name}
                 fill
-                className="object-contain"
+                className={`object-contain ${selectedSeason === "lato" ? "scale-75" : selectedSeason === "jesien" ? "scale-75" : selectedSeason === "zima" ? "scale-85" : ""}`}
               />
             </div>
           </div>
@@ -233,7 +233,7 @@ export default function FindMissingGame({ onMenuClick, onBack, onNext, onRetry, 
           <div className="flex gap-4 justify-center">
             <div
               className={`relative h-20 w-20 cursor-pointer transition-all duration-300 hover:scale-105 ${
-                selectedOption === options[3].id ? (options[3].isCorrect ? "scale-105 drop-shadow-lg" : "") : ""
+                selectedOption === options[3].id ? (options[3].isCorrect ? "scale-105" : "") : ""
               }`}
               onClick={() => handleOptionClick(options[3].id, options[3].isCorrect)}
             >
@@ -242,6 +242,11 @@ export default function FindMissingGame({ onMenuClick, onBack, onNext, onRetry, 
                 alt={options[3].name}
                 fill
                 className="object-contain"
+                style={{
+                  filter: selectedOption === options[3].id && options[3].isCorrect 
+                    ? "drop-shadow(0 4px 8px rgba(34, 197, 94, 0.6))" 
+                    : "none"
+                }}
               />
             </div>
 

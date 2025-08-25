@@ -25,6 +25,8 @@ interface FlowerItem {
   name: string
   image: string
   shadowImage: string
+  summerImage: string
+  summerShadowImage: string
   autumnImage: string
   autumnShadowImage: string
   winterImage: string
@@ -51,6 +53,8 @@ export default function MemoryGame7({ onMenuClick, onBack, onNext, onRetry, user
       name: "Yellow Flower",
       image: "/images/flower_yellow.svg",
       shadowImage: "/images/flower_yellow_shadow.svg",
+      summerImage: "/images/memory-game-7/summer_banana.svg",
+      summerShadowImage: "/images/memory-game-7/summer_banana_outline.svg",
       autumnImage: "/images/mushroom_autumn.svg",
       autumnShadowImage: "/images/mushroom_autumn_shadow.svg",
       winterImage: "/images/sniezka_01_winter.svg",
@@ -62,7 +66,9 @@ export default function MemoryGame7({ onMenuClick, onBack, onNext, onRetry, user
       name: "White Flower",
       image: "/images/flower_white.svg",
       shadowImage: "/images/flower_white_shadow.svg",
-      autumnImage: "/images/apple_autumn.svg",
+      summerImage: "/images/memory-game-7/summer_paprika.svg",
+      summerShadowImage: "/images/memory-game-7/summer_paprika_outline.svg",
+      autumnImage: "/images/apple_autumn_fruit.svg",
       autumnShadowImage: "/images/apple_autumn_shadow.svg",
       winterImage: "/images/sniezka_02_winter.svg",
       winterShadowImage: "/images/sniezka_02_winter_shadow.svg",
@@ -73,6 +79,8 @@ export default function MemoryGame7({ onMenuClick, onBack, onNext, onRetry, user
       name: "Pink Flower",
       image: "/images/flower_pink.svg",
       shadowImage: "/images/flower_pink_shadow.svg",
+      summerImage: "/images/memory-game-7/summer_raspberry.svg",
+      summerShadowImage: "/images/memory-game-7/summer_raspberry_outline.svg",
       autumnImage: "/images/pear_autumn.svg",
       autumnShadowImage: "/images/pear_autumn_shadow.svg",
       winterImage: "/images/sniezka_03_winter.svg",
@@ -84,6 +92,8 @@ export default function MemoryGame7({ onMenuClick, onBack, onNext, onRetry, user
       name: "Red Flower",
       image: "/images/flower_red.svg",
       shadowImage: "/images/flower_red_shadow.svg",
+      summerImage: "/images/memory-game-7/summer_sandwhich.svg",
+      summerShadowImage: "/images/memory-game-7/summer_sandwhich_outline.svg",
       autumnImage: "/images/squirel_autumn.svg",
       autumnShadowImage: "/images/squirel_autumn_shadow.svg",
       winterImage: "/images/sniezka_04_winter.svg",
@@ -95,10 +105,12 @@ export default function MemoryGame7({ onMenuClick, onBack, onNext, onRetry, user
       name: "Purple Flower",
       image: "/images/flower_purple.svg",
       shadowImage: "/images/flower_purple_shadow.svg",
+      summerImage: "/images/memory-game-7/summer_tomato.svg",
+      summerShadowImage: "/images/memory-game-7/summer_tomato_outline.svg",
       autumnImage: "/images/leaf_autumn.svg",
       autumnShadowImage: "/images/leaf_autumn_shadow.svg",
-      winterImage: "/images/sniezka_01_winter.svg",
-      winterShadowImage: "/images/sniezka_01_winter_shadow.svg",
+      winterImage: "/images/sniezka_05_winter.svg",
+      winterShadowImage: "/images/sniezka_05_winter_shadow.svg",
       matched: false,
     },
   ])
@@ -129,6 +141,9 @@ export default function MemoryGame7({ onMenuClick, onBack, onNext, onRetry, user
 
   // Get the appropriate image based on season
   const getImageForSeason = (flower: FlowerItem) => {
+    if (selectedSeason === "lato") {
+      return flower.summerImage
+    }
     if (selectedSeason === "jesien") {
       return flower.autumnImage
     }
@@ -140,6 +155,9 @@ export default function MemoryGame7({ onMenuClick, onBack, onNext, onRetry, user
 
   // Get the appropriate shadow image based on season
   const getShadowImageForSeason = (flower: FlowerItem) => {
+    if (selectedSeason === "lato") {
+      return flower.summerShadowImage
+    }
     if (selectedSeason === "jesien") {
       return flower.autumnShadowImage
     }
@@ -265,7 +283,7 @@ export default function MemoryGame7({ onMenuClick, onBack, onNext, onRetry, user
                     src={getImageForSeason(flower) || "/placeholder.svg"}
                     alt={flower.name}
                     fill
-                    className="object-contain"
+                    className={`object-contain ${selectedSeason === "lato" ? "scale-75" : ""}`}
                   />
                 </div>
               </div>
@@ -292,7 +310,7 @@ export default function MemoryGame7({ onMenuClick, onBack, onNext, onRetry, user
                   src={getShadowImageForSeason(flower) || "/placeholder.svg"}
                   alt={`${flower.name} shadow`}
                   fill
-                  className="object-contain drop-shadow-md"
+                  className={`object-contain drop-shadow-md ${selectedSeason === "lato" ? "scale-75" : ""}`}
                 />
 
                 {/* Show the matched flower on top if filled */}
@@ -303,7 +321,7 @@ export default function MemoryGame7({ onMenuClick, onBack, onNext, onRetry, user
                         src={getImageForSeason(flower) || "/placeholder.svg"}
                         alt={flower.name}
                         fill
-                        className="object-contain"
+                        className={`object-contain ${selectedSeason === "lato" ? "scale-75" : ""}`}
                       />
                     </div>
                   </div>

@@ -40,38 +40,38 @@ export default function SpotDifferenceGame5({ onMenuClick, onComplete, onBack, o
     if (selectedSeason === "lato") {
       // Summer differences with new locations
       return [
-        { id: 1, name: "difference-1", xProp: 0.25, yProp: 0.15, radius: 60, found: false },
-        { id: 2, name: "difference-2", xProp: 0.1, yProp: 0.5, radius: 60, found: false },
-        { id: 3, name: "difference-3", xProp: 0.42, yProp: 0.58, radius: 60, found: false },
-        { id: 4, name: "difference-4", xProp: 0.9, yProp: 0.4, radius: 60, found: false },
-        { id: 5, name: "difference-5", xProp: 0.65, yProp: 0.85, radius: 60, found: false },
+        { id: 1, name: "difference-1", xProp: 0.25, yProp: 0.15, radius: 45, found: false },
+        { id: 2, name: "difference-2", xProp: 0.1, yProp: 0.5, radius: 45, found: false },
+        { id: 3, name: "difference-3", xProp: 0.42, yProp: 0.58, radius: 45, found: false },
+        { id: 4, name: "difference-4", xProp: 0.9, yProp: 0.4, radius: 45, found: false },
+        { id: 5, name: "difference-5", xProp: 0.65, yProp: 0.85, radius: 45, found: false },
       ]
     } else if (selectedSeason === "jesien") {
       // Autumn differences with new locations
       return [
-        { id: 1, name: "difference-1", xProp: 0.35, yProp: 0.07, radius: 60, found: false },
-        { id: 2, name: "difference-2", xProp: 0.6, yProp: 0.36, radius: 60, found: false },
-        { id: 3, name: "difference-3", xProp: 0.95, yProp: 0.4, radius: 60, found: false },
-        { id: 4, name: "difference-4", xProp: 0.43, yProp: 0.55, radius: 60, found: false },
-        { id: 5, name: "difference-5", xProp: 0.09, yProp: 0.8, radius: 60, found: false },
+        { id: 1, name: "difference-1", xProp: 0.35, yProp: 0.07, radius: 45, found: false },
+        { id: 2, name: "difference-2", xProp: 0.6, yProp: 0.36, radius: 45, found: false },
+        { id: 3, name: "difference-3", xProp: 0.95, yProp: 0.4, radius: 45, found: false },
+        { id: 4, name: "difference-4", xProp: 0.43, yProp: 0.55, radius: 45, found: false },
+        { id: 5, name: "difference-5", xProp: 0.09, yProp: 0.8, radius: 45, found: false },
       ]
     } else if (selectedSeason === "zima") {
       // Winter differences with new locations
       return [
-        { id: 1, name: "difference-1", xProp: 0.3, yProp: 0.21, radius: 60, found: false },
-        { id: 2, name: "difference-2", xProp: 0.86, yProp: 0.1, radius: 60, found: false },
-        { id: 3, name: "difference-3", xProp: 0.11, yProp: 0.76, radius: 60, found: false },
-        { id: 4, name: "difference-4", xProp: 0.45, yProp: 0.68, radius: 60, found: false },
-        { id: 5, name: "difference-5", xProp: 0.8, yProp: 0.85, radius: 60, found: false },
+        { id: 1, name: "difference-1", xProp: 0.3, yProp: 0.21, radius: 45, found: false },
+        { id: 2, name: "difference-2", xProp: 0.86, yProp: 0.1, radius: 45, found: false },
+        { id: 3, name: "difference-3", xProp: 0.11, yProp: 0.76, radius: 45, found: false },
+        { id: 4, name: "difference-4", xProp: 0.45, yProp: 0.68, radius: 45, found: false },
+        { id: 5, name: "difference-5", xProp: 0.8, yProp: 0.85, radius: 45, found: false },
       ]
     } else {
       // Spring differences with original locations
       return [
-        { id: 1, name: "difference-1", xProp: 5 / 15, yProp: 4 / 11, radius: 60, found: false },
-        { id: 2, name: "difference-2", xProp: 7.5 / 15, yProp: 3 / 11, radius: 60, found: false },
-        { id: 3, name: "difference-3", xProp: 5 / 15, yProp: 7 / 11, radius: 60, found: false },
-        { id: 4, name: "difference-4", xProp: 12 / 15, yProp: 8 / 11, radius: 60, found: false },
-        { id: 5, name: "difference-5", xProp: 10.5 / 15, yProp: 9.5 / 11, radius: 60, found: false },
+        { id: 1, name: "difference-1", xProp: 5 / 15, yProp: 4.5 / 11, radius: 45, found: false },
+        { id: 2, name: "difference-2", xProp: 7.5 / 15, yProp: 3.5 / 11, radius: 45, found: false },
+        { id: 3, name: "difference-3", xProp: 5 / 15, yProp: 7 / 11, radius: 45, found: false },
+        { id: 4, name: "difference-4", xProp: 12 / 15, yProp: 7.5 / 11, radius: 45, found: false },
+        { id: 5, name: "difference-5", xProp: 10.5 / 15, yProp: 9.5 / 11, radius: 45, found: false },
       ]
     }
   }
@@ -203,7 +203,7 @@ export default function SpotDifferenceGame5({ onMenuClick, onComplete, onBack, o
       <div className="w-full flex justify-between items-center mb-8">
         <div className="relative w-16 h-16">
           <SoundButtonEnhanced
-            text="ZNAJDŹ RÓŻNICE."
+            text="ZNAJDŹ 5 RÓŻNIC."
             soundIcon={theme.soundIcon || "/images/sound_icon_dragon_page.svg"}
             size="xl"
             className="w-full h-full"
@@ -212,7 +212,7 @@ export default function SpotDifferenceGame5({ onMenuClick, onComplete, onBack, o
 
         <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
           <Image src={theme.titleBox || "/placeholder.svg"} alt="Title box" fill className="object-contain" />
-          <span className="relative z-10 text-white text-2xl md:text-3xl font-sour-gummy font-thin">ZNAJDŹ RÓŻNICE.</span>
+          <span className="relative z-10 text-white text-2xl md:text-3xl font-sour-gummy font-thin">ZNAJDŹ 5 RÓŻNIC.</span>
         </div>
 
         <div className="relative w-16 h-16" onClick={onMenuClick}>

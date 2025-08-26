@@ -58,6 +58,12 @@ export default function MainMenu({
           width={1440}
           height={1920}
           className="object-contain"
+          style={{ 
+            width: '480px', 
+            height: '640px',
+            maxWidth: 'none',
+            maxHeight: 'none'
+          }}
         />
       </div>
     </div>

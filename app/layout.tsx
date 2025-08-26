@@ -16,7 +16,10 @@ const dongle = Dongle({
 export const metadata: Metadata = {
   title: "Children's Learning Platform",
   description: "Interactive educational games for children",
-    generator: 'v0.dev'
+  generator: 'v0.dev',
+  other: {
+    'responsivevoice-verification': 'YOUR_VERIFICATION_CODE'
+  }
 }
 
 export default function RootLayout({
@@ -26,6 +29,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={dongle.variable} suppressHydrationWarning>
+      <head>
+        <script src="https://code.responsivevoice.org/responsivevoice.js?key=YOUR_API_KEY"></script>
+      </head>
       <body className={`${dongle.className} font-dongle`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
           <AuthProvider>

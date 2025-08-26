@@ -17,72 +17,58 @@ export default function SoundButtonEnhanced({
   size = 'md' 
 }: SoundButtonProps) {
   const [isPlaying, setIsPlaying] = useState(false)
-  const [polishVoice, setPolishVoice] = useState<SpeechSynthesisVoice | null>(null)
-  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([])
 
-  // Find best available voices when component loads
+  // Initialize ResponsiveVoice with Polish voice preferences
   useEffect(() => {
-    const findVoices = () => {
-      const voices = window.speechSynthesis.getVoices()
-      setAvailableVoices(voices)
+    // Only run on client side
+    if (typeof window !== 'undefined' && (window as any).responsiveVoice) {
+      const ResponsiveVoice = (window as any).responsiveVoice;
       
-      // Priority order for Polish voices
-      const polishVoice = voices.find(voice => 
-        voice.lang === 'pl-PL' || 
-        voice.lang === 'pl' ||
-        voice.name.toLowerCase().includes('polish') ||
-        voice.name.toLowerCase().includes('polski') ||
-        voice.name.toLowerCase().includes('polska')
-      )
+      // Set default Polish voice settings
+      ResponsiveVoice.setDefaultVoice("Polish Female");
+      ResponsiveVoice.setDefaultRate(0.75); // Slower for better clarity
+      ResponsiveVoice.setDefaultPitch(1.1); // Slightly higher pitch
+      ResponsiveVoice.setDefaultVolume(1.0);
       
-      if (polishVoice) {
-        setPolishVoice(polishVoice)
-      } else {
-        // Fallback to first available voice
-        setPolishVoice(voices[0] || null)
-      }
-    }
-
-    // Wait for voices to load
-    if (window.speechSynthesis.getVoices().length > 0) {
-      findVoices()
-    } else {
-      window.speechSynthesis.onvoiceschanged = findVoices
+      console.log('ResponsiveVoice initialized with Polish Female voice');
     }
   }, [])
 
   const speak = (text: string) => {
-    if ('speechSynthesis' in window) {
-      // Stop any previous speech
-      window.speechSynthesis.cancel()
+    if (typeof window === 'undefined' || !(window as any).responsiveVoice) {
+      console.log('ResponsiveVoice not available');
+      return;
+    }
+    
+    try {
+      const ResponsiveVoice = (window as any).responsiveVoice;
+      console.log('Speaking text:', text);
+      ResponsiveVoice.speak(text, "Polish Female", {
+        rate: 0.75,
+        pitch: 1.1,
+        volume: 1.0
+      });
+      setIsPlaying(true);
       
-      const utterance = new SpeechSynthesisUtterance(text)
+      // Check if speech is playing to update state
+      const checkPlaying = setInterval(() => {
+        if (!ResponsiveVoice.isPlaying()) {
+          setIsPlaying(false);
+          clearInterval(checkPlaying);
+        }
+      }, 100);
       
-      // Set Polish voice if available
-      if (polishVoice) {
-        utterance.voice = polishVoice
-      }
-      
-      // Enhanced settings for better Polish pronunciation
-      utterance.lang = 'pl-PL'
-      utterance.rate = 0.75  // Even slower for better clarity
-      utterance.pitch = 1.1   // Slightly higher pitch for better Polish sounds
-      utterance.volume = 1.0
-      
-      utterance.onstart = () => setIsPlaying(true)
-      utterance.onend = () => setIsPlaying(false)
-      utterance.onerror = (event) => {
-        console.error('Speech synthesis error:', event)
-        setIsPlaying(false)
-      }
-      
-      window.speechSynthesis.speak(utterance)
+    } catch (error) {
+      console.error('Error in speak function:', error);
+      setIsPlaying(false);
     }
   }
 
   const stopSpeaking = () => {
-    window.speechSynthesis.cancel()
-    setIsPlaying(false)
+    if (typeof window !== 'undefined' && (window as any).responsiveVoice) {
+      (window as any).responsiveVoice.stop();
+    }
+    setIsPlaying(false);
   }
 
   const handleClick = () => {
@@ -113,7 +99,6 @@ export default function SoundButtonEnhanced({
         flex items-center justify-center cursor-pointer 
         hover:scale-105 transition-transform drop-shadow-lg
         ${sizeClasses[size]} ${className}
-        ${!polishVoice ? 'opacity-50 cursor-not-allowed' : ''}
       `}
       onClick={handleClick}
       title={isPlaying ? "Zatrzymaj odtwarzanie" : "Odtwórz dźwięk"}

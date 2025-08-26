@@ -59,8 +59,8 @@ export default function MainMenu({
           height={1920}
           className="object-contain"
           style={{ 
-            width: '480px', 
-            height: '640px',
+            width: '70vw', 
+            height: '70vh',
             maxWidth: 'none',
             maxHeight: 'none'
           }}

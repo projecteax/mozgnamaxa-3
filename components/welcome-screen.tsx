@@ -62,8 +62,8 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
           height={1750}
           className="object-contain"
           style={{ 
-            width: '560px', 
-            height: '700px',
+            width: '70vw', 
+            height: '70vh',
             maxWidth: 'none',
             maxHeight: 'none'
           }}

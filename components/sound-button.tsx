@@ -22,18 +22,36 @@ export default function SoundButton({
   
   const { speak, speaking, cancel } = useSpeechSynthesis()
 
-  // Find Polish voice when component loads
+  // Find Polish female voice when component loads
   useEffect(() => {
     const findPolishVoice = () => {
       const voices = window.speechSynthesis.getVoices()
-      const polishVoice = voices.find(voice => 
-        voice.lang === 'pl-PL' || 
-        voice.lang === 'pl' ||
-        voice.name.toLowerCase().includes('polish') ||
-        voice.name.toLowerCase().includes('polski') ||
-        voice.name.toLowerCase().includes('polish') ||
-        voice.name.toLowerCase().includes('polska')
+      
+      // First, try to find a Polish female voice
+      let polishVoice = voices.find(voice => 
+        (voice.lang === 'pl-PL' || voice.lang === 'pl') &&
+        (voice.name.toLowerCase().includes('female') ||
+         voice.name.toLowerCase().includes('kobieta') ||
+         voice.name.toLowerCase().includes('ewa') ||
+         voice.name.toLowerCase().includes('agata') ||
+         voice.name.toLowerCase().includes('monika') ||
+         voice.name.toLowerCase().includes('paulina') ||
+         voice.name.toLowerCase().includes('natalia') ||
+         voice.name.toLowerCase().includes('zofia') ||
+         voice.name.toLowerCase().includes('anna') ||
+         voice.name.toLowerCase().includes('maria'))
       )
+      
+      // If no female voice found, try any Polish voice
+      if (!polishVoice) {
+        polishVoice = voices.find(voice => 
+          voice.lang === 'pl-PL' || 
+          voice.lang === 'pl' ||
+          voice.name.toLowerCase().includes('polish') ||
+          voice.name.toLowerCase().includes('polski') ||
+          voice.name.toLowerCase().includes('polska')
+        )
+      }
       
       if (polishVoice) {
         setPolishVoice(polishVoice)

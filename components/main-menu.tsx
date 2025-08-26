@@ -59,10 +59,11 @@ export default function MainMenu({
           height={1920}
           className="object-contain"
           style={{ 
-            width: '70vw', 
-            height: '70vh',
+            width: '85vw', 
+            height: '85vh',
             maxWidth: 'none',
-            maxHeight: 'none'
+            maxHeight: 'none',
+            objectPosition: 'bottom left'
           }}
         />
       </div>

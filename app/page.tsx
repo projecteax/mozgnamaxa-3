@@ -1010,7 +1010,6 @@ export default function Home() {
       <MainMenu
         onStudentLogin={handleStudentLogin}
         onTeacherLogin={handleTeacherLogin}
-        onTeacherRegister={handleTeacherRegister}
         onPlayWithoutLogin={handlePlayWithoutLogin}
       />
     )
@@ -1018,19 +1017,21 @@ export default function Home() {
 
   if (currentView === "season-selection") {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-[#e3f7ff] to-[#b8e6ff] flex flex-col items-center justify-center p-4">
-        <button
-          onClick={handleBackToMenu}
-          className="self-start mb-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 font-sour-gummy"
-        >
-          ← Powrót do menu
-        </button>
+      <main className="min-h-screen bg-gradient-to-br from-[#e3f7ff] to-[#b8e6ff]">
         {/* Show different components based on user login status */}
         {user ? (
-          <StudentProgressMenu 
-            onGameStart={handleGameStartFromProgress} 
-            onMenuClick={handleBackToMenu} 
-          />
+          <div className="flex flex-col items-center justify-center p-4">
+            <button
+              onClick={handleBackToMenu}
+              className="self-start mb-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 font-sour-gummy"
+            >
+              ← Powrót do menu
+            </button>
+            <StudentProgressMenu 
+              onGameStart={handleGameStartFromProgress} 
+              onMenuClick={handleBackToMenu} 
+            />
+          </div>
         ) : (
           <SeasonSelectionMenu onSeasonSelect={handleSeasonSelect} onMenuClick={handleBackToMenu} />
         )}

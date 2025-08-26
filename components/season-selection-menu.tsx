@@ -8,22 +8,20 @@ interface SeasonSelectionMenuProps {
 
 export default function SeasonSelectionMenu({ onSeasonSelect, onMenuClick }: SeasonSelectionMenuProps) {
   return (
-    <div className="w-full max-w-4xl">
-      {/* Header with sound and menu icons */}
-      <div className="w-full flex justify-between items-center mb-8">
-        <div className="relative w-16 h-16">
-          <Image src="/images/sound_new.svg" alt="Sound" fill className="object-contain cursor-pointer" />
+    <div className="w-full h-screen flex flex-col items-center justify-center">
+      {/* Season selection grid - centered on screen */}
+      <div className="flex flex-col items-center gap-8">
+        {/* Back to menu button at top */}
+        <div className="w-full flex justify-start mb-8">
+          <button
+            onClick={onMenuClick}
+            className="relative w-full h-12 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-200 flex items-center justify-center group"
+          >
+            <span className="text-xl font-bold text-[#3e459c] font-sour-gummy group-hover:scale-105 transition-transform duration-200">
+              POWRÓT DO MENU
+            </span>
+          </button>
         </div>
-
-        <div className="flex-1"></div>
-
-        <div className="relative w-16 h-16" onClick={onMenuClick}>
-          <Image src="/images/menu_new.svg" alt="Menu" fill className="object-contain cursor-pointer" />
-        </div>
-      </div>
-
-      {/* Season selection grid */}
-      <div className="flex flex-col items-center justify-center min-h-[400px] gap-8">
         {/* Top row - Wiosna and Lato */}
         <div className="flex gap-8">
           {/* Wiosna (Spring) button */}

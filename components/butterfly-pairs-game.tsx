@@ -109,6 +109,9 @@ export default function ButterflyPairsGame({ onMenuClick, onComplete, onBack, on
   // State for success message
   const [successMessage, setSuccessMessage] = useState<string>("")
 
+  // State to track if success message has been set (to prevent multiple random messages)
+  const [hasSetSuccessMessage, setHasSetSuccessMessage] = useState(false)
+
   // Use the game completion hook
   const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("butterfly-pairs-game")
 
@@ -227,7 +230,11 @@ export default function ButterflyPairsGame({ onMenuClick, onComplete, onBack, on
       const totalMatched = Object.keys(newMatchedPairs).length
       if (totalMatched === 3) {
         setAllMatched(true)
-        setSuccessMessage(getRandomSuccessMessage())
+        // Get a random success message only once
+        if (!hasSetSuccessMessage) {
+          setSuccessMessage(getRandomSuccessMessage())
+          setHasSetSuccessMessage(true)
+        }
 
         // Record completion with season-specific game ID
         const gameId =
@@ -263,6 +270,7 @@ export default function ButterflyPairsGame({ onMenuClick, onComplete, onBack, on
     setErrorMessage(null)
     setMatchedPairs({})
     setSuccessMessage("")
+    setHasSetSuccessMessage(false)
   }
 
   // Get season-specific assets

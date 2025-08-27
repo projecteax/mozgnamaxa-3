@@ -9,9 +9,10 @@ import StudentProgressTable from "./student-progress-table"
 import UserAvatar from "./user-avatar"
 import TeacherUserButton from "./teacher-user-button"
 import TeacherStudentRegisterForm from "./teacher-student-register-form"
-import { collection, query, where, getDocs, deleteDoc, doc } from "firebase/firestore"
+import { collection, query, where, getDocs, deleteDoc, doc, updateDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import { getTeacherStudents, type StudentProgress } from "@/lib/progress-service"
+import { Season, SEASON_INFO, isValidSeason } from "@/lib/season-utils"
 import Image from "next/image"
 
 interface TeacherPanelProps {
@@ -104,6 +105,31 @@ export default function TeacherPanel({ onMenuClick, isCreatingStudent, setIsCrea
     // Refresh students list
     if (teacherData?.unique_code) {
       getTeacherStudents(teacherData.unique_code).then(setStudents)
+    }
+  }
+
+  const handleInitialSeasonChange = async (studentId: string, newSeason: Season) => {
+    try {
+      setIsLoading(true)
+      
+      // Update student document with new initial season
+      const studentRef = doc(db, "students", studentId)
+      await updateDoc(studentRef, {
+        initialSeason: newSeason,
+        updatedAt: new Date()
+      })
+      
+      // Refresh students list to reflect changes
+      if (teacherData?.unique_code) {
+        const updatedStudents = await getTeacherStudents(teacherData.unique_code)
+        setStudents(updatedStudents)
+      }
+      
+      console.log(`Updated initial season for student ${studentId} to ${newSeason}`)
+    } catch (error) {
+      console.error("Error updating student initial season:", error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -285,6 +311,30 @@ export default function TeacherPanel({ onMenuClick, isCreatingStudent, setIsCrea
                                    }).join(' ');
                                  })()}
                                </p>
+                            </div>
+                            
+                            {/* Initial Season Selector */}
+                            <div className="mt-4 pt-4 border-t border-[#3e459c]/20">
+                              <p className="text-sm text-gray-600 font-dongle mb-2">Startowa pora roku:</p>
+                              <select 
+                                value={student.initialSeason || "wiosna"}
+                                onChange={(e) => {
+                                  e.stopPropagation() // Prevent card click
+                                  const newSeason = e.target.value as Season
+                                  if (isValidSeason(newSeason)) {
+                                    handleInitialSeasonChange(student.id, newSeason)
+                                  }
+                                }}
+                                onClick={(e) => e.stopPropagation()} // Prevent card click
+                                className="w-full px-3 py-2 text-sm border border-[#3e459c]/30 rounded-lg bg-white font-dongle focus:outline-none focus:ring-2 focus:ring-[#3e459c]/50"
+                                disabled={isLoading}
+                              >
+                                {Object.values(SEASON_INFO).map((season) => (
+                                  <option key={season.id} value={season.id}>
+                                    {season.name}
+                                  </option>
+                                ))}
+                              </select>
                             </div>
                           </div>
                         )

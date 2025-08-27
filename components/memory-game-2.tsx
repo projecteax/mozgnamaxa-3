@@ -124,7 +124,7 @@ export default function MemoryGame2({ onMenuClick }: MemoryGame2Props) {
         }, 1500)
       }
     }
-  }, [flippedCards, cards, isLoggedIn, recordCompletion])
+  }, [flippedCards, isLoggedIn, recordCompletion])
 
   // Reset the game
   const resetGame = () => {

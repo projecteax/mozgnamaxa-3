@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import { useGameCompletionWithHistory } from "@/hooks/use-game-completion"
 import { getRandomSuccessMessage } from "@/lib/success-messages"
@@ -49,6 +49,9 @@ export default function MemoryGame4({ onMenuClick, onComplete, onBack, onNext, o
 
   // State for success message
   const [successMessage, setSuccessMessage] = useState<string>("")
+
+  // Use ref to track if success message has been set to avoid dependency issues
+  const successMessageSetRef = useRef(false)
 
   // Initialize the cards based on season
   useEffect(() => {
@@ -365,11 +368,14 @@ export default function MemoryGame4({ onMenuClick, onComplete, onBack, onNext, o
 
   // Handle card click
   const handleCardClick = (id: number) => {
-    // Ignore clicks if already checking or if card is already flipped or matched
+    // Ignore clicks if already checking, if card is already flipped/matched, or if we already have 2 cards flipped
     if (isChecking || flippedCards.length >= 2) return
 
     const clickedCard = cards.find((card) => card.id === id)
     if (!clickedCard || clickedCard.isFlipped || clickedCard.isMatched) return
+
+    // Prevent clicking the same card twice
+    if (flippedCards.includes(id)) return
 
     // Flip the card
     setCards((prevCards) => prevCards.map((card) => (card.id === id ? { ...card, isFlipped: true } : card)))
@@ -399,15 +405,6 @@ export default function MemoryGame4({ onMenuClick, onComplete, onBack, onNext, o
         // Check if all cards are matched
         if (updatedCards.every((card) => card.isMatched)) {
           setIsCompleted(true)
-          setSuccessMessage(getRandomSuccessMessage())
-          // Record completion for user stats
-          recordCompletion()
-          // Call onComplete after 3 seconds to show success message
-          if (onComplete) {
-            setTimeout(() => {
-              onComplete()
-            }, 3000) // 3 second delay
-          }
         }
       } else {
         // No match, flip cards back after 1.5 seconds
@@ -422,7 +419,26 @@ export default function MemoryGame4({ onMenuClick, onComplete, onBack, onNext, o
         }, 1500)
       }
     }
-  }, [flippedCards, cards, recordCompletion, onComplete])
+  }, [flippedCards, cards])
+
+  // Handle game completion separately
+  useEffect(() => {
+    if (isCompleted && !successMessageSetRef.current) {
+      // Get a random success message only once
+      setSuccessMessage(getRandomSuccessMessage())
+      successMessageSetRef.current = true
+      
+      // Record completion for user stats
+      recordCompletion()
+      
+      // Call onComplete after 3 seconds to show success message
+      if (onComplete) {
+        setTimeout(() => {
+          onComplete()
+        }, 3000) // 3 second delay
+      }
+    }
+  }, [isCompleted, recordCompletion, onComplete])
 
   const handleMedalComplete = () => {
     // This function is no longer needed as medal flow is removed
@@ -452,6 +468,7 @@ export default function MemoryGame4({ onMenuClick, onComplete, onBack, onNext, o
     setIsCompleted(false)
     setIsChecking(false)
     setSuccessMessage("")
+    successMessageSetRef.current = false
     // These states are no longer needed as medal flow is removed
     // setShowMedal(false)
     // setShowProgress(false)

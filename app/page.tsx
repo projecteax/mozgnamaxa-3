@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useStudentProgress } from "@/hooks/use-student-progress"
 import MatchingGame from "@/components/matching-game"
 import SequenceGame from "@/components/sequence-game"
@@ -212,7 +212,7 @@ export default function Home() {
   const [showProgressPage, setShowProgressPage] = useState(false)
   const { user } = useAuth()
   const { setSelectedSeason, getThemeColors, selectedSeason } = useSeason()
-  const { progress } = useStudentProgress()
+  const { progress, refreshProgress } = useStudentProgress()
 
   const [showMedalDisplay2, setShowMedalDisplay2] = useState(false)
   const [showProgressPage2, setShowProgressPage2] = useState(false)
@@ -467,22 +467,32 @@ export default function Home() {
     setCurrentGame("matching")
   }
 
-  // Check if current game is completed by user
+  // Refresh progress when game changes to check for completion status updates
+  useEffect(() => {
+    if (user && refreshProgress) {
+      // Small delay to allow any ongoing completion recording to finish
+      const timeoutId = setTimeout(() => {
+        refreshProgress()
+      }, 1000)
+      return () => clearTimeout(timeoutId)
+    }
+  }, [currentGame, user, refreshProgress])
+
+  // Check if current game is completed by user in the current season
   const isCurrentGameCompleted = () => {
     if (!user || !progress) return false
     
-    // Check if the game is completed in ANY season (not just the current selectedSeason)
-    const allSeasons = ['wiosna', 'lato', 'jesien', 'zima'] as const
-    for (const season of allSeasons) {
-      const seasonCompletedGames = progress.seasonProgress[season]?.completedGames || []
-      if (seasonCompletedGames.includes(currentGame)) {
-        console.log(`Game ${currentGame} is completed in season ${season}`)
-        return true
-      }
+    // Check if the game is completed in the CURRENT selectedSeason only
+    const seasonCompletedGames = progress.seasonProgress[selectedSeason]?.completedGames || []
+    const isCompleted = seasonCompletedGames.includes(currentGame)
+    
+    if (isCompleted) {
+      console.log(`Game ${currentGame} is completed in current season ${selectedSeason}`)
+    } else {
+      console.log(`Game ${currentGame} is not completed in current season ${selectedSeason}`)
     }
     
-    console.log(`Game ${currentGame} is not completed in any season`)
-    return false
+    return isCompleted
   }
 
   // Function to navigate to the previous game
@@ -503,177 +513,177 @@ export default function Home() {
     setShowMedalDisplay2(true)
   }
 
-  const handleMedal2Complete = () => {
+  const handleMedal2Complete = useCallback(() => {
     setShowMedalDisplay2(false)
     setShowProgressPage2(true)
-  }
+  }, [])
 
   // Updated to show third dragon page instead of going directly to game
-  const handleProgress2Continue = () => {
+  const handleProgress2Continue = useCallback(() => {
     setShowProgressPage2(false)
     setCurrentView("dragon-welcome-3")
-  }
+  }, [])
 
-  const handleMedalComplete = () => {
+  const handleMedalComplete = useCallback(() => {
     setShowMedalDisplay(false)
     setShowProgressPage(true)
-  }
+  }, [])
 
   // Updated to show second dragon page instead of going directly to game
-  const handleProgressContinue = () => {
+  const handleProgressContinue = useCallback(() => {
     setShowProgressPage(false)
     setCurrentView("dragon-welcome-2")
-  }
+  }, [])
 
   // Handle memory-game completion - show medal 3 then progress page 3
   const handleMemoryGameComplete = () => {
     setShowMedalDisplay3(true)
   }
 
-  const handleMedal3Complete = () => {
+  const handleMedal3Complete = useCallback(() => {
     setShowMedalDisplay3(false)
     setShowProgressPage3(true)
-  }
+  }, [])
 
-  const handleProgress3Continue = () => {
+  const handleProgress3Continue = useCallback(() => {
     setShowProgressPage3(false)
     setCurrentView("dragon-welcome-4")
-  }
+  }, [])
 
   // Handle easter-sequence completion - show medal 4 then progress page 4
   const handleEasterSequenceComplete = () => {
     setShowMedalDisplay4(true)
   }
 
-  const handleMedal4Complete = () => {
+  const handleMedal4Complete = useCallback(() => {
     setShowMedalDisplay4(false)
     setShowProgressPage4(true)
-  }
+  }, [])
 
-  const handleProgress4Continue = () => {
+  const handleProgress4Continue = useCallback(() => {
     setShowProgressPage4(false)
     setCurrentView("dragon-welcome-5")
-  }
+  }, [])
 
   // Handle memory-game-5 completion - show medal 5 then progress page 5
   const handleMemoryGame5Complete = () => {
     setShowMedalDisplay5(true)
   }
 
-  const handleMedal5Complete = () => {
+  const handleMedal5Complete = useCallback(() => {
     setShowMedalDisplay5(false)
     setShowProgressPage5(true)
-  }
+  }, [])
 
-  const handleProgress5Continue = () => {
+  const handleProgress5Continue = useCallback(() => {
     setShowProgressPage5(false)
     setCurrentView("dragon-welcome-6")
-  }
+  }, [])
 
   // Handle spot-difference-5 completion - show medal 6 then progress page 6
   const handleSpotDifference5Complete = () => {
     setShowMedalDisplay6(true)
   }
 
-  const handleMedal6Complete = () => {
+  const handleMedal6Complete = useCallback(() => {
     setShowMedalDisplay6(false)
     setShowProgressPage6(true)
-  }
+  }, [])
 
-  const handleProgress6Continue = () => {
+  const handleProgress6Continue = useCallback(() => {
     setShowProgressPage6(false)
     setCurrentView("dragon-welcome-7")
-  }
+  }, [])
 
   // Handle sequence-game-2 completion - show medal 7 then progress page 7
   const handleSequenceGame2Complete = () => {
     setShowMedalDisplay7(true)
   }
 
-  const handleMedal7Complete = () => {
+  const handleMedal7Complete = useCallback(() => {
     setShowMedalDisplay7(false)
     setShowProgressPage7(true)
-  }
+  }, [])
 
-  const handleProgress7Continue = () => {
+  const handleProgress7Continue = useCallback(() => {
     setShowProgressPage7(false)
     setCurrentView("dragon-welcome-8")
-  }
+  }, [])
 
   // Handle memory-4 completion - show medal 8 then progress page 8
   const handleMemoryGame4Complete = () => {
     setShowMedalDisplay8(true)
   }
 
-  const handleMedal8Complete = () => {
+  const handleMedal8Complete = useCallback(() => {
     setShowMedalDisplay8(false)
     setShowProgressPage8(true)
-  }
+  }, [])
 
-  const handleProgress8Continue = () => {
+  const handleProgress8Continue = useCallback(() => {
     setShowProgressPage8(false)
     setCurrentView("dragon-welcome-9")
-  }
+  }, [])
 
   // Handle find-missing-half completion - show medal 9 then progress page 9
   const handleFindMissingHalfComplete = () => {
     setShowMedalDisplay9(true)
   }
 
-  const handleMedal9Complete = () => {
+  const handleMedal9Complete = useCallback(() => {
     setShowMedalDisplay9(false)
     setShowProgressPage9(true)
-  }
+  }, [])
 
-  const handleProgress9Continue = () => {
+  const handleProgress9Continue = useCallback(() => {
     setShowProgressPage9(false)
     setCurrentView("dragon-welcome-10")
-  }
+  }, [])
 
   // Handle find-6-differences completion - show medal 10 then progress page 10
   const handleFind6DifferencesComplete = () => {
     setShowMedalDisplay10(true)
   }
 
-  const handleMedal10Complete = () => {
+  const handleMedal10Complete = useCallback(() => {
     setShowMedalDisplay10(false)
     setShowProgressPage10(true)
-  }
+  }, [])
 
-  const handleProgress10Continue = () => {
+  const handleProgress10Continue = useCallback(() => {
     setShowProgressPage10(false)
     setCurrentView("dragon-welcome-11")
-  }
+  }, [])
 
   // Handle sudoku completion - show medal 11 then progress page 11
   const handleSudokuComplete = () => {
     setShowMedalDisplay11(true)
   }
 
-  const handleMedal11Complete = () => {
+  const handleMedal11Complete = useCallback(() => {
     setShowMedalDisplay11(false)
     setShowProgressPage11(true)
-  }
+  }, [])
 
-  const handleProgress11Continue = () => {
+  const handleProgress11Continue = useCallback(() => {
     setShowProgressPage11(false)
     setCurrentView("dragon-welcome-12")
-  }
+  }, [])
 
   // Handle sequential-order-3 completion - show medal 12 then progress page 12
   const handleSequentialOrder3Complete = () => {
     setShowMedalDisplay12(true)
   }
 
-  const handleMedal12Complete = () => {
+  const handleMedal12Complete = useCallback(() => {
     setShowMedalDisplay12(false)
     setShowProgressPage12(true)
-  }
+  }, [])
 
-  const handleProgress12Continue = () => {
+  const handleProgress12Continue = useCallback(() => {
     setShowProgressPage12(false)
     setCurrentView("dragon-welcome-13")
-  }
+  }, [])
 
   // Handle thirteenth dragon welcome screen START button - goes to season selection menu
   const handleDragon13Start = () => {
@@ -1198,6 +1208,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       ) : currentGame === "memory-match-2x4" ? (
         <MemoryMatchGame2x4 
@@ -1209,6 +1220,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
               ) : currentGame === "birds-puzzle" ? (
           <BirdsPuzzleGame 
@@ -1220,6 +1232,7 @@ export default function Home() {
             }}
             userLoggedIn={!!user}
             currentSeason={selectedSeason}
+            isGameCompleted={isCurrentGameCompleted()}
           />
       ) : currentGame === "find-6-differences" ? (
         <Find6DifferencesGame 
@@ -1232,6 +1245,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
               ) : currentGame === "branch-sequence" ? (
           <BranchSequenceGame 
@@ -1243,6 +1257,7 @@ export default function Home() {
             }}
             userLoggedIn={!!user}
             currentSeason={selectedSeason}
+            isGameCompleted={isCurrentGameCompleted()}
           />
               ) : currentGame === "find-flipped-rabbit" ? (
           <FindFlippedRabbitGame 
@@ -1254,6 +1269,7 @@ export default function Home() {
             }}
             userLoggedIn={!!user}
             currentSeason={selectedSeason}
+            isGameCompleted={isCurrentGameCompleted()}
           />
       ) : currentGame === "find-missing-half" ? (
         <FindMissingHalfGame 
@@ -1266,6 +1282,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       ) : currentGame === "student-panel" ? (
         <StudentPanel onMenuClick={toggleMenu} />
@@ -1287,6 +1304,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       ) : currentGame === "find-missing" ? (
         <FindMissingGame 
@@ -1298,6 +1316,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       ) : currentGame === "sequence-2" ? (
         <SequenceGame2 
@@ -1310,6 +1329,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       ) : currentGame === "category-sorting-4" ? (
         <CategorySortingGame4 onMenuClick={toggleMenu} />
@@ -1323,6 +1343,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       ) : currentGame === "category-sorting-2" ? (
         <CategorySortingGame2 onMenuClick={toggleMenu} />
@@ -1336,6 +1357,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       ) : currentGame === "memory" ? (
         <MemoryGame 
@@ -1348,6 +1370,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       ) : currentGame === "memory-7" ? (
         <MemoryGame7 
@@ -1359,6 +1382,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       ) : currentGame === "memory-6" ? (
         <MemoryGame6 onMenuClick={toggleMenu} />
@@ -1372,6 +1396,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       ) : currentGame === "memory-5" ? (
         <MemoryGame5 
@@ -1384,6 +1409,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       ) : currentGame === "memory-4" ? (
         <MemoryGame4 
@@ -1396,6 +1422,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       ) : currentGame === "puzzle-assembly-2" ? (
         <PuzzleAssemblyGame2 
@@ -1407,6 +1434,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       ) : currentGame === "spot-difference-5" ? (
         <SpotDifferenceGame5 
@@ -1419,6 +1447,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       ) : currentGame === "memory-3" ? (
         <MemoryGame3 
@@ -1443,6 +1472,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       ) : currentGame === "easter-sequence" ? (
         <EasterSequenceGame 
@@ -1455,6 +1485,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       ) : currentGame === "easter-basket-2" ? (
         <EasterBasketGame2 onMenuClick={toggleMenu} />
@@ -1468,6 +1499,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
               ) : currentGame === "matching" ? (
           <MatchingGame 
@@ -1531,17 +1563,18 @@ export default function Home() {
             currentSeason={selectedSeason}
             isGameCompleted={isCurrentGameCompleted()}
           />
-              ) : currentGame === "sorting" ? (
-          <SortingGame 
-            onMenuClick={toggleMenu} 
-            onBack={goToPreviousGame}
-            onNext={goToNextGame}
-            onRetry={() => {
-              // Reset handled internally
-            }}
-            userLoggedIn={!!user}
-            currentSeason={selectedSeason}
-          />
+                    ) : currentGame === "sorting" ? (
+        <SortingGame 
+          onMenuClick={toggleMenu} 
+          onBack={goToPreviousGame}
+          onNext={goToNextGame}
+          onRetry={() => {
+            // Reset handled internally
+          }}
+          userLoggedIn={!!user}
+          currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
+        />
       ) : currentGame === "sorting-3" ? (
         <SortingGame3 onMenuClick={toggleMenu} />
       ) : currentGame === "sorting-4" ? (
@@ -1556,6 +1589,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       ) : currentGame === "memory-2" ? (
         <MemoryGame2 onMenuClick={toggleMenu} />
@@ -1569,6 +1603,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       ) : currentGame === "sequential-order" ? (
         <SequentialOrderGame onMenuClick={toggleMenu} />
@@ -1582,6 +1617,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       ) : (
         <ConnectGame 
@@ -1594,6 +1630,7 @@ export default function Home() {
           }}
           userLoggedIn={!!user}
           currentSeason={selectedSeason}
+          isGameCompleted={isCurrentGameCompleted()}
         />
       )}
 

@@ -108,6 +108,9 @@ export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userL
   // State for success message
   const [successMessage, setSuccessMessage] = useState<string>("")
 
+  // State to track if success message has been set (to prevent multiple random messages)
+  const [hasSetSuccessMessage, setHasSetSuccessMessage] = useState(false)
+
   // Use the game completion hook
   const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("puzzle-game")
 
@@ -229,7 +232,11 @@ export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userL
 
       if (allCorrect) {
         setIsCompleted(true)
-        setSuccessMessage(getRandomSuccessMessage())
+        // Get a random success message only once
+        if (!hasSetSuccessMessage) {
+          setSuccessMessage(getRandomSuccessMessage())
+          setHasSetSuccessMessage(true)
+        }
         console.log("🎉 Puzzle game completed! All pieces correctly placed!")
 
         // Record completion when game is finished
@@ -252,6 +259,7 @@ export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userL
     setPuzzlePieces((prevPieces) => prevPieces.map((piece) => ({ ...piece, currentPosition: null })))
     setIsCompleted(false)
     setSuccessMessage("")
+    setHasSetSuccessMessage(false)
   }
 
   

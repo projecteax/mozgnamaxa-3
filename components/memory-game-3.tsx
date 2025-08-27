@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import { useGameCompletionWithHistory } from "@/hooks/use-game-completion"
 import { getRandomSuccessMessage } from "@/lib/success-messages"
@@ -15,6 +15,7 @@ interface MemoryGameProps {
   onRetry?: () => void
   userLoggedIn?: boolean
   currentSeason?: string
+  isGameCompleted?: boolean
 }
 
 interface MemoryCard {
@@ -43,6 +44,9 @@ export default function MemoryGame3({ onMenuClick, onBack, onNext, onRetry, user
 
   // State for random success message
   const [successMessage, setSuccessMessage] = useState<string>("")
+
+  // Use ref to track if success message has been set to avoid dependency issues
+  const successMessageSetRef = useRef(false)
 
   const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("memory-game-3")
   const [progressSaved, setProgressSaved] = useState(false)
@@ -172,11 +176,14 @@ export default function MemoryGame3({ onMenuClick, onBack, onNext, onRetry, user
 
   // Handle card click
   const handleCardClick = (id: number) => {
-    // Ignore clicks if already checking or if card is already flipped or matched
+    // Ignore clicks if already checking, if card is already flipped/matched, or if we already have 2 cards flipped
     if (isChecking || flippedCards.length >= 2) return
 
     const clickedCard = cards.find((card) => card.id === id)
     if (!clickedCard || clickedCard.isFlipped || clickedCard.isMatched) return
+
+    // Prevent clicking the same card twice
+    if (flippedCards.includes(id)) return
 
     // Flip the card
     setCards((prevCards) => prevCards.map((card) => (card.id === id ? { ...card, isFlipped: true } : card)))
@@ -207,8 +214,6 @@ export default function MemoryGame3({ onMenuClick, onBack, onNext, onRetry, user
 
         if (allMatched) {
           setIsCompleted(true)
-          setSuccessMessage(getRandomSuccessMessage())
-          handleGameCompletion()
         }
       } else {
         // No match, flip cards back after 1.5 seconds
@@ -225,6 +230,16 @@ export default function MemoryGame3({ onMenuClick, onBack, onNext, onRetry, user
     }
   }, [flippedCards, cards])
 
+  // Handle game completion separately
+  useEffect(() => {
+    if (isCompleted && !successMessageSetRef.current) {
+      // Get a random success message only once
+      setSuccessMessage(getRandomSuccessMessage())
+      successMessageSetRef.current = true
+      handleGameCompletion()
+    }
+  }, [isCompleted])
+
   const resetGame = () => {
     // Reset all cards but keep the same order
     setCards((prevCards) =>
@@ -240,6 +255,7 @@ export default function MemoryGame3({ onMenuClick, onBack, onNext, onRetry, user
     setIsChecking(false)
     setProgressSaved(false)
     setSuccessMessage("")
+    successMessageSetRef.current = false
   }
 
   const handleGameCompletion = async () => {

@@ -81,6 +81,9 @@ export default function SequentialOrderGame3({ onMenuClick, onComplete, onBack, 
   // State for shuffled draggable items
   const [shuffledItems, setShuffledItems] = useState<Item[]>([])
 
+  // State to track if success message has been set (to prevent multiple random messages)
+  const [hasSetSuccessMessage, setHasSetSuccessMessage] = useState(false)
+
   const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("sequential-order-game-3")
 
   // Function to shuffle array
@@ -99,14 +102,18 @@ export default function SequentialOrderGame3({ onMenuClick, onComplete, onBack, 
     setCorrectItems([])
     setIsGameComplete(false)
     setSuccessMessage("")
+    setHasSetSuccessMessage(false)
   }, [selectedSeason])
 
   // Check if all items are correctly placed
   useEffect(() => {
     if (correctItems.length === sequenceItems.length) {
       setIsGameComplete(true)
-      // Get a random success message
-      setSuccessMessage(getRandomSuccessMessage())
+      // Get a random success message only once
+      if (!hasSetSuccessMessage) {
+        setSuccessMessage(getRandomSuccessMessage())
+        setHasSetSuccessMessage(true)
+      }
       // Record completion when game is finished
       if (isLoggedIn) {
         recordCompletion()
@@ -120,7 +127,7 @@ export default function SequentialOrderGame3({ onMenuClick, onComplete, onBack, 
     } else {
       setIsGameComplete(false)
     }
-  }, [correctItems, sequenceItems.length, isLoggedIn, recordCompletion, onComplete])
+  }, [correctItems, sequenceItems.length, isLoggedIn, recordCompletion, onComplete, hasSetSuccessMessage])
 
   // Handle drag start
   const handleDragStart = (id: string) => {
@@ -151,6 +158,7 @@ export default function SequentialOrderGame3({ onMenuClick, onComplete, onBack, 
     setCorrectItems([])
     setIsGameComplete(false)
     setSuccessMessage("")
+    setHasSetSuccessMessage(false)
     setDraggedItem(null)
   }
 

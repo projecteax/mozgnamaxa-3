@@ -24,6 +24,9 @@ export default function FindFlippedRabbitGame({ onMenuClick, onBack, onNext, onR
   const [isCompleted, setIsCompleted] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
+  // State to track if success message has been set (to prevent multiple random messages)
+  const [hasSetSuccessMessage, setHasSetSuccessMessage] = useState(false)
+
   // Use the game completion hook
   const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("find-flipped-rabbit-game")
 
@@ -99,7 +102,11 @@ export default function FindFlippedRabbitGame({ onMenuClick, onBack, onNext, onR
     if (index === flippedRabbitIndex) {
       // Correct selection
       setIsCompleted(true)
-      setSuccessMessage(getRandomSuccessMessage())
+      // Get a random success message only once
+      if (!hasSetSuccessMessage) {
+        setSuccessMessage(getRandomSuccessMessage())
+        setHasSetSuccessMessage(true)
+      }
 
       // Record the game completion
       await recordCompletion()
@@ -117,6 +124,7 @@ export default function FindFlippedRabbitGame({ onMenuClick, onBack, onNext, onR
     setSelectedRabbit(null)
     setIsCompleted(false)
     setSuccessMessage(null)
+    setHasSetSuccessMessage(false)
   }
 
   const renderRabbit = (index: number) => {

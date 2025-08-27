@@ -131,6 +131,9 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
   // State for success message
   const [successMessage, setSuccessMessage] = useState<string>("")
 
+  // State to track if success message has been set (to prevent multiple random messages)
+  const [hasSetSuccessMessage, setHasSetSuccessMessage] = useState(false)
+
   // Function to get the correct image based on season
   const getImageForSeason = (item: GameItem) => {
     if (selectedSeason === "zima" && item.winterImage) {
@@ -435,7 +438,11 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
       if (matchedCount === totalPairs) {
         console.log("🎉 Connect game completed! All 3 pairs matched!")
         setAllMatched(true)
-        setSuccessMessage(getRandomSuccessMessage())
+        // Get a random success message only once
+        if (!hasSetSuccessMessage) {
+          setSuccessMessage(getRandomSuccessMessage())
+          setHasSetSuccessMessage(true)
+        }
         setFeedbackMessage(null)
 
         // Record completion when all pairs are matched
@@ -464,6 +471,7 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
     setFeedbackMessage(null)
     setMatchedPairs({})
     setSuccessMessage("")
+    setHasSetSuccessMessage(false)
   }
 
   const themeColors = getThemeColors()

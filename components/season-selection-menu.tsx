@@ -1,5 +1,7 @@
 "use client"
 import Image from "next/image"
+import { useStudentProgress } from "@/hooks/use-student-progress"
+import { SEASON_INFO, Season } from "@/lib/season-utils"
 
 interface SeasonSelectionMenuProps {
   onSeasonSelect: (season: string) => void
@@ -7,6 +9,11 @@ interface SeasonSelectionMenuProps {
 }
 
 export default function SeasonSelectionMenu({ onSeasonSelect, onMenuClick }: SeasonSelectionMenuProps) {
+  const { progress, loading } = useStudentProgress()
+  
+  // Get season order and unlocked seasons from progress
+  const seasonOrder = progress?.seasonOrder || ['wiosna', 'lato', 'jesien', 'zima']
+  const unlockedSeasons = progress?.unlockedSeasons || ['wiosna']
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center">
       {/* Season selection grid - centered on screen */}
@@ -22,50 +29,56 @@ export default function SeasonSelectionMenu({ onSeasonSelect, onMenuClick }: Sea
             </span>
           </button>
         </div>
-        {/* Top row - Wiosna and Lato */}
-        <div className="flex gap-8">
-          {/* Wiosna (Spring) button */}
-          <button
-            onClick={() => onSeasonSelect("wiosna")}
-            className="relative w-64 h-32 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-200 flex items-center justify-center group"
-          >
-            <span className="text-4xl font-bold text-[#539e1b] font-sour-gummy group-hover:scale-105 transition-transform duration-200">
-              WIOSNA
-            </span>
-          </button>
-
-          {/* Lato (Summer) button */}
-          <button
-            onClick={() => onSeasonSelect("lato")}
-            className="relative w-64 h-32 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-200 flex items-center justify-center group"
-          >
-            <span className="text-4xl font-bold text-[#ffc402] font-sour-gummy group-hover:scale-105 transition-transform duration-200">
-              LATO
-            </span>
-          </button>
-        </div>
-
-        {/* Bottom row - Jesień and Zima */}
-        <div className="flex gap-8">
-          {/* Jesień (Autumn) button */}
-          <button
-            onClick={() => onSeasonSelect("jesien")}
-            className="relative w-64 h-32 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-200 flex items-center justify-center group"
-          >
-            <span className="text-4xl font-bold text-[#ed6b19] font-sour-gummy group-hover:scale-105 transition-transform duration-200">
-              JESIEŃ
-            </span>
-          </button>
-
-          {/* Zima (Winter) button */}
-          <button
-            onClick={() => onSeasonSelect("zima")}
-            className="relative w-64 h-32 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-200 flex items-center justify-center group"
-          >
-            <span className="text-4xl font-bold text-[#00abc6] font-sour-gummy group-hover:scale-105 transition-transform duration-200">
-              ZIMA
-            </span>
-          </button>
+        {/* Dynamic seasons based on order */}
+        <div className="grid grid-cols-2 gap-8">
+          {seasonOrder.map((seasonId, index) => {
+            const seasonInfo = SEASON_INFO[seasonId as Season]
+            const isUnlocked = unlockedSeasons.includes(seasonId)
+            const isFirstSeason = index === 0
+            
+            return (
+              <button
+                key={seasonId}
+                onClick={() => isUnlocked && onSeasonSelect(seasonId)}
+                disabled={!isUnlocked || loading}
+                className={`relative w-64 h-32 rounded-3xl shadow-lg transition-all duration-200 flex items-center justify-center group ${
+                  isUnlocked 
+                    ? 'bg-white hover:shadow-xl cursor-pointer' 
+                    : 'bg-gray-300 opacity-60 cursor-not-allowed'
+                }`}
+              >
+                <span 
+                  className={`text-4xl font-bold font-sour-gummy transition-transform duration-200 ${
+                    isUnlocked 
+                      ? `group-hover:scale-105` 
+                      : 'text-gray-500'
+                  }`}
+                  style={{ 
+                    color: isUnlocked ? seasonInfo?.color : '#6B7280' 
+                  }}
+                >
+                  {seasonInfo?.name}
+                  {isFirstSeason && (
+                    <span className="text-lg ml-2 font-normal">(START)</span>
+                  )}
+                </span>
+                
+                {/* Lock icon for locked seasons */}
+                {!isUnlocked && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-200/50 rounded-3xl">
+                    <span className="text-2xl">🔒</span>
+                  </div>
+                )}
+                
+                {/* Loading overlay */}
+                {loading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-white/70 rounded-3xl">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                  </div>
+                )}
+              </button>
+            )
+          })}
         </div>
       </div>
     </div>

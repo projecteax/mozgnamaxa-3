@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useAuth } from "@/contexts/auth-context"
+import { Season, getSeasonOrder, calculateUnlockedSeasons } from "@/lib/season-utils"
 
 interface StudentProgress {
   completedGames: string[]
@@ -16,12 +17,16 @@ interface StudentProgress {
     jesien: { completedGames: string[], medals: number }
     zima: { completedGames: string[], medals: number }
   }
+  // NEW FIELDS for initial season support
+  initialSeason: Season
+  seasonOrder: Season[]
 }
 
 export function useStudentProgress() {
   const { user } = useAuth()
   const [progress, setProgress] = useState<StudentProgress | null>(null)
   const [loading, setLoading] = useState(true)
+  const [refreshTrigger, setRefreshTrigger] = useState(0)
 
   useEffect(() => {
     if (!user) {
@@ -31,7 +36,7 @@ export function useStudentProgress() {
     }
 
     fetchStudentProgress()
-  }, [user])
+  }, [user, refreshTrigger])
 
   const fetchStudentProgress = async () => {
     if (!user) return
@@ -48,14 +53,25 @@ export function useStudentProgress() {
       const studentsSnapshot = await getDocs(studentsQuery)
 
       if (studentsSnapshot.empty) {
-        // Initialize progress for new student
+        // Initialize progress for new student with default season order
+        const defaultInitialSeason: Season = "wiosna"
+        const defaultSeasonOrder = getSeasonOrder(defaultInitialSeason)
+        
         setProgress({
           completedGames: [],
-          unlockedSeasons: ["wiosna"], // Spring is always unlocked
+          unlockedSeasons: [defaultInitialSeason], // First season is always unlocked
           medals: 0,
-          currentSeason: "wiosna",
+          currentSeason: defaultInitialSeason,
           totalGamesCompleted: 0,
-          gameCompletionCounts: {}
+          gameCompletionCounts: {},
+          seasonProgress: {
+            wiosna: { completedGames: [], medals: 0 },
+            lato: { completedGames: [], medals: 0 },
+            jesien: { completedGames: [], medals: 0 },
+            zima: { completedGames: [], medals: 0 }
+          },
+          initialSeason: defaultInitialSeason,
+          seasonOrder: defaultSeasonOrder
         })
         setLoading(false)
         return
@@ -166,38 +182,25 @@ export function useStudentProgress() {
       seasonProgress.jesien.medals = Math.floor(seasonProgress.jesien.completedGames.length / 3)
       seasonProgress.zima.medals = Math.floor(seasonProgress.zima.completedGames.length / 3)
 
-      // Calculate unlocked seasons based on season completion
-      const unlockedSeasons = ["wiosna"] // Spring always unlocked
-      const gamesPerSeason = 36 // 36 games per season
+      // Get student's initial season and season order
+      const initialSeason: Season = (studentData.initialSeason as Season) || "wiosna"
+      const seasonOrder = getSeasonOrder(initialSeason)
       
-      // Unlock summer if spring is completed
-      if (seasonProgress.wiosna.completedGames.length >= gamesPerSeason) {
-        unlockedSeasons.push("lato")
-      }
-      
-      // Unlock autumn if summer is completed
-      if (seasonProgress.lato.completedGames.length >= gamesPerSeason) {
-        unlockedSeasons.push("jesien")
-      }
-      
-      // Unlock winter if autumn is completed
-      if (seasonProgress.jesien.completedGames.length >= gamesPerSeason) {
-        unlockedSeasons.push("zima")
-      }
+      // Calculate unlocked seasons based on custom season order
+      const unlockedSeasons = calculateUnlockedSeasons(seasonOrder, gameResults)
 
       // Calculate total medals across all seasons
       const medals = seasonProgress.wiosna.medals + seasonProgress.lato.medals + seasonProgress.jesien.medals + seasonProgress.zima.medals
 
-      // Determine current season based on which season the user is actively playing
-      let currentSeason = "wiosna"
-      if (seasonProgress.wiosna.completedGames.length >= gamesPerSeason) {
-        currentSeason = "lato"
-      }
-      if (seasonProgress.lato.completedGames.length >= gamesPerSeason) {
-        currentSeason = "jesien"
-      }
-      if (seasonProgress.jesien.completedGames.length >= gamesPerSeason) {
-        currentSeason = "zima"
+      // Determine current season based on season order and completion
+      let currentSeason: Season = seasonOrder[0] // Start with first season in order
+      for (let i = 0; i < seasonOrder.length - 1; i++) {
+        const season = seasonOrder[i]
+        if (seasonProgress[season].completedGames.length >= 30) { // 30 games required to move to next season
+          currentSeason = seasonOrder[i + 1]
+        } else {
+          break
+        }
       }
 
       setProgress({
@@ -207,34 +210,45 @@ export function useStudentProgress() {
         currentSeason,
         totalGamesCompleted: totalCompleted,
         gameCompletionCounts,
-        seasonProgress
+        seasonProgress,
+        initialSeason,
+        seasonOrder
       })
 
     } catch (error) {
       console.error("Error fetching student progress:", error)
       // Fallback to empty progress
-              setProgress({
-          completedGames: [],
-          unlockedSeasons: ["wiosna"],
-          medals: 0,
-          currentSeason: "wiosna",
-          totalGamesCompleted: 0,
-          gameCompletionCounts: {},
-          seasonProgress: {
-            wiosna: { completedGames: [], medals: 0 },
-            lato: { completedGames: [], medals: 0 },
-            jesien: { completedGames: [], medals: 0 },
-            zima: { completedGames: [], medals: 0 }
-          }
-        })
+      const fallbackInitialSeason: Season = "wiosna"
+      const fallbackSeasonOrder = getSeasonOrder(fallbackInitialSeason)
+      
+      setProgress({
+        completedGames: [],
+        unlockedSeasons: [fallbackInitialSeason],
+        medals: 0,
+        currentSeason: fallbackInitialSeason,
+        totalGamesCompleted: 0,
+        gameCompletionCounts: {},
+        seasonProgress: {
+          wiosna: { completedGames: [], medals: 0 },
+          lato: { completedGames: [], medals: 0 },
+          jesien: { completedGames: [], medals: 0 },
+          zima: { completedGames: [], medals: 0 }
+        },
+        initialSeason: fallbackInitialSeason,
+        seasonOrder: fallbackSeasonOrder
+      })
     } finally {
       setLoading(false)
     }
   }
 
+  const refreshProgress = () => {
+    setRefreshTrigger(prev => prev + 1)
+  }
+
   return {
     progress,
     loading,
-    refreshProgress: fetchStudentProgress
+    refreshProgress
   }
 }

@@ -521,7 +521,7 @@ export default function Home() {
   // Updated to show third dragon page instead of going directly to game
   const handleProgress2Continue = useCallback(() => {
     setShowProgressPage2(false)
-    setCurrentView("dragon-welcome-3")
+    setCurrentView("season-selection")
   }, [])
 
   const handleMedalComplete = useCallback(() => {
@@ -547,7 +547,7 @@ export default function Home() {
 
   const handleProgress3Continue = useCallback(() => {
     setShowProgressPage3(false)
-    setCurrentView("dragon-welcome-4")
+    setCurrentView("season-selection")
   }, [])
 
   // Handle easter-sequence completion - show medal 4 then progress page 4
@@ -562,7 +562,7 @@ export default function Home() {
 
   const handleProgress4Continue = useCallback(() => {
     setShowProgressPage4(false)
-    setCurrentView("dragon-welcome-5")
+    setCurrentView("season-selection")
   }, [])
 
   // Handle memory-game-5 completion - show medal 5 then progress page 5
@@ -577,7 +577,7 @@ export default function Home() {
 
   const handleProgress5Continue = useCallback(() => {
     setShowProgressPage5(false)
-    setCurrentView("dragon-welcome-6")
+    setCurrentView("season-selection")
   }, [])
 
   // Handle spot-difference-5 completion - show medal 6 then progress page 6
@@ -592,7 +592,7 @@ export default function Home() {
 
   const handleProgress6Continue = useCallback(() => {
     setShowProgressPage6(false)
-    setCurrentView("dragon-welcome-7")
+    setCurrentView("season-selection")
   }, [])
 
   // Handle sequence-game-2 completion - show medal 7 then progress page 7
@@ -607,7 +607,7 @@ export default function Home() {
 
   const handleProgress7Continue = useCallback(() => {
     setShowProgressPage7(false)
-    setCurrentView("dragon-welcome-8")
+    setCurrentView("season-selection")
   }, [])
 
   // Handle memory-4 completion - show medal 8 then progress page 8
@@ -622,7 +622,7 @@ export default function Home() {
 
   const handleProgress8Continue = useCallback(() => {
     setShowProgressPage8(false)
-    setCurrentView("dragon-welcome-9")
+    setCurrentView("season-selection")
   }, [])
 
   // Handle find-missing-half completion - show medal 9 then progress page 9
@@ -637,7 +637,7 @@ export default function Home() {
 
   const handleProgress9Continue = useCallback(() => {
     setShowProgressPage9(false)
-    setCurrentView("dragon-welcome-10")
+    setCurrentView("season-selection")
   }, [])
 
   // Handle find-6-differences completion - show medal 10 then progress page 10
@@ -652,7 +652,7 @@ export default function Home() {
 
   const handleProgress10Continue = useCallback(() => {
     setShowProgressPage10(false)
-    setCurrentView("dragon-welcome-11")
+    setCurrentView("season-selection")
   }, [])
 
   // Handle sudoku completion - show medal 11 then progress page 11
@@ -667,7 +667,7 @@ export default function Home() {
 
   const handleProgress11Continue = useCallback(() => {
     setShowProgressPage11(false)
-    setCurrentView("dragon-welcome-12")
+    setCurrentView("season-selection")
   }, [])
 
   // Handle sequential-order-3 completion - show medal 12 then progress page 12

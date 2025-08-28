@@ -135,12 +135,9 @@ export default function SeasonGamePopup({
             <div className="relative w-48 h-12 cursor-pointer hover:scale-105 transition-transform" onClick={onContinueGame}>
               <Image src="/images/button_default.svg" alt="Continue button background" fill className="object-contain" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="font-sour-gummy font-bold text-2xl" style={{ color: '#3E459C' }}>NASTĘPNA GRA</span>
+                <span className="font-sour-gummy font-bold text-2xl" style={{ color: '#3E459C' }}>GRAJ DALEJ</span>
               </div>
             </div>
-            <p className="text-sm font-sour-gummy mt-2" style={{ color: '#3E459C' }}>
-              Następna gra: {nextGameAfterCompleted.name}
-            </p>
           </div>
         )}
 
@@ -179,7 +176,6 @@ export default function SeasonGamePopup({
         <div className="space-y-3">
           {games.map((game, gameIndex) => {
             const isCompleted = completedGames.includes(game.id)
-            const completionCount = gameCompletionCounts[game.id] || 0
             const isNextGame = nextGameAfterCompleted?.id === game.id
             const isClickable = isCompleted || isNextGame // Only completed games and next game are clickable
             
@@ -236,19 +232,15 @@ export default function SeasonGamePopup({
                       })()}
                       <div className="flex items-center justify-between mt-1">
                         <div className="text-sm font-sour-gummy">
-                          {isCompleted ? (
-                            <span className="text-green-700 font-bold">
-                              Ukończono {completionCount}× 
-                            </span>
-                          ) : isNextGame ? (
+                          {isNextGame ? (
                             <span className="text-yellow-700 font-bold">
                               Następna gra
                             </span>
-                          ) : (
+                          ) : !isCompleted ? (
                             <span className="text-gray-500">
                               Zablokowana
                             </span>
-                          )}
+                          ) : null}
                         </div>
                       </div>
                     </div>

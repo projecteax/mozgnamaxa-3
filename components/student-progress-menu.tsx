@@ -67,6 +67,58 @@ const GAMES_LIST = [
   { id: "maze-4", name: "ZNAJDŹ DROGĘ DO GNIAZDA." },
 ]
 
+// Season-specific game names for the popup
+const seasonGameNames: Record<string, Record<string, string>> = {
+  "wiosna": {
+    "easter-basket": "WYBIERZ, CO NIE PASUJE DO KOSZYCZKA.",
+    "easter-sequence": "CO PASUJE? UZUPEŁNIJ. WIELKANOC.",
+    "maze": "ZNAJDŹ DROGĘ DO GNIAZDA.",
+    "maze-3": "ZNAJDŹ DROGĘ DO KWIATKA.",
+    "find-flipped-rabbit": "ZNAJDŹ ODWRÓCONEGO KRÓLICZKA.",
+    "birds-puzzle": "UŁÓŻ OBRAZEK - PTAKI.",
+    "find-incorrect-ladybug": "ZNAJDŹ BŁĘDNĄ BIEDRONKĘ.",
+  },
+  "lato": {
+    "easter-basket": "WYBIERZ, CO NIE PASUJE DO KOSZYCZKA.",
+    "easter-sequence": "CO PASUJE? UZUPEŁNIJ. LATO.",
+    "maze": "ZNAJDŹ DROGĘ DO PLAŻY.",
+    "maze-3": "ZNAJDŹ DROGĘ DO SŁOŃCA.",
+    "find-flipped-rabbit": "ZNAJDŹ ODWRÓCONĄ RYBKĘ.",
+    "birds-puzzle": "UŁÓŻ OBRAZEK - ZWIERZĘTA.",
+    "find-incorrect-ladybug": "ZNAJDŹ BŁĘDNĄ MUSZELKĘ.",
+  },
+  "jesien": {
+    "easter-basket": "WYBIERZ, CO NIE PASUJE DO KOSZYCZKA.",
+    "easter-sequence": "CO PASUJE? UZUPEŁNIJ. JESIEŃ.",
+    "maze": "ZNAJDŹ DROGĘ DO LIŚCIA.",
+    "maze-3": "ZNAJDŹ DROGĘ DO GRZYBA.",
+    "find-flipped-rabbit": "ZNAJDŹ ODWRÓCONEGO JEŻA.",
+    "birds-puzzle": "UŁÓŻ OBRAZEK - JESIENNE LIŚCIE.",
+    "find-incorrect-ladybug": "ZNAJDŹ BŁĘDNY LIŚĆ.",
+  },
+  "zima": {
+    "easter-basket": "WYBIERZ, CO NIE PASUJE DO KOSZYCZKA.",
+    "easter-sequence": "CO PASUJE? UZUPEŁNIJ. ZIMA.",
+    "maze": "ZNAJDŹ DROGĘ DO ŚNIEŻKI.",
+    "maze-3": "ZNAJDŹ DROGĘ DO BAŁWANA.",
+    "find-flipped-rabbit": "ZNAJDŹ ODWRÓCONEGO PINGWINA.",
+    "birds-puzzle": "UŁÓŻ OBRAZEK - ŚNIEŻYNKI.",
+    "find-incorrect-ladybug": "ZNAJDŹ BŁĘDNĄ ŚNIEŻYNKĘ.",
+  },
+}
+
+// Function to get season-specific game name
+const getSeasonGameName = (gameId: string, seasonId: string): string => {
+  const seasonNames = seasonGameNames[seasonId]
+  if (seasonNames && seasonNames[gameId]) {
+    return seasonNames[gameId]
+  }
+  
+  // Fallback to default name from GAMES_LIST
+  const game = GAMES_LIST.find(g => g.id === gameId)
+  return game ? game.name : gameId
+}
+
 // Seasons mapping
 const SEASONS = [
   { 

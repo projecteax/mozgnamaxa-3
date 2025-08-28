@@ -305,8 +305,8 @@ export default function SortingGame2({ onMenuClick, onBack, onNext, onRetry, use
 
             {/* DALEJ Button - only unlocked when game completed (for logged users) or always available (for non-logged users) */}
             <div 
-              className={`relative w-36 h-14 transition-all ${(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-105'}`}
-              onClick={(userLoggedIn && !isGameCompleted && !isHistoricallyCompleted) ? undefined : onNext}
+              className={`relative w-36 h-14 transition-all ${(userLoggedIn && !isCompleted && !isHistoricallyCompleted) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-105'}`}
+              onClick={(userLoggedIn && !isCompleted && !isHistoricallyCompleted) ? undefined : onNext}
             >
               <Image 
                 src={theme.wrocDalejButton || "/images/wroc_dalej_wiosna.svg"} 

@@ -28,32 +28,32 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
             alt="Cloud"
             width={300}
             height={200}
-            className="object-contain"
+            className="object-contain w-[clamp(180px,22.5vw,450px)] h-[clamp(120px,15vw,300px)] sm:w-[clamp(225px,22.5vw,450px)] sm:h-[clamp(150px,15vw,300px)]"
           />
-              <div className="absolute top-5 left-5">
-      <Image
-        src="/images/welcome/logo_fundacja.svg"
-        alt="Fundacja Logo"
-        width={200}
-        height={100}
-        className="object-contain"
-      />
-    </div>
+          <div className="absolute top-[clamp(9px,1.2vw,30px)] left-[clamp(9px,1.2vw,30px)] sm:top-[clamp(12px,1.5vw,30px)] sm:left-[clamp(12px,1.5vw,30px)]">
+            <Image
+              src="/images/welcome/logo_fundacja.svg"
+              alt="Fundacja Logo"
+              width={200}
+              height={100}
+              className="object-contain w-[clamp(120px,12vw,300px)] h-[clamp(60px,6vw,150px)] sm:w-[clamp(150px,15vw,300px)] sm:h-[clamp(75px,7.5vw,150px)]"
+            />
+          </div>
         </div>
       </div>
 
-      {/* Main App Logo - Centered horizontally, 150px from top */}
-      <div className="absolute top-[150px] left-1/2 transform -translate-x-1/2 z-20">
+      {/* Main App Logo - Moved slightly left from center to avoid dragon elements */}
+      <div className="absolute top-[clamp(60px,6vw,150px)] sm:top-[clamp(80px,8vw,150px)] left-[calc(50%-380px)] z-20">
         <Image
           src="/images/welcome/app_logo.svg"
           alt="App Logo"
           width={400}
           height={200}
-          className="object-contain"
+          className="object-contain w-[clamp(288px,28.8vw,720px)] h-[clamp(144px,14.4vw,360px)] sm:w-[clamp(360px,36vw,720px)] sm:h-[clamp(180px,18vw,360px)]"
         />
       </div>
 
-      {/* Dragon Welcome - Bottom Right */}
+      {/* Dragon Welcome - Bottom Right with responsive sizing */}
       <div className="absolute bottom-0 right-0 z-40">
         <Image
           src="/images/welcome/dragon_welcome.svg"
@@ -62,8 +62,8 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
           height={1750}
           className="object-contain"
           style={{ 
-            width: '85vw', 
-            height: '85vh',
+            width: 'clamp(70vw, 85vw, 100vw)', 
+            height: 'clamp(70vh, 85vh, 100vh)',
             maxWidth: 'none',
             maxHeight: 'none',
             objectPosition: 'bottom right'
@@ -71,8 +71,8 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
         />
       </div>
 
-      {/* START Button - Above the white stripe */}
-      <div className="absolute bottom-[175px] left-0 right-0 z-50">
+      {/* START Button - Above the white stripe with responsive positioning */}
+      <div className="absolute bottom-[clamp(80px,10vh,175px)] sm:bottom-[clamp(100px,12vh,175px)] left-0 right-0 z-50">
         <div className="flex justify-center">
           <button
             onClick={handleStart}
@@ -84,21 +84,21 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
               alt="Start Button"
               width={200}
               height={60}
-              className="object-contain"
+              className="object-contain w-[clamp(150px,15vw,300px)] h-[clamp(45px,4.5vw,90px)] sm:w-[clamp(180px,18vw,300px)] sm:h-[clamp(54px,5.4vw,90px)]"
             />
           </button>
         </div>
       </div>
 
-      {/* White Stripe with Bottom Logos - Below dragon */}
+      {/* White Stripe with Bottom Logos - Below dragon with responsive padding */}
       <div className="absolute bottom-0 left-0 right-0 z-30">
-        <div className="bg-white w-full py-4 flex justify-center">
+        <div className="bg-white w-full py-[clamp(6px,0.8vh,16px)] sm:py-[clamp(8px,1vh,16px)] flex justify-center">
           <Image
             src="/images/welcome/bottom_logos.svg"
             alt="Bottom Logos"
             width={600}
             height={80}
-            className="object-contain"
+            className="object-contain w-[clamp(250px,25vw,600px)] h-[clamp(32px,3.2vw,80px)] sm:w-[clamp(300px,30vw,600px)] sm:h-[clamp(40px,4vw,80px)]"
           />
         </div>
       </div>

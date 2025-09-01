@@ -14,15 +14,22 @@ export default function MainMenu({
   onPlayWithoutLogin,
 }: MainMenuProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#e3f7ff] to-[#b8e6ff] flex flex-col items-center justify-center p-8 relative">
-      <div className="flex flex-col items-center space-y-16 w-full max-w-md ml-[25%] z-50">
+    <div className="min-h-screen bg-gradient-to-b from-[#e3f7ff] to-[#b8e6ff] flex flex-col items-center justify-center p-[clamp(16px,2vw,32px)] relative">
+      <div className="flex flex-col items-center space-y-[clamp(20px,2.5vw,40px)] w-full max-w-[clamp(240px,30vw,350px)] ml-[clamp(5%,20vw,35%)] z-50">
         {/* Student Login Button */}
         <button
           onClick={onStudentLogin}
-          className="relative w-full h-[120px] flex items-center justify-center group hover:scale-105 transition-transform duration-200"
+          className="relative w-full h-[clamp(108px,12.6vw,180px)] flex items-center justify-center group hover:scale-105 transition-transform duration-200"
         >
-          <Image src="/images/main_menu_box.svg" alt="Menu Button" width={323} height={51} className="w-full h-full" style={{ transform: 'scale(2)' }} />
-          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-[4.4rem] font-dongle tracking-wide whitespace-nowrap">
+          <Image 
+            src="/images/main_menu_box.svg" 
+            alt="Menu Button" 
+            width={323} 
+            height={51} 
+            className="w-full h-full" 
+            style={{ transform: 'scale(2.0)' }} 
+          />
+          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-[clamp(2.88rem,2.88vw,5.76rem)] font-dongle tracking-wide whitespace-nowrap px-2">
             LOGOWANIE DLA UCZNIA
           </span>
         </button>
@@ -30,10 +37,17 @@ export default function MainMenu({
         {/* Teacher Login Button */}
         <button
           onClick={onTeacherLogin}
-          className="relative w-full h-[120px] flex items-center justify-center group hover:scale-105 transition-transform duration-200"
+          className="relative w-full h-[clamp(108px,12.6vw,180px)] flex items-center justify-center group hover:scale-105 transition-transform duration-200"
         >
-          <Image src="/images/main_menu_box.svg" alt="Menu Button" width={323} height={51} className="w-full h-full" style={{ transform: 'scale(2)' }} />
-          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-[4.4rem] font-dongle tracking-wide whitespace-nowrap">
+          <Image 
+            src="/images/main_menu_box.svg" 
+            alt="Menu Button" 
+            width={323} 
+            height={51} 
+            className="w-full h-full" 
+            style={{ transform: 'scale(2.0)' }} 
+          />
+          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-[clamp(2.88rem,2.88vw,5.76rem)] font-dongle tracking-wide whitespace-nowrap px-2">
             LOGOWANIE DLA NAUCZYCIELA
           </span>
         </button>
@@ -41,10 +55,17 @@ export default function MainMenu({
         {/* Play Without Login Button */}
         <button
           onClick={onPlayWithoutLogin}
-          className="relative w-full h-[120px] flex items-center justify-center group hover:scale-105 transition-transform duration-200"
+          className="relative w-full h-[clamp(108px,12.6vw,180px)] flex items-center justify-center group hover:scale-105 transition-transform duration-200"
         >
-          <Image src="/images/main_menu_box.svg" alt="Menu Button" width={323} height={51} className="w-full h-full" style={{ transform: 'scale(2)' }} />
-          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-[4.4rem] font-dongle tracking-wide whitespace-nowrap">
+          <Image 
+            src="/images/main_menu_box.svg" 
+            alt="Menu Button" 
+            width={323} 
+            height={51} 
+            className="w-full h-full" 
+            style={{ transform: 'scale(2.0)' }} 
+          />
+          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-[clamp(2.88rem,2.88vw,5.76rem)] font-dongle tracking-wide whitespace-nowrap px-2">
             ZAGRAJ BEZ LOGOWANIA
           </span>
         </button>
@@ -59,8 +80,8 @@ export default function MainMenu({
           height={1920}
           className="object-contain"
           style={{ 
-            width: '85vw', 
-            height: '85vh',
+            width: 'clamp(60vw, 75vw, 90vw)', 
+            height: 'clamp(60vh, 75vh, 90vh)',
             maxWidth: 'none',
             maxHeight: 'none',
             objectPosition: 'bottom left'

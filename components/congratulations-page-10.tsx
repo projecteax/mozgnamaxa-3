@@ -24,7 +24,7 @@ export default function CongratulationsPage10({ onStartClick }: CongratulationsP
             </>
           ),
           
-          speechText: "A to ciekawe! Plaże powiększają się latem – ciepło powoduje rozszerzanie się piasku więc niektóre plaże <p>stają się większe. </> )",
+          speechText: "A to ciekawe! Plaże powiększają się latem – ciepło powoduje rozszerzanie się piasku więc niektóre plaże stają się większe.",
           textColor: "text-[#FF8C00]",
         }
       case "jesien":
@@ -33,11 +33,12 @@ export default function CongratulationsPage10({ onStartClick }: CongratulationsP
             <>
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Jak się nazywa warzywo puste w środku?</p>
-              <p>Kapusta.</p>
+              <p className="mb-2">Kapusta.</p>
+              <p className="italic">A tak na poważnie: Kiszenie kapusty to tradycyjna metoda jej przechowywania. Kapusta w takiej formie jest bardzo zdrowa.</p>
             </>
           ),
           
-          speechText: "A to zabawne! Jak się nazywa warzywo puste w środku? <p>Kapusta. </> )",
+          speechText: "A to zabawne! Jak się nazywa warzywo puste w środku? Kapusta. A tak na poważnie: Kiszenie kapusty to tradycyjna metoda jej przechowywania. Kapusta w takiej formie jest bardzo zdrowa.",
           textColor: "text-[#D2691E]",
         }
       case "zima":
@@ -51,7 +52,7 @@ export default function CongratulationsPage10({ onStartClick }: CongratulationsP
             </>
           ),
           
-          speechText: "A to ciekawe! Śnieg nie jest biały – w rzeczywistości jest przezroczysty, a jego struktura odbija światło, <p>co sprawia, że wygląda na biały. </> )",
+          speechText: "A to ciekawe! Śnieg nie jest biały – w rzeczywistości jest przezroczysty, a jego struktura odbija światło, co sprawia, że wygląda na biały.",
           textColor: "text-[#4682B4]",
         }
       default: // wiosna
@@ -65,7 +66,7 @@ export default function CongratulationsPage10({ onStartClick }: CongratulationsP
             </>
           ),
           
-          speechText: "A to ciekawe! Wiosną można zaobserwować piękne tęcze, które powstają, gdy promienie słońca <p>przechodzą przez krople deszczu w powietrzu. </> )",
+          speechText: "A to ciekawe! Wiosną można zaobserwować piękne tęcze, które powstają, gdy promienie słońca przechodzą przez krople deszczu w powietrzu.",
           textColor: "text-[#539e1b]",
         }
     }
@@ -77,8 +78,8 @@ export default function CongratulationsPage10({ onStartClick }: CongratulationsP
     <div className="w-full h-screen flex items-center justify-center px-12 overflow-hidden"
       style={{ backgroundColor: theme.backgroundColor }}>
       <div className="flex items-center justify-between w-full max-w-6xl gap-16">
-        {/* Speech bubble with new text - 150% larger with shadow */}
-        <div className="relative w-[692px] h-[317px] flex-shrink-0 drop-shadow-lg">
+        {/* Speech bubble with new text - 40% larger with shadow */}
+        <div className="relative w-[969px] h-[444px] flex-shrink-0 drop-shadow-lg">
           <Image src="/images/cloud_text.svg" alt="Speech bubble" fill className="object-contain" />
 
           {/* Text overlay - left aligned, 120% larger text */}

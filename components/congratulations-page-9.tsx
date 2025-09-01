@@ -18,12 +18,13 @@ export default function CongratulationsPage9({ onStartClick }: CongratulationsPa
           text: (
             <>
               <p className="mb-1">A to zabawne!</p>
-              <p className="mb-1">Jakie jest ulubione jajko ogrodnika?</p>
-              <p>Sadzone!</p>
+              <p className="mb-1">Jak nazywa się ryba szpieg?</p>
+              <p className="mb-2">Śledź.</p>
+              <p className="italic">A tak na poważnie: Śledź to ryba morska. Jest źródłem zdrowych tłuszczów omega-3 oraz witamin D i B12.</p>
             </>
           ),
           
-          speechText: "A to zabawne! Jakie jest ulubione jajko ogrodnika? <p>Sadzone! </> )",
+          speechText: "A to zabawne! Jak nazywa się ryba szpieg? Śledź. A tak na poważnie: Śledź to ryba morska. Jest źródłem zdrowych tłuszczów omega-3 oraz witamin D i B12.",
           textColor: "text-[#FF8C00]",
         }
       case "jesien":
@@ -36,7 +37,7 @@ export default function CongratulationsPage9({ onStartClick }: CongratulationsPa
             </>
           ),
           
-          speechText: "A to ciekawe! Rekordowe okazy dyni mogą osiągnąć <p>nawet 1100 kg! </> )",
+          speechText: "A to ciekawe! Rekordowe okazy dyni mogą osiągnąć nawet 1100 kg!",
           textColor: "text-[#D2691E]",
         }
       case "zima":
@@ -45,11 +46,12 @@ export default function CongratulationsPage9({ onStartClick }: CongratulationsPa
             <>
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Jak się nazywają kury jeżdżące na sankach?</p>
-              <p>Kokosanki.</p>
+              <p className="mb-2">Kokosanki.</p>
+              <p className="italic">A tak na poważnie: Kokosanki to ciasteczka z wiórków kokosowych, często pieczone bez mąki.</p>
             </>
           ),
           
-          speechText: "A to zabawne! Jak się nazywają kury jeżdżące na sankach? <p>Kokosanki. </> )",
+          speechText: "A to zabawne! Jak się nazywają kury jeżdżące na sankach? Kokosanki. A tak na poważnie: Kokosanki to ciasteczka z wiórków kokosowych, często pieczone bez mąki.",
           textColor: "text-[#4682B4]",
         }
       default: // wiosna
@@ -58,11 +60,12 @@ export default function CongratulationsPage9({ onStartClick }: CongratulationsPa
             <>
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Jak nazywamy pasącego się konia?</p>
-              <p>Pasikonik.</p>
+              <p className="mb-2">Pasikonik.</p>
+              <p className="italic">A tak na poważnie: Pasikonik to owad z długimi nogami, potrafiący wydawać dźwięki przez pocieranie skrzydeł.</p>
             </>
           ),
           
-          speechText: "A to zabawne! Jak nazywamy pasącego się konia? <p>Pasikonik. </> )",
+          speechText: "A to zabawne! Jak nazywamy pasącego się konia? Pasikonik. A tak na poważnie: Pasikonik to owad z długimi nogami, potrafiący wydawać dźwięki przez pocieranie skrzydeł.",
           textColor: "text-[#539e1b]",
         }
     }
@@ -74,8 +77,8 @@ export default function CongratulationsPage9({ onStartClick }: CongratulationsPa
     <div className="w-full h-screen flex items-center justify-center px-12 overflow-hidden"
       style={{ backgroundColor: theme.backgroundColor }}>
       <div className="flex items-center justify-between w-full max-w-6xl gap-16">
-        {/* Speech bubble with new text - 150% larger with shadow */}
-        <div className="relative w-[692px] h-[317px] flex-shrink-0 drop-shadow-lg">
+        {/* Speech bubble with new text - 40% larger with shadow */}
+        <div className="relative w-[969px] h-[444px] flex-shrink-0 drop-shadow-lg">
           <Image src="/images/cloud_text.svg" alt="Speech bubble" fill className="object-contain" />
 
           {/* Text overlay - left aligned, 120% larger text */}

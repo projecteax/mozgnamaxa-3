@@ -20,10 +20,11 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
             <>
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">W jakie dni pokrzywa nie parzy?</p>
-              <p>W nieparzyste!</p>
+              <p className="mb-2">W nieparzyste!</p>
+              <p className="italic">A tak na poważnie: Pokrzywa parzy, bo ma na liściach włoski wypełnione kwasem mrówkowym.</p>
             </>
           ),
-          speechText: "A to zabawne! W jakie dni pokrzywa nie parzy? W nieparzyste!",
+          speechText: "A to zabawne! W jakie dni pokrzywa nie parzy? W nieparzyste! A tak na poważnie: Pokrzywa parzy, bo ma na liściach włoski wypełnione kwasem mrówkowym.",
           dragonImage: "/images/dragon_01_summer.svg",
           soundIcon: "/images/sound_summer.svg",
           startButtonBg: "/images/start_summer.svg",
@@ -50,10 +51,11 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
             <>
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Co robi rzeka jak jej się coś nie podoba?</p>
-              <p>Narzeka.</p>
+              <p className="mb-2">Narzeka.</p>
+              <p className="italic">A tak na poważnie: Wisła to najdłuższa rzeka w Polsce — ma ponad 1000 km!</p>
             </>
           ),
-          speechText: "A to zabawne! Co robi rzeka jak jej się coś nie podoba? Narzeka.",
+          speechText: "A to zabawne! Co robi rzeka jak jej się coś nie podoba? Narzeka. A tak na poważnie: Wisła to najdłuższa rzeka w Polsce — ma ponad 1000 km!",
           dragonImage: "/images/dragon_01_winter.svg",
           soundIcon: "/images/sound_winter.svg",
           startButtonBg: "/images/start_button.svg",
@@ -65,10 +67,11 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
             <>
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Jak się czuje ogórek w śmietanie?</p>
-              <p>Mizernie!</p>
+              <p className="mb-2">Mizernie!</p>
+              <p className="italic">A tak na poważnie: Ogórek to warzywo o wysokiej zawartości wody — świetnie nawadnia organizm.</p>
             </>
           ),
-          speechText: "A to zabawne! Jak się czuje ogórek w śmietanie? Mizernie!",
+          speechText: "A to zabawne! Jak się czuje ogórek w śmietanie? Mizernie! A tak na poważnie: Ogórek to warzywo o wysokiej zawartości wody — świetnie nawadnia organizm.",
           dragonImage: "/images/dragon_01.svg",
           startButtonBg: "/images/start_button.svg",
           textColor: "text-[#539e1b]",
@@ -84,8 +87,8 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
       style={{ backgroundColor: theme.backgroundColor }}
     >
       <div className="flex items-center justify-between w-full max-w-6xl gap-16">
-        {/* Speech bubble with joke text - 150% larger with shadow */}
-        <div className="relative w-[692px] h-[317px] flex-shrink-0 drop-shadow-lg">
+        {/* Speech bubble with joke text - 40% larger with shadow */}
+        <div className="relative w-[969px] h-[444px] flex-shrink-0 drop-shadow-lg">
           <Image src="/images/cloud_text.svg" alt="Speech bubble" fill className="object-contain" />
 
           {/* Joke text overlay - left aligned, 120% larger text */}

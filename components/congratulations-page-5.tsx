@@ -19,10 +19,11 @@ export default function CongratulationsPage5({ onStartClick }: CongratulationsPa
             <>
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Jak się nazywa noga konia?</p>
-              <p>Kończyna!</p>
+              <p className="mb-2">Kończyna!</p>
+              <p className="italic">A tak na poważnie: Kończyna konia zakończona jest kopytem, które trzeba regularnie czyścić i podkuwać.</p>
             </>
           ),
-          speechText: "A to zabawne! Jak się nazywa noga konia? Kończyna!",
+          speechText: "A to zabawne! Jak się nazywa noga konia? Kończyna! A tak na poważnie: Kończyna konia zakończona jest kopytem, które trzeba regularnie czyścić i podkuwać.",
           
           textColor: "text-[#FF8C00]",
         }
@@ -45,10 +46,11 @@ export default function CongratulationsPage5({ onStartClick }: CongratulationsPa
             <>
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Dlaczego choinka nie jest głodna?</p>
-              <p>Bo jodła.</p>
+              <p className="mb-2">Bo jodła.</p>
+              <p className="italic">A tak na poważnie: Jodła to drzewo iglaste — ma miękkie igły i rośnie nawet do 50 metrów.</p>
             </>
           ),
-          speechText: "A to zabawne! Dlaczego choinka nie jest głodna? Bo jodła.",
+          speechText: "A to zabawne! Dlaczego choinka nie jest głodna? Bo jodła. A tak na poważnie: Jodła to drzewo iglaste — ma miękkie igły i rośnie nawet do 50 metrów.",
           
           textColor: "text-[#4682B4]",
         }
@@ -58,10 +60,11 @@ export default function CongratulationsPage5({ onStartClick }: CongratulationsPa
             <>
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Co mówi żaba do żaby?</p>
-              <p>Kumasz?</p>
+              <p className="mb-2">Kumasz?</p>
+              <p className="italic">A tak na poważnie: Żaby oddychają także przez skórę, dlatego potrzebują wilgotnego środowiska.</p>
             </>
           ),
-          speechText: "A to zabawne! Co mówi żaba do żaby? Kumasz?",
+          speechText: "A to zabawne! Co mówi żaba do żaby? Kumasz? A tak na poważnie: Żaby oddychają także przez skórę, dlatego potrzebują wilgotnego środowiska.",
           
           textColor: "text-[#539e1b]",
         }
@@ -74,8 +77,8 @@ export default function CongratulationsPage5({ onStartClick }: CongratulationsPa
     <div className="w-full h-screen flex items-center justify-center px-12 overflow-hidden"
       style={{ backgroundColor: theme.backgroundColor }}>
       <div className="flex items-center justify-between w-full max-w-6xl gap-16">
-        {/* Speech bubble with frog text - 150% larger with shadow */}
-        <div className="relative w-[692px] h-[317px] flex-shrink-0 drop-shadow-lg">
+        {/* Speech bubble with frog text - 40% larger with shadow */}
+        <div className="relative w-[969px] h-[444px] flex-shrink-0 drop-shadow-lg">
           <Image src="/images/cloud_text.svg" alt="Speech bubble" fill className="object-contain" />
 
           {/* Text overlay - left aligned, 120% larger text */}

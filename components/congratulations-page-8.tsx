@@ -24,7 +24,7 @@ export default function CongratulationsPage8({ onStartClick }: CongratulationsPa
             </>
           ),
           
-          speechText: "A to ciekawe! W sierpniu obserwować możemy noce spadających gwiazd. Są to Perseidy, czyli jedne <p>z najpiękniejszych rojów meteorów. </> )",
+          speechText: "A to ciekawe! W sierpniu obserwować możemy noce spadających gwiazd. Są to Perseidy, czyli jedne z najpiękniejszych rojów meteorów.",
           textColor: "text-[#FF8C00]",
         }
       case "jesien":
@@ -33,11 +33,12 @@ export default function CongratulationsPage8({ onStartClick }: CongratulationsPa
             <>
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Co ma wspólnego łyżka z jesienią?</p>
-              <p>Je się nią.</p>
+              <p className="mb-2">Je się nią.</p>
+              <p className="italic">A tak na poważnie: Jesień to czas zbiorów — dynie, buraki, ziemniaki to idealne produkty na pyszne dania.</p>
             </>
           ),
           
-          speechText: "A to zabawne! Co ma wspólnego łyżka z jesienią? <p>Je się nią. </> )",
+          speechText: "A to zabawne! Co ma wspólnego łyżka z jesienią? Je się nią. A tak na poważnie: Jesień to czas zbiorów — dynie, buraki, ziemniaki to idealne produkty na pyszne dania.",
           textColor: "text-[#D2691E]",
         }
       case "zima":
@@ -51,7 +52,7 @@ export default function CongratulationsPage8({ onStartClick }: CongratulationsPa
             </>
           ),
           
-          speechText: "A to ciekawe! Niektóre zwierzęta zmieniają kolor futra – na przykład lis polarny czy zając bielak <p>latem są brązowe, a zimą białe. </> )",
+          speechText: "A to ciekawe! Niektóre zwierzęta zmieniają kolor futra – na przykład lis polarny czy zając bielak latem są brązowe, a zimą białe.",
           textColor: "text-[#4682B4]",
         }
       default: // wiosna
@@ -64,7 +65,7 @@ export default function CongratulationsPage8({ onStartClick }: CongratulationsPa
             </>
           ),
           
-          speechText: "A to ciekawe! Wiosną często występują burze. <p>To czas, kiedy zimne i ciepłe powietrze spotykają się, tworząc zjawiska atmosferyczne. </> )",
+          speechText: "A to ciekawe! Wiosną często występują burze. To czas, kiedy zimne i ciepłe powietrze spotykają się, tworząc zjawiska atmosferyczne.",
           textColor: "text-[#539e1b]",
         }
     }
@@ -76,8 +77,8 @@ export default function CongratulationsPage8({ onStartClick }: CongratulationsPa
     <div className="w-full h-screen flex items-center justify-center px-12 overflow-hidden"
       style={{ backgroundColor: theme.backgroundColor }}>
       <div className="flex items-center justify-between w-full max-w-6xl gap-16">
-        {/* Speech bubble with hibernation text - 150% larger with shadow */}
-        <div className="relative w-[692px] h-[317px] flex-shrink-0 drop-shadow-lg">
+        {/* Speech bubble with hibernation text - 40% larger with shadow */}
+        <div className="relative w-[969px] h-[444px] flex-shrink-0 drop-shadow-lg">
           <Image src="/images/cloud_text.svg" alt="Speech bubble" fill className="object-contain" />
 
           {/* Text overlay - left aligned, 120% larger text */}

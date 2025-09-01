@@ -33,10 +33,11 @@ export default function CongratulationsPage4({ onStartClick }: CongratulationsPa
             <>
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Dlaczego woda nie zdała egzaminu?</p>
-              <p>Bo go oblała!</p>
+              <p className="mb-2">Bo go oblała!</p>
+              <p className="italic">A tak na poważnie: Woda jest nam niezbędna do życia — organizm człowieka składa się w ok. 60% z wody.</p>
             </>
           ),
-          speechText: "A to zabawne! Dlaczego woda nie zdała egzaminu? Bo go oblała!",
+          speechText: "A to zabawne! Dlaczego woda nie zdała egzaminu? Bo go oblała! A tak na poważnie: Woda jest nam niezbędna do życia — organizm człowieka składa się w ok. 60% z wody.",
           
           textColor: "text-[#D2691E]",
         }
@@ -76,8 +77,8 @@ export default function CongratulationsPage4({ onStartClick }: CongratulationsPa
     <div className="w-full h-screen flex items-center justify-center px-12 overflow-hidden"
       style={{ backgroundColor: theme.backgroundColor }}>
       <div className="flex items-center justify-between w-full max-w-6xl gap-16">
-        {/* Speech bubble with tulip text - 150% larger with shadow */}
-        <div className="relative w-[692px] h-[317px] flex-shrink-0 drop-shadow-lg">
+        {/* Speech bubble with tulip text - 40% larger with shadow */}
+        <div className="relative w-[969px] h-[444px] flex-shrink-0 drop-shadow-lg">
           <Image src="/images/cloud_text.svg" alt="Speech bubble" fill className="object-contain" />
 
           {/* Text overlay - left aligned, 120% larger text */}

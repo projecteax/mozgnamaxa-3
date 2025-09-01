@@ -19,11 +19,12 @@ export default function CongratulationsPage11({ onStartClick }: CongratulationsP
             <>
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Jak nazywa się specjalista od owiec?</p>
-              <p>Fachowiec!</p>
+              <p className="mb-2">Fachowiec!</p>
+              <p className="italic">A tak na poważnie: Krety są pożyteczne — zjadają larwy i pędraki.</p>
             </>
           ),
           
-          speechText: "A to zabawne! Jak nazywa się specjalista od owiec? <p>Fachowiec! </> )",
+          speechText: "A to zabawne! Jak nazywa się specjalista od owiec? Fachowiec! A tak na poważnie: Krety są pożyteczne — zjadają larwy i pędraki.",
           textColor: "text-[#FF8C00]",
         }
       case "jesien":
@@ -37,7 +38,7 @@ export default function CongratulationsPage11({ onStartClick }: CongratulationsP
             </>
           ),
           
-          speechText: "A to ciekawe! Powietrze jesienią jest mniej wilgotne, więc rozpraszanie światła daje bardziej intensywny <p>odcień błękitu przez co niebo wydaje się bardziej niebieskie. </> )",
+          speechText: "A to ciekawe! Powietrze jesienią jest mniej wilgotne, więc rozpraszanie światła daje bardziej intensywny odcień błękitu przez co niebo wydaje się bardziej niebieskie.",
           textColor: "text-[#D2691E]",
         }
       case "zima":
@@ -46,11 +47,12 @@ export default function CongratulationsPage11({ onStartClick }: CongratulationsP
             <>
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Gdzie Ania schowała książkę?</p>
-              <p>Podręcznik.</p>
+              <p className="mb-2">Podręcznik.</p>
+              <p className="italic">A tak na poważnie: Podręcznik to książka używana w szkole. Zawiera treści nauczania i pomaga uczniom zdobywać wiedzę.</p>
             </>
           ),
           
-          speechText: "A to zabawne! Gdzie Ania schowała książkę? <p>Podręcznik. </> )",
+          speechText: "A to zabawne! Gdzie Ania schowała książkę? Podręcznik. A tak na poważnie: Podręcznik to książka używana w szkole. Zawiera treści nauczania i pomaga uczniom zdobywać wiedzę.",
           textColor: "text-[#4682B4]",
         }
       default: // wiosna
@@ -59,11 +61,12 @@ export default function CongratulationsPage11({ onStartClick }: CongratulationsP
             <>
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Jak się nazywa sekretny kret?</p>
-              <p>Sekrecik.</p>
+              <p className="mb-2">Sekrecik.</p>
+              <p className="italic">A tak na poważnie: Kret to ssak, który kopie korytarze pod ziemią za pomocą silnych łap. Ma słaby wzrok, ale doskonały węch i słuch.</p>
             </>
           ),
           
-          speechText: "A to zabawne! Jak się nazywa sekretny kret? <p>Sekrecik. </> )",
+          speechText: "A to zabawne! Jak się nazywa sekretny kret? Sekrecik. A tak na poważnie: Kret to ssak, który kopie korytarze pod ziemią za pomocą silnych łap. Ma słaby wzrok, ale doskonały węch i słuch.",
           textColor: "text-[#539e1b]",
         }
     }
@@ -75,8 +78,8 @@ export default function CongratulationsPage11({ onStartClick }: CongratulationsP
     <div className="w-full h-screen flex items-center justify-center px-12 overflow-hidden"
       style={{ backgroundColor: theme.backgroundColor }}>
       <div className="flex items-center justify-between w-full max-w-6xl gap-16">
-        {/* Speech bubble with new text - 150% larger with shadow */}
-        <div className="relative w-[692px] h-[317px] flex-shrink-0 drop-shadow-lg">
+        {/* Speech bubble with new text - 40% larger with shadow */}
+        <div className="relative w-[969px] h-[444px] flex-shrink-0 drop-shadow-lg">
           <Image src="/images/cloud_text.svg" alt="Speech bubble" fill className="object-contain" />
 
           {/* Text overlay - left aligned, 120% larger text */}

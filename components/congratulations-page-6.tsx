@@ -32,10 +32,11 @@ export default function CongratulationsPage6({ onStartClick }: CongratulationsPa
             <>
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Jak nazywa się człowiek, który kocha drzewa?</p>
-              <p>Lovelas.</p>
+              <p className="mb-2">Lovelas.</p>
+              <p className="italic">A tak na poważnie: Drzewa produkują tlen, oczyszczają powietrze i dają cień — są bardzo ważne dla środowiska.</p>
             </>
           ),
-          speechText: "A to zabawne! Jak nazywa się człowiek, który kocha drzewa? Lovelas.",
+          speechText: "A to zabawne! Jak nazywa się człowiek, który kocha drzewa? Lovelas. A tak na poważnie: Drzewa produkują tlen, oczyszczają powietrze i dają cień — są bardzo ważne dla środowiska.",
           textColor: "text-[#D2691E]",
         }
       case "zima":
@@ -73,8 +74,8 @@ export default function CongratulationsPage6({ onStartClick }: CongratulationsPa
     <div className="w-full h-screen flex items-center justify-center px-12 overflow-hidden"
       style={{ backgroundColor: theme.backgroundColor }}>
       <div className="flex items-center justify-between w-full max-w-6xl gap-16">
-        {/* Speech bubble with hibernation text - 150% larger with shadow */}
-        <div className="relative w-[692px] h-[317px] flex-shrink-0 drop-shadow-lg">
+        {/* Speech bubble with hibernation text - 40% larger with shadow */}
+        <div className="relative w-[969px] h-[444px] flex-shrink-0 drop-shadow-lg">
           <Image src="/images/cloud_text.svg" alt="Speech bubble" fill className="object-contain" />
 
           {/* Text overlay - left aligned, 120% larger text */}

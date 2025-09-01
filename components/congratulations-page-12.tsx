@@ -24,7 +24,7 @@ export default function CongratulationsPage12({ onStartClick }: CongratulationsP
             </>
           ),
           
-          speechText: "A to ciekawe! Przez temperaturę i sól morską w powietrzu, która przyspiesza proces topnienia, lody na <p>nadmorskiej plaży topnieją szybciej! </> )",
+          speechText: "A to ciekawe! Przez temperaturę i sól morską w powietrzu, która przyspiesza proces topnienia, lody na nadmorskiej plaży topnieją szybciej!",
           textColor: "text-[#FF8C00]",
         }
       case "jesien":
@@ -33,11 +33,12 @@ export default function CongratulationsPage12({ onStartClick }: CongratulationsP
             <>
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Jak się śmieje las?</p>
-              <p>Mech, mech, mech!</p>
+              <p className="mb-2">Mech, mech, mech!</p>
+              <p className="italic">A tak na poważnie: Mech nie ma korzeni, tylko chwytniki. Pobiera wodę bezpośrednio z otoczenia. Zatrzymuje wilgoć i oczyszcza powietrze w lesie.</p>
             </>
           ),
           
-          speechText: "A to zabawne! Jak się śmieje las? <p>Mech, mech, mech! </> )",
+          speechText: "A to zabawne! Jak się śmieje las? Mech, mech, mech! A tak na poważnie: Mech nie ma korzeni, tylko chwytniki. Pobiera wodę bezpośrednio z otoczenia. Zatrzymuje wilgoć i oczyszcza powietrze w lesie.",
           textColor: "text-[#D2691E]",
         }
       case "zima":
@@ -50,7 +51,7 @@ export default function CongratulationsPage12({ onStartClick }: CongratulationsP
             </>
           ),
           
-          speechText: "A to ciekawe! Niedźwiedzie polarne mają czarną skórę – <p>dzięki temu lepiej łapią ciepło ze słońca. </> )",
+          speechText: "A to ciekawe! Niedźwiedzie polarne mają czarną skórę – dzięki temu lepiej łapią ciepło ze słońca.",
           textColor: "text-[#4682B4]",
         }
       default: // wiosna
@@ -65,7 +66,7 @@ export default function CongratulationsPage12({ onStartClick }: CongratulationsP
             </>
           ),
           
-          speechText: "A to ciekawe! Magnolie to jedne z pierwszych drzew, które kwitną wiosną. <p>Ich duże kwiaty przyciągają <p>pszczoły i motyle. </> )",
+          speechText: "A to ciekawe! Magnolie to jedne z pierwszych drzew, które kwitną wiosną. Ich duże kwiaty przyciągają pszczoły i motyle.",
           textColor: "text-[#539e1b]",
         }
     }
@@ -77,8 +78,8 @@ export default function CongratulationsPage12({ onStartClick }: CongratulationsP
     <div className="w-full h-screen flex items-center justify-center px-12 overflow-hidden"
       style={{ backgroundColor: theme.backgroundColor }}>
       <div className="flex items-center justify-between w-full max-w-6xl gap-16">
-        {/* Speech bubble with new text - 150% larger with shadow */}
-        <div className="relative w-[692px] h-[317px] flex-shrink-0 drop-shadow-lg">
+        {/* Speech bubble with new text - 40% larger with shadow */}
+        <div className="relative w-[969px] h-[444px] flex-shrink-0 drop-shadow-lg">
           <Image src="/images/cloud_text.svg" alt="Speech bubble" fill className="object-contain" />
 
           {/* Text overlay - left aligned, 120% larger text */}

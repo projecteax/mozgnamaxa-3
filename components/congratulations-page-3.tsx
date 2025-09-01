@@ -17,13 +17,13 @@ export default function CongratulationsPage3({ onStartClick }: CongratulationsPa
         return {
           text: (
             <>
-              <p className="mb-1">A to ciekawe!</p>
-              <p className="mb-1">W lesie latem można spotkać więcej zwierząt,</p>
-              <p className="mb-1">które wychodzą z ukrycia, aby korzystać</p>
-              <p>z obfitości pożywienia.</p>
+              <p className="mb-1">A to zabawne!</p>
+              <p className="mb-1">Przez jakie ryby można skakać?</p>
+              <p className="mb-2">Przez płotki!</p>
+              <p className="italic">A tak na poważnie: Płotka to niewielka ryba słodkowodna żyjąca w jeziorach i rzekach. Jej ciało jest spłaszczone i błyszczące.</p>
             </>
           ),
-          speechText: "A to ciekawe! W lesie latem można spotkać więcej zwierząt, które wychodzą z ukrycia, aby korzystać z obfitości pożywienia.",
+          speechText: "A to zabawne! Przez jakie ryby można skakać? Przez płotki! A tak na poważnie: Płotka to niewielka ryba słodkowodna żyjąca w jeziorach i rzekach. Jej ciało jest spłaszczone i błyszczące.",
           dragon: "/images/dragon_03_summer.svg",
           
           textColor: "text-[#FF8C00]",
@@ -46,13 +46,13 @@ export default function CongratulationsPage3({ onStartClick }: CongratulationsPa
         return {
           text: (
             <>
-              <p className="mb-1">A to ciekawe!</p>
-              <p className="mb-1">Śnieg jest biały, ponieważ odbija wszystkie</p>
-              <p className="mb-1">kolory światła, ale najczęściej widzimy</p>
-              <p>go w świetle słonecznym.</p>
+              <p className="mb-1">A to zabawne!</p>
+              <p className="mb-1">Jaka część ciała najwięcej razy mówi „pa"?</p>
+              <p className="mb-2">Stopa.</p>
+              <p className="italic">A tak na poważnie: Stopy umożliwiają nam chodzenie i utrzymanie równowagi. Składają się z 26 kości i ponad 100 mięśni, więzadeł i ścięgien!</p>
             </>
           ),
-          speechText: "A to ciekawe! Śnieg jest biały, ponieważ odbija wszystkie kolory światła, ale najczęściej widzimy go w świetle słonecznym.",
+          speechText: "A to zabawne! Jaka część ciała najwięcej razy mówi pa? Stopa. A tak na poważnie: Stopy umożliwiają nam chodzenie i utrzymanie równowagi. Składają się z 26 kości i ponad 100 mięśni, więzadeł i ścięgien!",
           dragon: "/images/dragon_03_winter.svg",
           
           textColor: "text-[#4682B4]",
@@ -61,13 +61,13 @@ export default function CongratulationsPage3({ onStartClick }: CongratulationsPa
         return {
           text: (
             <>
-              <p className="mb-1">A to ciekawe!</p>
-              <p className="mb-1">Wiosną ptaki śpiewają głośniej, aby</p>
-              <p className="mb-1">przyciągnąć partnerów i oznaczyć</p>
-              <p>swoje terytorium.</p>
+              <p className="mb-1">A to zabawne!</p>
+              <p className="mb-1">Jak nazywa się mrówka, która ma jad?</p>
+              <p className="mb-2">Mrówkojad!</p>
+              <p className="italic">A tak na poważnie: Mrówkojad to ssak z Ameryki Południowej. Nie ma zębów, a językiem, który może mieć nawet 60 cm długości, zjada mrówki i termity!</p>
             </>
           ),
-          speechText: "A to ciekawe! Wiosną ptaki śpiewają głośniej, aby przyciągnąć partnerów i oznaczyć swoje terytorium.",
+          speechText: "A to zabawne! Jak nazywa się mrówka, która ma jad? Mrówkojad! A tak na poważnie: Mrówkojad to ssak z Ameryki Południowej. Nie ma zębów, a językiem, który może mieć nawet 60 cm długości, zjada mrówki i termity!",
           dragon: "/images/dragon_03.svg",
           
           textColor: "text-[#539e1b]",
@@ -83,8 +83,8 @@ export default function CongratulationsPage3({ onStartClick }: CongratulationsPa
       style={{ backgroundColor: theme.backgroundColor }}
     >
       <div className="flex items-center justify-between w-full max-w-6xl gap-16">
-        {/* Speech bubble with seasonal text - 150% larger with shadow */}
-        <div className="relative w-[692px] h-[317px] flex-shrink-0 drop-shadow-lg">
+        {/* Speech bubble with seasonal text - 40% larger with shadow */}
+        <div className="relative w-[969px] h-[444px] flex-shrink-0 drop-shadow-lg">
           <Image src="/images/cloud_text.svg" alt="Speech bubble" fill className="object-contain" />
 
           {/* Seasonal text overlay - left aligned, 120% larger text */}

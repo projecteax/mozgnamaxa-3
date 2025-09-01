@@ -34,10 +34,11 @@ export default function CongratulationsPage2({ onStartClick }: CongratulationsPa
             <>
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Jak szybko przemieszcza się burza?</p>
-              <p>Błyskawicznie!</p>
+              <p className="mb-2">Błyskawicznie!</p>
+              <p className="italic">A tak na poważnie: Dźwięk grzmotu słyszymy później, bo dźwięk przemieszcza się wolniej niż światło.</p>
             </>
           ),
-          speechText: "A to zabawne! Jak szybko przemieszcza się burza? Błyskawicznie!",
+          speechText: "A to zabawne! Jak szybko przemieszcza się burza? Błyskawicznie! A tak na poważnie: Dźwięk grzmotu słyszymy później, bo dźwięk przemieszcza się wolniej niż światło.",
           dragon: "/images/dragon_02_autumn.svg",
           
           textColor: "text-[#D2691E]",
@@ -83,8 +84,8 @@ export default function CongratulationsPage2({ onStartClick }: CongratulationsPa
       style={{ backgroundColor: theme.backgroundColor }}
     >
       <div className="flex items-center justify-between w-full max-w-6xl gap-16">
-        {/* Speech bubble with seasonal text - 150% larger with shadow */}
-        <div className="relative w-[692px] h-[317px] flex-shrink-0 drop-shadow-lg">
+        {/* Speech bubble with seasonal text - 40% larger with shadow */}
+        <div className="relative w-[969px] h-[444px] flex-shrink-0 drop-shadow-lg">
           <Image src="/images/cloud_text.svg" alt="Speech bubble" fill className="object-contain" />
 
           {/* Seasonal text overlay - left aligned, 120% larger text */}

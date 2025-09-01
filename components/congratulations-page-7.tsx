@@ -18,11 +18,12 @@ export default function CongratulationsPage7({ onStartClick }: CongratulationsPa
           text: (
             <>
               <p className="mb-1">A to zabawne!</p>
-              <p className="mb-1">Jak nazwiemy pasącego się konia?</p>
-              <p>Pasikonik.</p>
+              <p className="mb-1">Jak nazywa się tata raka?</p>
+              <p className="mb-2">Tatarak.</p>
+              <p className="italic">A tak na poważnie: Tatarak to roślina wodna o silnym zapachu, rosnąca przy brzegach stawów i jezior.</p>
             </>
           ),
-          speechText: "A to zabawne! Jak nazwiemy pasącego się konia? Pasikonik.",
+          speechText: "A to zabawne! Jak nazywa się tata raka? Tatarak. A tak na poważnie: Tatarak to roślina wodna o silnym zapachu, rosnąca przy brzegach stawów i jezior.",
           textColor: "text-[#FF8C00]",
         }
       case "jesien":
@@ -44,10 +45,11 @@ export default function CongratulationsPage7({ onStartClick }: CongratulationsPa
             <>
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Jak się nazywa mina na powitanie?</p>
-              <p>Witamina.</p>
+              <p className="mb-2">Witamina.</p>
+              <p className="italic">A tak na poważnie: Witaminy wspierają odporność, wzrost i prawidłowe funkcjonowanie organizmu. Ich niedobór może powodować zmęczenie, osłabienie i choroby.</p>
             </>
           ),
-          speechText: "A to zabawne! Jak się nazywa mina na powitanie? Witamina.",
+          speechText: "A to zabawne! Jak się nazywa mina na powitanie? Witamina. A tak na poważnie: Witaminy wspierają odporność, wzrost i prawidłowe funkcjonowanie organizmu. Ich niedobór może powodować zmęczenie, osłabienie i choroby.",
           textColor: "text-[#4682B4]",
         }
       default: // wiosna
@@ -56,10 +58,11 @@ export default function CongratulationsPage7({ onStartClick }: CongratulationsPa
             <>
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Jakie jest ulubione jajko ogrodnika?</p>
-              <p>Sadzone.</p>
+              <p className="mb-2">Sadzone.</p>
+              <p className="italic">A tak na poważnie: Jajko to źródło białka i witamin — w tym witaminy D i B12.</p>
             </>
           ),
-          speechText: "A to zabawne! Jakie jest ulubione jajko ogrodnika? Sadzone.",
+          speechText: "A to zabawne! Jakie jest ulubione jajko ogrodnika? Sadzone. A tak na poważnie: Jajko to źródło białka i witamin — w tym witaminy D i B12.",
           textColor: "text-[#539e1b]",
         }
     }
@@ -71,8 +74,8 @@ export default function CongratulationsPage7({ onStartClick }: CongratulationsPa
     <div className="w-full h-screen flex items-center justify-center px-12 overflow-hidden"
       style={{ backgroundColor: theme.backgroundColor }}>
       <div className="flex items-center justify-between w-full max-w-6xl gap-16">
-        {/* Speech bubble with hibernation text - 150% larger with shadow */}
-        <div className="relative w-[692px] h-[317px] flex-shrink-0 drop-shadow-lg">
+        {/* Speech bubble with hibernation text - 40% larger with shadow */}
+        <div className="relative w-[969px] h-[444px] flex-shrink-0 drop-shadow-lg">
           <Image src="/images/cloud_text.svg" alt="Speech bubble" fill className="object-contain" />
 
           {/* Text overlay - left aligned, 120% larger text */}

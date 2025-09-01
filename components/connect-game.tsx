@@ -44,6 +44,34 @@ function shuffleArray<T>(array: T[]): T[] {
   return arr
 }
 
+// Helper function to shuffle right array ensuring it's different from left array
+function shuffleArrayDifferent<T extends { pairId: string }>(rightArray: T[], leftArray: T[]): T[] {
+  const shuffled = [...rightArray]
+  let attempts = 0
+  const maxAttempts = 10
+
+  do {
+    // Fisher-Yates shuffle algorithm
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    }
+    attempts++
+
+    // Check if the order is different from left array
+    const isSameOrder = shuffled.every((rightItem, index) => {
+      const leftItem = leftArray[index]
+      return leftItem && rightItem.pairId === leftItem.pairId
+    })
+
+    if (!isSameOrder || attempts >= maxAttempts) {
+      break
+    }
+  } while (attempts < maxAttempts)
+
+  return shuffled
+}
+
 export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, userLoggedIn = false, currentSeason = "wiosna", isGameCompleted = false, onComplete }: ConnectGameProps) {
   // First, add a useGameCompletion hook at the top with other hooks
   const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("connect-game")
@@ -188,7 +216,7 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
           matched: false,
         },
       ])
-      const right = shuffleArray([
+      const rightArray = [
         {
           id: "set-of-flowers",
           image: "/images/red_flowers_multiple.svg",
@@ -210,7 +238,8 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
           isLeft: false,
           matched: false,
         },
-      ])
+      ]
+      const right = shuffleArrayDifferent(rightArray, left)
       setLeftItems(left)
       setRightItems(right)
       return
@@ -225,23 +254,17 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
               ? "person"
               : selectedSeason === "jesien"
                 ? "onion"
-                : selectedSeason === "wiosna"
-                  ? "leaf"
                 : "leaf"
             : item.id === "single-hedgehog"
               ? selectedSeason === "zima"
                 ? "cookie"
                 : selectedSeason === "jesien"
                   ? "carrot"
-                  : selectedSeason === "wiosna"
-                    ? "hedgehog"
                   : "hedgehog"
               : selectedSeason === "zima"
                 ? "ball"
                 : selectedSeason === "jesien"
                   ? "beetroot"
-                  : selectedSeason === "wiosna"
-                    ? "nut"
                   : "nut",
       })),
     )
@@ -306,65 +329,64 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
             },
           ]
     )
-    const right = shuffleArray(
-      selectedSeason === "lato"
-        ? [
-            // Summer-specific right items
-            {
-              id: "set-of-bucket",
-              image: "/images/bucket_summer.svg",
-              pairId: "digger",
-              isLeft: false,
-              matched: false,
-            },
-            {
-              id: "set-of-sunglasses",
-              image: "/images/sunglasses_summer.svg",
-              pairId: "sun",
-              isLeft: false,
-              matched: false,
-            },
-            {
-              id: "set-of-swimsuit",
-              image: "/images/swimsuit_summer.svg",
-              pairId: "flamingo",
-              isLeft: false,
-              matched: false,
-            },
-          ]
-        : [
-            {
-              id: "set-of-leaves",
-              image: "/images/leaf_orange_autumn.svg",
-              springImage: "/images/leaf_orange_spring.svg",
-              autumnImage: "/images/onion_autumn_multiple.svg",
-              winterImage: "/images/people_winter.svg",
-              pairId: selectedSeason === "zima" ? "person" : selectedSeason === "jesien" ? "onion" : "leaf",
-              isLeft: false,
-              matched: false,
-            },
-            {
-              id: "set-of-hedgehogs",
-              image: "/images/squirel_autumn.svg",
-              springImage: "/images/squirel_spring.svg",
-              autumnImage: "/images/carrot_autumn_multiple.svg",
-              winterImage: "/images/cookies_winter.svg",
-              pairId: selectedSeason === "zima" ? "cookie" : selectedSeason === "jesien" ? "carrot" : "hedgehog",
-              isLeft: false,
-              matched: false,
-            },
-            {
-              id: "set-of-nuts",
-              image: "/images/zoladz_autumn.svg",
-              springImage: "/images/zoladz_spring.svg",
-              autumnImage: "/images/beetroot_autumn_multiple.svg",
-              winterImage: "/images/balls_multiple_winter.svg",
-              pairId: selectedSeason === "zima" ? "ball" : selectedSeason === "jesien" ? "beetroot" : "nut",
-              isLeft: false,
-              matched: false,
-            },
-          ]
-    )
+    const rightArray = selectedSeason === "lato"
+      ? [
+          // Summer-specific right items
+          {
+            id: "set-of-bucket",
+            image: "/images/bucket_summer.svg",
+            pairId: "digger",
+            isLeft: false,
+            matched: false,
+          },
+          {
+            id: "set-of-sunglasses",
+            image: "/images/sunglasses_summer.svg",
+            pairId: "sun",
+            isLeft: false,
+            matched: false,
+          },
+          {
+            id: "set-of-swimsuit",
+            image: "/images/swimsuit_summer.svg",
+            pairId: "flamingo",
+            isLeft: false,
+            matched: false,
+          },
+        ]
+      : [
+          {
+            id: "set-of-leaves",
+            image: "/images/leaf_orange_autumn.svg",
+            springImage: "/images/leaf_orange_spring.svg",
+            autumnImage: "/images/onion_autumn_multiple.svg",
+            winterImage: "/images/people_winter.svg",
+            pairId: selectedSeason === "zima" ? "person" : selectedSeason === "jesien" ? "onion" : "leaf",
+            isLeft: false,
+            matched: false,
+          },
+          {
+            id: "set-of-hedgehogs",
+            image: "/images/squirel_autumn.svg",
+            springImage: "/images/squirel_spring.svg",
+            autumnImage: "/images/carrot_autumn_multiple.svg",
+            winterImage: "/images/cookies_winter.svg",
+            pairId: selectedSeason === "zima" ? "cookie" : selectedSeason === "jesien" ? "carrot" : "hedgehog",
+            isLeft: false,
+            matched: false,
+          },
+          {
+            id: "set-of-nuts",
+            image: "/images/zoladz_autumn.svg",
+            springImage: "/images/zoladz_spring.svg",
+            autumnImage: "/images/beetroot_autumn_multiple.svg",
+            winterImage: "/images/balls_multiple_winter.svg",
+            pairId: selectedSeason === "zima" ? "ball" : selectedSeason === "jesien" ? "beetroot" : "nut",
+            isLeft: false,
+            matched: false,
+          },
+        ]
+    const right = shuffleArrayDifferent(rightArray, left)
     setLeftItems(left)
     setRightItems(right)
   }, [selectedSeason])

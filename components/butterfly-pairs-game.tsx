@@ -167,10 +167,37 @@ export default function ButterflyPairsGame({ onMenuClick, onComplete, onBack, on
     }
 
     const initialRightHalves = getInitialRightHalves()
+    const leftHalves = getLeftHalves()
 
-    // Shuffle the right halves
-    const shuffled = [...initialRightHalves].sort(() => Math.random() - 0.5)
-    return shuffled
+    // Function to shuffle array ensuring it's different from left order
+    const shuffleArray = (array: ButterflyHalf[]) => {
+      const shuffled = [...array]
+      let attempts = 0
+      const maxAttempts = 10
+
+      do {
+        // Fisher-Yates shuffle algorithm
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1))
+          ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+        }
+        attempts++
+
+        // Check if the order is different from left halves
+        const isSameOrder = shuffled.every((rightHalf, index) => {
+          const leftHalf = leftHalves[index]
+          return leftHalf && rightHalf.pairId === leftHalf.pairId
+        })
+
+        if (!isSameOrder || attempts >= maxAttempts) {
+          break
+        }
+      } while (attempts < maxAttempts)
+
+      return shuffled
+    }
+
+    return shuffleArray(initialRightHalves)
   }, [selectedSeason])
 
   // State for right halves, initialized with shuffled values

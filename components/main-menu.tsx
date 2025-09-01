@@ -29,7 +29,7 @@ export default function MainMenu({
             className="w-full h-full" 
             style={{ transform: 'scale(2.0)' }} 
           />
-          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-[clamp(2.88rem,2.88vw,5.76rem)] font-dongle tracking-wide whitespace-nowrap px-2">
+          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-[clamp(1.8rem,1.8vw,3.6rem)] font-dongle tracking-wide whitespace-nowrap px-2">
             LOGOWANIE DLA UCZNIA
           </span>
         </button>
@@ -47,7 +47,7 @@ export default function MainMenu({
             className="w-full h-full" 
             style={{ transform: 'scale(2.0)' }} 
           />
-          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-[clamp(2.88rem,2.88vw,5.76rem)] font-dongle tracking-wide whitespace-nowrap px-2">
+          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-[clamp(1.8rem,1.8vw,3.6rem)] font-dongle tracking-wide whitespace-nowrap px-2">
             LOGOWANIE DLA NAUCZYCIELA
           </span>
         </button>
@@ -65,7 +65,7 @@ export default function MainMenu({
             className="w-full h-full" 
             style={{ transform: 'scale(2.0)' }} 
           />
-          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-[clamp(2.88rem,2.88vw,5.76rem)] font-dongle tracking-wide whitespace-nowrap px-2">
+          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-[clamp(1.8rem,1.8vw,3.6rem)] font-dongle tracking-wide whitespace-nowrap px-2">
             ZAGRAJ BEZ LOGOWANIA
           </span>
         </button>

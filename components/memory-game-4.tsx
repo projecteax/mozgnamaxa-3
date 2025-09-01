@@ -53,82 +53,92 @@ export default function MemoryGame4({ onMenuClick, onComplete, onBack, onNext, o
   // Use ref to track if success message has been set to avoid dependency issues
   const successMessageSetRef = useRef(false)
 
+  // Helper function to shuffle an array
+  const shuffleArray = <T,>(array: T[]): T[] => {
+    const shuffled = [...array]
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    }
+    return shuffled
+  }
+
   // Initialize the cards based on season
   useEffect(() => {
     let orderedCards: MemoryCard[] = []
 
     if (selectedSeason === "zima") {
-      // Winter theme with winter items
+      // Winter theme with winter hat items
       orderedCards = [
         // First row
         {
           id: 0,
-          image: "/images/slaigh_winter.svg",
-          name: "Sleigh",
+          image: "/images/memory-game-4/winter_hat_01_l.svg",
+          name: "Winter Hat 01",
           isFlipped: false,
           isMatched: false,
         },
         {
           id: 1,
-          image: "/images/fox_winter_bw.svg",
-          name: "Fox",
+          image: "/images/memory-game-4/winter_hat_02_l.svg",
+          name: "Winter Hat 02",
           isFlipped: false,
           isMatched: false,
         },
         {
           id: 2,
-          image: "/images/hat_winter.svg",
-          name: "Hat",
+          image: "/images/memory-game-4/winter_hat_03_l.svg",
+          name: "Winter Hat 03",
           isFlipped: false,
           isMatched: false,
         },
         {
           id: 3,
-          image: "/images/glove_winter.svg",
-          name: "Glove",
+          image: "/images/memory-game-4/winter_hat_04_l.svg",
+          name: "Winter Hat 04",
           isFlipped: false,
           isMatched: false,
         },
         {
           id: 4,
-          image: "/images/pinguin_winter_bw.svg",
-          name: "Penguin",
+          image: "/images/memory-game-4/winter_hat_05_l.svg",
+          name: "Winter Hat 05",
           isFlipped: false,
           isMatched: false,
         },
         // Second row
         {
           id: 5,
-          image: "/images/glove_winter_bw.svg",
-          name: "Glove",
+          image: "/images/memory-game-4/winter_hat_01_r.svg",
+          name: "Winter Hat 01",
           isFlipped: false,
           isMatched: false,
         },
         {
           id: 6,
-          image: "/images/hat_winter_bw.svg",
-          name: "Hat",
+          image: "/images/memory-game-4/winter_hat_02_r.svg",
+          name: "Winter Hat 02",
           isFlipped: false,
           isMatched: false,
         },
         {
           id: 7,
-          image: "/images/pinguin_winter.svg",
-          name: "Penguin",
+          image: "/images/memory-game-4/winter_hat_03_r.svg",
+          name: "Winter Hat 03",
           isFlipped: false,
           isMatched: false,
         },
         {
           id: 8,
-          image: "/images/slaigh_winter_bw.svg",
-          name: "Sleigh",
+          image: "/images/memory-game-4/winter_hat_04_r.svg",
+          name: "Winter Hat 04",
           isFlipped: false,
           isMatched: false,
         },
         {
           id: 9,
-          image: "/images/fox_winter.svg",
-          name: "Fox",
+          image: "/images/memory-game-4/winter_hat_05_r.svg",
+          name: "Winter Hat 05",
           isFlipped: false,
           isMatched: false,
         },
@@ -363,7 +373,9 @@ export default function MemoryGame4({ onMenuClick, onComplete, onBack, onNext, o
       ]
     }
 
-    setCards(orderedCards)
+    // Shuffle the cards before setting them
+    const shuffledCards = shuffleArray(orderedCards)
+    setCards(shuffledCards)
   }, [selectedSeason])
 
   // Handle card click

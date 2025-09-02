@@ -6,10 +6,12 @@ import { useAuth } from "@/contexts/auth-context"
 interface TeacherUserButtonProps {
   onLogout: () => void
   onCreateStudentAccount: () => void
+  onPrivacyPolicy: () => void
+  onTeacherPanel: () => void
   teacherName?: string
 }
 
-export default function TeacherUserButton({ onLogout, onCreateStudentAccount, teacherName }: TeacherUserButtonProps) {
+export default function TeacherUserButton({ onLogout, onCreateStudentAccount, onPrivacyPolicy, onTeacherPanel, teacherName }: TeacherUserButtonProps) {
   const { user, logout } = useAuth()
   const [showPopup, setShowPopup] = useState(false)
 
@@ -60,7 +62,17 @@ export default function TeacherUserButton({ onLogout, onCreateStudentAccount, te
       {/* Dropdown Menu */}
       {showPopup && (
         <div className="absolute top-14 right-0 z-50">
-          <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-2 min-w-36">
+          <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-2 min-w-48">
+            <button
+              onClick={() => {
+                onTeacherPanel()
+                setShowPopup(false)
+              }}
+              className="w-full text-left px-4 py-2 text-sm font-sour-gummy hover:bg-gray-100 rounded transition-colors"
+              style={{ color: '#3E459C' }}
+            >
+              Panel nauczyciela
+            </button>
             <button
               onClick={() => {
                 onCreateStudentAccount()
@@ -70,6 +82,16 @@ export default function TeacherUserButton({ onLogout, onCreateStudentAccount, te
               style={{ color: '#3E459C' }}
             >
               Stwórz konto ucznia
+            </button>
+            <button
+              onClick={() => {
+                onPrivacyPolicy()
+                setShowPopup(false)
+              }}
+              className="w-full text-left px-4 py-2 text-sm font-sour-gummy hover:bg-gray-100 rounded transition-colors"
+              style={{ color: '#3E459C' }}
+            >
+              Polityka prywatności
             </button>
             <button
               onClick={handleLogout}

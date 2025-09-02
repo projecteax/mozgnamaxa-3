@@ -176,13 +176,13 @@ export default function TeacherStudentRegisterForm({ onSuccess, onCancel, teache
                 onChange={handleInputChange}
                 required
                 className="w-full px-3 py-2 border-2 border-[#3e459c]/30 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e459c] focus:border-[#3e459c] font-dongle text-[1.6rem]"
-                placeholder="Wprowadź adres email ucznia"
+                placeholder="Np. imię@mozgnamaxa.pl"
               />
             </div>
 
             <div className="bg-[#e3f7ff] p-4 rounded-lg border-2 border-[#3e459c]/20">
-              <p className="text-sm text-[#3e459c] font-dongle">
-                <strong>Informacja:</strong> Hasło dla ucznia zostanie automatycznie ustawione na Twój kod nauczyciela z dodatkowymi dwoma zerami na końcu.
+              <p className="text-[1.2rem] text-[#3e459c] font-dongle">
+                <strong>Informacja:</strong> Hasło dla ucznia zostanie automatycznie ustawione na Twój kod nauczyciela. Udostępnij uczniowi kod wraz z mailem: imię@mozgnamaxa.pl, abyś mógł widzieć jego postępy w Twoim panelu.
               </p>
             </div>
 

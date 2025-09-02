@@ -9,6 +9,7 @@ import StudentProgressTable from "./student-progress-table"
 import UserAvatar from "./user-avatar"
 import TeacherUserButton from "./teacher-user-button"
 import TeacherStudentRegisterForm from "./teacher-student-register-form"
+import PrivacyPolicyPage from "./privacy-policy-page"
 import { collection, query, where, getDocs, deleteDoc, doc, updateDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import { getTeacherStudents, type StudentProgress } from "@/lib/progress-service"
@@ -21,7 +22,7 @@ interface TeacherPanelProps {
   setIsCreatingStudent: (value: boolean) => void
 }
 
-type AuthView = "login" | "register" | "forgot-password" | "dashboard" | "student-progress" | "create-student"
+type AuthView = "login" | "register" | "forgot-password" | "dashboard" | "student-progress" | "create-student" | "privacy-policy"
 
 export default function TeacherPanel({ onMenuClick, isCreatingStudent, setIsCreatingStudent }: TeacherPanelProps) {
   const [view, setView] = useState<AuthView>("login")
@@ -100,6 +101,14 @@ export default function TeacherPanel({ onMenuClick, isCreatingStudent, setIsCrea
     setView("create-student")
   }
 
+  const handlePrivacyPolicy = () => {
+    setView("privacy-policy")
+  }
+
+  const handleTeacherPanel = () => {
+    setView("dashboard")
+  }
+
   const handleStudentCreated = () => {
     setView("dashboard")
     // Refresh students list
@@ -172,6 +181,8 @@ export default function TeacherPanel({ onMenuClick, isCreatingStudent, setIsCrea
               <TeacherUserButton 
                 onLogout={handleLogout}
                 onCreateStudentAccount={handleCreateStudentAccount}
+                onPrivacyPolicy={handlePrivacyPolicy}
+                onTeacherPanel={handleTeacherPanel}
                 teacherName={teacherData.name}
               />
             )}
@@ -211,6 +222,10 @@ export default function TeacherPanel({ onMenuClick, isCreatingStudent, setIsCrea
                 isCreatingStudent={isCreatingStudent}
                 setIsCreatingStudent={setIsCreatingStudent}
               />
+            ) : view === "privacy-policy" ? (
+              <PrivacyPolicyPage
+                onBackClick={() => setView("dashboard")}
+              />
             ) : (
               <div className="w-full max-w-4xl">
                 <div className="flex justify-center items-center mb-8">
@@ -238,6 +253,16 @@ export default function TeacherPanel({ onMenuClick, isCreatingStudent, setIsCrea
                       <p className="text-xl text-gray-600 mb-2 font-dongle">Unikalny kod</p>
                       <p className="font-bold text-4xl text-[#3e459c] font-dongle">{teacherData?.unique_code}</p>
                     </div>
+                  </div>
+                  
+                  {/* Additional information text */}
+                  <div className="mt-6 p-4 bg-[#e3f7ff] rounded-xl border-2 border-[#3e459c]/20">
+                    <p className="text-lg text-gray-700 leading-relaxed font-dongle">
+                      Twój unikalny kod to <span className="font-bold text-[#3e459c]">{teacherData?.unique_code}</span>. 
+                      Po stworzeniu konta ucznia udostępnij mu kod wraz z mailem, np. imię@mozgnamaxa.pl, 
+                      aby mógł się zalogować i dołączyć do Twojego panelu. Dla każdego ucznia wybierz startową porę roku. 
+                      Kliknij na ucznia, aby zobaczyć jego postępy.
+                    </p>
                   </div>
                 </div>
 
@@ -355,6 +380,24 @@ export default function TeacherPanel({ onMenuClick, isCreatingStudent, setIsCrea
                 </div>
               </div>
             )}
+          </div>
+        </div>
+
+        {/* Creative Commons License Footer */}
+        <div className="w-full max-w-6xl mx-auto mt-8 mb-4">
+          <div className="text-center text-sm text-gray-600">
+            <p>
+              Niniejszy materiał opublikowany jest na licencji{" "}
+              <a 
+                href="https://creativecommons.org/licenses/by/4.0/deed.pl" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800 underline"
+              >
+                CC BY 4.0 (Creative Commons – Uznanie autorstwa – 4.0 Międzynarodowe)
+              </a>
+              .
+            </p>
           </div>
         </div>
       </div>

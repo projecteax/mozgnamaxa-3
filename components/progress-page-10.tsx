@@ -8,7 +8,7 @@ interface ProgressPage10Props {
 
 export default function ProgressPage10({ onContinue }: ProgressPage10Props) {
   const handleDalejClick = () => {
-    console.log("DALEJ button clicked from progress page 10")
+    console.log("DALEJ button clicked from progress page 10 - Redirecting based on user login status")
     onContinue()
   }
 
@@ -167,7 +167,7 @@ export default function ProgressPage10({ onContinue }: ProgressPage10Props) {
         ))}
       </div>
 
-      {/* DALEJ button */}
+      {/* DALEJ button - redirects based on user login status */}
       <div
         className="relative w-48 h-12 cursor-pointer hover:scale-105 transition-transform"
         onClick={handleDalejClick}

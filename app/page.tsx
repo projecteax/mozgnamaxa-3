@@ -518,22 +518,32 @@ export default function Home() {
     setShowProgressPage2(true)
   }, [])
 
-  // Updated to show third dragon page instead of going directly to game
+  // Redirect based on user login status after game 4
   const handleProgress2Continue = useCallback(() => {
     setShowProgressPage2(false)
-    setCurrentView("season-selection")
-  }, [])
+    // For logged-in users: go to season selection, for unlogged users: continue to next game
+    if (user) {
+      setCurrentView("season-selection")
+    } else {
+      setCurrentView("dragon-welcome-3")
+    }
+  }, [user])
 
   const handleMedalComplete = useCallback(() => {
     setShowMedalDisplay(false)
     setShowProgressPage(true)
   }, [])
 
-  // Updated to show second dragon page instead of going directly to game
+  // Redirect based on user login status after first three games
   const handleProgressContinue = useCallback(() => {
     setShowProgressPage(false)
-    setCurrentView("dragon-welcome-2")
-  }, [])
+    // For logged-in users: go to season selection, for unlogged users: continue to next game
+    if (user) {
+      setCurrentView("season-selection")
+    } else {
+      setCurrentView("dragon-welcome-2")
+    }
+  }, [user])
 
   // Handle memory-game completion - show medal 3 then progress page 3
   const handleMemoryGameComplete = () => {
@@ -547,8 +557,13 @@ export default function Home() {
 
   const handleProgress3Continue = useCallback(() => {
     setShowProgressPage3(false)
-    setCurrentView("season-selection")
-  }, [])
+    // For logged-in users: go to season selection, for unlogged users: continue to next game
+    if (user) {
+      setCurrentView("season-selection")
+    } else {
+      setCurrentView("dragon-welcome-4")
+    }
+  }, [user])
 
   // Handle easter-sequence completion - show medal 4 then progress page 4
   const handleEasterSequenceComplete = () => {
@@ -562,8 +577,13 @@ export default function Home() {
 
   const handleProgress4Continue = useCallback(() => {
     setShowProgressPage4(false)
-    setCurrentView("season-selection")
-  }, [])
+    // For logged-in users: go to season selection, for unlogged users: continue to next game
+    if (user) {
+      setCurrentView("season-selection")
+    } else {
+      setCurrentView("dragon-welcome-5")
+    }
+  }, [user])
 
   // Handle memory-game-5 completion - show medal 5 then progress page 5
   const handleMemoryGame5Complete = () => {
@@ -577,8 +597,13 @@ export default function Home() {
 
   const handleProgress5Continue = useCallback(() => {
     setShowProgressPage5(false)
-    setCurrentView("season-selection")
-  }, [])
+    // For logged-in users: go to season selection, for unlogged users: continue to next game
+    if (user) {
+      setCurrentView("season-selection")
+    } else {
+      setCurrentView("dragon-welcome-6")
+    }
+  }, [user])
 
   // Handle spot-difference-5 completion - show medal 6 then progress page 6
   const handleSpotDifference5Complete = () => {
@@ -592,8 +617,13 @@ export default function Home() {
 
   const handleProgress6Continue = useCallback(() => {
     setShowProgressPage6(false)
-    setCurrentView("season-selection")
-  }, [])
+    // For logged-in users: go to season selection, for unlogged users: continue to next game
+    if (user) {
+      setCurrentView("season-selection")
+    } else {
+      setCurrentView("dragon-welcome-7")
+    }
+  }, [user])
 
   // Handle sequence-game-2 completion - show medal 7 then progress page 7
   const handleSequenceGame2Complete = () => {
@@ -607,8 +637,13 @@ export default function Home() {
 
   const handleProgress7Continue = useCallback(() => {
     setShowProgressPage7(false)
-    setCurrentView("season-selection")
-  }, [])
+    // For logged-in users: go to season selection, for unlogged users: continue to next game
+    if (user) {
+      setCurrentView("season-selection")
+    } else {
+      setCurrentView("dragon-welcome-8")
+    }
+  }, [user])
 
   // Handle memory-4 completion - show medal 8 then progress page 8
   const handleMemoryGame4Complete = () => {
@@ -622,8 +657,13 @@ export default function Home() {
 
   const handleProgress8Continue = useCallback(() => {
     setShowProgressPage8(false)
-    setCurrentView("season-selection")
-  }, [])
+    // For logged-in users: go to season selection, for unlogged users: continue to next game
+    if (user) {
+      setCurrentView("season-selection")
+    } else {
+      setCurrentView("dragon-welcome-9")
+    }
+  }, [user])
 
   // Handle find-missing-half completion - show medal 9 then progress page 9
   const handleFindMissingHalfComplete = () => {
@@ -637,8 +677,13 @@ export default function Home() {
 
   const handleProgress9Continue = useCallback(() => {
     setShowProgressPage9(false)
-    setCurrentView("season-selection")
-  }, [])
+    // For logged-in users: go to season selection, for unlogged users: continue to next game
+    if (user) {
+      setCurrentView("season-selection")
+    } else {
+      setCurrentView("dragon-welcome-10")
+    }
+  }, [user])
 
   // Handle find-6-differences completion - show medal 10 then progress page 10
   const handleFind6DifferencesComplete = () => {
@@ -652,8 +697,13 @@ export default function Home() {
 
   const handleProgress10Continue = useCallback(() => {
     setShowProgressPage10(false)
-    setCurrentView("season-selection")
-  }, [])
+    // For logged-in users: go to season selection, for unlogged users: continue to next game
+    if (user) {
+      setCurrentView("season-selection")
+    } else {
+      setCurrentView("dragon-welcome-11")
+    }
+  }, [user])
 
   // Handle sudoku completion - show medal 11 then progress page 11
   const handleSudokuComplete = () => {
@@ -667,8 +717,13 @@ export default function Home() {
 
   const handleProgress11Continue = useCallback(() => {
     setShowProgressPage11(false)
-    setCurrentView("season-selection")
-  }, [])
+    // For logged-in users: go to season selection, for unlogged users: continue to next game
+    if (user) {
+      setCurrentView("season-selection")
+    } else {
+      setCurrentView("dragon-welcome-12")
+    }
+  }, [user])
 
   // Handle sequential-order-3 completion - show medal 12 then progress page 12
   const handleSequentialOrder3Complete = () => {
@@ -682,8 +737,13 @@ export default function Home() {
 
   const handleProgress12Continue = useCallback(() => {
     setShowProgressPage12(false)
-    setCurrentView("dragon-welcome-13")
-  }, [])
+    // For logged-in users: go to season selection, for unlogged users: continue to next game
+    if (user) {
+      setCurrentView("season-selection")
+    } else {
+      setCurrentView("dragon-welcome-13")
+    }
+  }, [user])
 
   // Handle thirteenth dragon welcome screen START button - goes to season selection menu
   const handleDragon13Start = () => {

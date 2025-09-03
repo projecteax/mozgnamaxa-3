@@ -38,7 +38,7 @@ export default function ProgressPage2({ onContinue }: ProgressPage2Props) {
   const { medalSuffix, buttonColor } = getSeasonalStyles()
 
   const handleDalejClick = () => {
-    console.log("DALEJ button clicked from progress page 2")
+    console.log("DALEJ button clicked from progress page 2 - Redirecting based on user login status")
     onContinue()
   }
 
@@ -81,7 +81,7 @@ export default function ProgressPage2({ onContinue }: ProgressPage2Props) {
         ))}
       </div>
 
-      {/* DALEJ button */}
+      {/* DALEJ button - redirects based on user login status */}
       <div
         className="relative w-48 h-12 cursor-pointer hover:scale-105 transition-transform"
         onClick={handleDalejClick}

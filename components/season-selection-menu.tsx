@@ -1,6 +1,7 @@
 "use client"
 import Image from "next/image"
 import { useStudentProgress } from "@/hooks/use-student-progress"
+import { useAuth } from "@/contexts/auth-context"
 import { SEASON_INFO, Season } from "@/lib/season-utils"
 
 interface SeasonSelectionMenuProps {
@@ -10,10 +11,13 @@ interface SeasonSelectionMenuProps {
 
 export default function SeasonSelectionMenu({ onSeasonSelect, onMenuClick }: SeasonSelectionMenuProps) {
   const { progress, loading } = useStudentProgress()
+  const { user } = useAuth()
   
   // Get season order and unlocked seasons from progress
   const seasonOrder = progress?.seasonOrder || ['wiosna', 'lato', 'jesien', 'zima']
-  const unlockedSeasons = progress?.unlockedSeasons || ['wiosna']
+  
+  // For unlogged users, unlock all seasons. For logged users, use their progress
+  const unlockedSeasons = user ? (progress?.unlockedSeasons || ['wiosna']) : ['wiosna', 'lato', 'jesien', 'zima']
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center">
       {/* Season selection grid - centered on screen */}
@@ -58,7 +62,8 @@ export default function SeasonSelectionMenu({ onSeasonSelect, onMenuClick }: Sea
                   }}
                 >
                   {seasonInfo?.name}
-                  {isFirstSeason && (
+                  {/* Only show (START) for logged-in users */}
+                  {user && isFirstSeason && (
                     <span className="text-lg ml-2 font-normal">(START)</span>
                   )}
                 </span>

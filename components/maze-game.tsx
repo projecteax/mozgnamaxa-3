@@ -105,7 +105,16 @@ export default function MazeGame({ onMenuClick, onBack, onNext, onRetry, userLog
   }
 
   const getTitleBoxImage = () => {
-    return theme.titleBox || "/images/title_box_small.png"
+    switch (selectedSeason) {
+      case "lato":
+        return "/images/title_box_small_summer.svg"
+      case "jesien":
+        return "/images/title_box_small_autumn.svg"
+      case "zima":
+        return "/images/title_box_small_winter.svg"
+      default:
+        return "/images/title_box_small.png"
+    }
   }
 
   const getSoundIcon = () => {
@@ -247,7 +256,7 @@ export default function MazeGame({ onMenuClick, onBack, onNext, onRetry, userLog
         </div>
 
         <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
-          <Image src={theme.titleBox || "/images/title_box_small.png"} alt="Title box" fill className="object-contain" />
+          <Image src={getTitleBoxImage()} alt="Title box" fill className="object-contain" />
           <span className="relative z-10 text-white text-2xl md:text-3xl font-sour-gummy font-thin">
             {getTitleText()}
           </span>

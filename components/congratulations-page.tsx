@@ -86,7 +86,7 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
       className="w-full min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 lg:p-12 overflow-hidden"
       style={{ backgroundColor: theme.backgroundColor }}
     >
-              <div className="flex flex-col lg:flex-row items-center justify-center w-full max-w-7xl gap-4 sm:gap-6 md:gap-8 lg:gap-16">
+      <div className="flex flex-col lg:flex-row items-center justify-center w-full max-w-7xl gap-4 sm:gap-6 md:gap-4 sm:gap-6 md:gap-8 lg:gap-4 sm:gap-6 md:gap-4 sm:gap-6 md:gap-8 lg:gap-16">
         {/* Speech bubble with joke text - responsive sizing */}
         <div className="relative w-full max-w-[280px] sm:max-w-[400px] md:max-w-[600px] lg:max-w-[800px] xl:max-w-[969px] aspect-[969/444] flex-shrink-0 drop-shadow-lg">
           <Image src="/images/cloud_text.svg" alt="Speech bubble" fill className="object-contain" />
@@ -100,7 +100,7 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
         </div>
 
         {/* Dragon and buttons column - responsive sizing */}
-        <div className="flex flex-col items-center gap-4 sm:gap-6 md:gap-8 flex-shrink-0">
+        <div className="flex flex-col items-center gap-4 sm:gap-6 md:gap-4 sm:gap-6 md:gap-8 flex-shrink-0">
           {/* Dragon character with responsive sizing */}
           <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 xl:w-[420px] xl:h-[420px] drop-shadow-lg">
             <Image
@@ -112,7 +112,7 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
           </div>
 
           {/* Buttons positioned under the dragon - responsive sizing */}
-          <div className="flex items-center gap-4 sm:gap-6 md:gap-8">
+          <div className="flex items-center gap-4 sm:gap-6 md:gap-4 sm:gap-6 md:gap-8">
             {/* Enhanced Sound button with better Polish pronunciation */}
             <SoundButtonEnhanced 
               text={seasonContent.speechText}
@@ -120,7 +120,7 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
               size="md"
             />
 
-            {/* START button with responsive sizing */}
+            {/* START button with responsive sizing and matching text styling */}
             <div
               className="relative w-32 h-8 sm:w-36 sm:h-9 md:w-40 md:h-10 lg:w-44 lg:h-11 xl:w-48 xl:h-12 cursor-pointer hover:scale-105 transition-transform drop-shadow-lg"
               onClick={onStartClick}
@@ -134,7 +134,7 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
               {/* Only show START text for non-summer seasons */}
               {selectedSeason !== "lato" && (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className={`font-bold text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl ${seasonContent.textColor}`}>START</span>
+                  <span className={`font-bold text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl dragon-speech-text ${seasonContent.textColor}`}>START</span>
                 </div>
               )}
             </div>

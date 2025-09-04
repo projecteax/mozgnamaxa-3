@@ -44,6 +44,20 @@ export default function CategorySortingGame3({ onMenuClick, onBack, onNext, onRe
   const { selectedSeason, getThemeColors } = useSeason()
   const theme = getThemeColors()
 
+  // Get the appropriate title box based on season
+  const getTitleBox = () => {
+    switch (selectedSeason) {
+      case "lato":
+        return "/images/title_box_small_summer.svg"
+      case "jesien":
+        return "/images/title_box_small_autumn.svg"
+      case "zima":
+        return "/images/title_box_small_winter.svg"
+      default:
+        return "/images/title_box_small.png"
+    }
+  }
+
   // Use the game completion hook
   const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("category-sorting-game-3")
 

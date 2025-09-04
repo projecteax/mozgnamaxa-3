@@ -32,6 +32,20 @@ export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userL
   const { selectedSeason, getThemeColors } = useSeason()
   const themeColors = getThemeColors()
 
+  // Get the appropriate title box based on season
+  const getTitleBox = () => {
+    switch (selectedSeason) {
+      case "lato":
+        return "/images/title_box_small_summer.svg"
+      case "jesien":
+        return "/images/title_box_small_autumn.svg"
+      case "zima":
+        return "/images/title_box_small_winter.svg"
+      default:
+        return "/images/title_box_small.png"
+    }
+  }
+
   // Get puzzle images based on season
   const getPuzzleImages = () => {
     switch (selectedSeason) {
@@ -279,7 +293,7 @@ export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userL
         </div>
 
         <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
-          <Image src={themeColors.titleBox || "/placeholder.svg"} alt="Title box" fill className="object-contain" />
+          <Image src={getTitleBox()} alt="Title box" fill className="object-contain" />
           <span className="relative z-10 text-white text-2xl md:text-3xl font-sour-gummy font-thin">UŁÓŻ OBRAZEK.</span>
         </div>
 

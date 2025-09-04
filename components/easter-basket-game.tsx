@@ -199,7 +199,16 @@ export default function EasterBasketGame({ onMenuClick, onBack, onNext, onRetry,
 
   // Get the appropriate title box based on season
   const getTitleBox = () => {
-    return theme.titleBox || "/images/green_large_box.svg"
+    switch (selectedSeason) {
+      case "lato":
+        return "/images/title_box_small_summer.svg"
+      case "jesien":
+        return "/images/title_box_small_autumn.svg"
+      case "zima":
+        return "/images/title_box_small_winter.svg"
+      default:
+        return "/images/title_box_small.png"
+    }
   }
 
   return (
@@ -216,7 +225,7 @@ export default function EasterBasketGame({ onMenuClick, onBack, onNext, onRetry,
         </div>
 
         <div className="relative h-[115px] w-[384px] md:w-[600px] flex items-center justify-center">
-          <Image src={theme.titleBox || "/images/title_box_small.png"} alt="Title box" fill className="object-contain" />
+          <Image src={getTitleBox()} alt="Title box" fill className="object-contain" />
           <span className="relative z-10 text-white text-center text-xl md:text-2xl font-sour-gummy font-thin px-4">
             {getTitleText()}
           </span>

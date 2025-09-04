@@ -25,6 +25,20 @@ export default function EasterSequenceGame({ onMenuClick, onComplete, onBack, on
   const { selectedSeason, getThemeColors } = useSeason()
   const theme = getThemeColors()
 
+  // Get the appropriate title box based on season
+  const getTitleBox = () => {
+    switch (selectedSeason) {
+      case "lato":
+        return "/images/title_box_small_summer.svg"
+      case "jesien":
+        return "/images/title_box_small_autumn.svg"
+      case "zima":
+        return "/images/title_box_small_winter.svg"
+      default:
+        return "/images/title_box_small.png"
+    }
+  }
+
   // Define the sequence items - alternating red and blue eggs/flowers
   const sequenceItems = [
     {
@@ -186,11 +200,7 @@ export default function EasterSequenceGame({ onMenuClick, onComplete, onBack, on
 
         <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
           <Image
-            src={
-              selectedSeason === "zima"
-                ? "/images/title_box_small_winter.svg"
-                : theme.titleBox || "/images/title_box_small.svg"
-            }
+            src={getTitleBox()}
             alt="Title box"
             fill
             className="object-contain"

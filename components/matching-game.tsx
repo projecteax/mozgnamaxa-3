@@ -217,7 +217,21 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
     setDraggedItem(null)
   }
 
-  const titleBoxImage = theme.titleBox
+  // Get the appropriate title box based on season
+  const getTitleBox = () => {
+    switch (selectedSeason) {
+      case "lato":
+        return "/images/title_box_small_summer.svg"
+      case "jesien":
+        return "/images/title_box_small_autumn.svg"
+      case "zima":
+        return "/images/title_box_small_winter.svg"
+      default:
+        return "/images/title_box_small.png"
+    }
+  }
+
+  const titleBoxImage = getTitleBox()
 
   if (!scrambledTargetItems) {
     return <div>Ładowanie...</div>

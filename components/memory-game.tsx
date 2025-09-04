@@ -249,8 +249,19 @@ export default function MemoryGame({ onMenuClick, onBack, onNext, onRetry, userL
     return "/images/box_covered.png"
   }
 
-  // Get the appropriate title box image based on season
-  // getTitleBoxImage function removed - now using theme.titleBox
+  // Get the appropriate title box based on season
+  const getTitleBox = () => {
+    switch (selectedSeason) {
+      case "lato":
+        return "/images/title_box_small_summer.svg"
+      case "jesien":
+        return "/images/title_box_small_autumn.svg"
+      case "zima":
+        return "/images/title_box_small_winter.svg"
+      default:
+        return "/images/title_box_small.png"
+    }
+  }
 
   
   
@@ -270,7 +281,7 @@ export default function MemoryGame({ onMenuClick, onBack, onNext, onRetry, userL
           </div>
 
           <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
-            <Image src={theme.titleBox || "/images/title_box_small.png"} alt="Title box" fill className="object-contain" />
+            <Image src={getTitleBox()} alt="Title box" fill className="object-contain" />
             <span className="relative z-10 text-white text-2xl md:text-3xl font-bold font-sour-gummy">
               ZNAJDŹ PARY.
             </span>

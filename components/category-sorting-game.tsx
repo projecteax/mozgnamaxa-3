@@ -91,7 +91,7 @@ export default function CategorySortingGame({ onMenuClick, onBack, onNext, onRet
     {
       id: "butterfly",
       name: "Butterfly",
-      image: "/images/butterfly.png",
+      image: "/images/butterfly_orange_new.svg",
       summerImage: "/images/rose_summer.svg",
       autumnImage: "/images/carrot_autumn_fruit.svg",
       winterImage: "/images/tree_02_winter_xmas.svg",
@@ -135,8 +135,19 @@ export default function CategorySortingGame({ onMenuClick, onBack, onNext, onRet
     return isLeftBox ? "/images/ant.svg" : "/images/flower_red.svg"
   }
 
-  // Helper function to get title box image
-  // getTitleBox function removed - now using theme.titleBox
+  // Get the appropriate title box based on season
+  const getTitleBox = () => {
+    switch (selectedSeason) {
+      case "lato":
+        return "/images/title_box_small_summer.svg"
+      case "jesien":
+        return "/images/title_box_small_autumn.svg"
+      case "zima":
+        return "/images/title_box_small_winter.svg"
+      default:
+        return "/images/title_box_small.png"
+    }
+  }
 
   // Handle drag start
   const handleDragStart = (id: string) => {
@@ -249,7 +260,7 @@ export default function CategorySortingGame({ onMenuClick, onBack, onNext, onRet
           </div>
 
           <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
-            <Image src={theme.titleBox || "/images/title_box_small.png"} alt="Title box" fill className="object-contain" />
+            <Image src={getTitleBox()} alt="Title box" fill className="object-contain" />
             <span className="relative z-10 text-white text-2xl md:text-3xl font-bold font-sour-gummy">
               PODZIEL OBRAZKI.
             </span>

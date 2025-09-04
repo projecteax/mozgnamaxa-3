@@ -54,13 +54,7 @@ export default function FindFlippedRabbitGame({ onMenuClick, onBack, onNext, onR
       : isSummer
         ? "/images/menu_summer.svg"
         : "/images/menu_new.svg"
-  const titleBox = isWinter
-    ? "/images/title_box_small_winter.svg"
-    : isAutumn
-      ? "/images/title_box_small_autumn.svg"
-      : isSummer
-        ? "/images/title_box_small_summer.svg"
-      : "/images/title_box_small.png"
+  // titleBox now comes from theme.titleBox
   const gameIcon = isWinter
     ? "/images/snowman_winter.svg"
     : isAutumn
@@ -169,7 +163,7 @@ export default function FindFlippedRabbitGame({ onMenuClick, onBack, onNext, onR
         </div>
 
         <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
-          <Image src={titleBox || "/placeholder.svg"} alt="Title box" fill className="object-contain" />
+          <Image src={theme.titleBox || "/images/title_box_small.png"} alt="Title box" fill className="object-contain" />
           <span
             className="relative z-10 text-white font-sour-gummy font-thin text-2xl md:text-3xl"
           >

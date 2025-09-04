@@ -173,15 +173,7 @@ export default function MazeGame3({ onMenuClick, onBack, onNext, onRetry, userLo
 
         <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
           <Image
-            src={
-              isWinter
-                ? "/images/title_box_small_winter.svg"
-                : isAutumn
-                  ? "/images/title_box_small_autumn.svg"
-                  : isSummer
-                    ? "/images/title_box_small_summer.svg"
-                    : "/images/title_box_small.png"
-            }
+            src={theme.titleBox || "/images/title_box_small.png"}
             alt="Title box"
             fill
             className="object-contain"

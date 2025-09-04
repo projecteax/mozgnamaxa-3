@@ -216,7 +216,7 @@ export default function EasterBasketGame({ onMenuClick, onBack, onNext, onRetry,
         </div>
 
         <div className="relative h-[115px] w-[384px] md:w-[600px] flex items-center justify-center">
-          <Image src={getTitleBox() || "/placeholder.svg"} alt="Title box" fill className="object-contain" />
+          <Image src={theme.titleBox || "/images/title_box_small.png"} alt="Title box" fill className="object-contain" />
           <span className="relative z-10 text-white text-center text-xl md:text-2xl font-sour-gummy font-thin px-4">
             {getTitleText()}
           </span>

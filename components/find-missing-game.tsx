@@ -153,7 +153,7 @@ export default function FindMissingGame({ onMenuClick, onBack, onNext, onRetry, 
         </div>
 
         <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
-          <Image src={getTitleBox() || "/placeholder.svg"} alt="Title box" fill className="object-contain" />
+          <Image src={theme.titleBox || "/images/title_box_small.png"} alt="Title box" fill className="object-contain" />
           <span className="relative z-10 text-white text-lg md:text-xl font-sour-gummy font-thin text-center">
             ZAZNACZ TO, CZEGO BRAKUJE NA OBRAZKU.
           </span>

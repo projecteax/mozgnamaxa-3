@@ -174,7 +174,7 @@ export default function OddOneOutGame({ onMenuClick, onBack, onNext, onRetry, us
         </div>
 
         <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
-          <Image src={getTitleBox() || "/placeholder.svg"} alt="Title box" fill className="object-contain" />
+          <Image src={theme.titleBox || "/images/title_box_small.png"} alt="Title box" fill className="object-contain" />
           <span className="relative z-10 text-white text-2xl md:text-3xl font-sour-gummy font-thin">
             WYBIERZ, CO NIE PASUJE.
           </span>

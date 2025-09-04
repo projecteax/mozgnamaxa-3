@@ -126,13 +126,7 @@ export default function BranchSequenceGame({ onMenuClick, onBack, onNext, onRetr
   // Get UI assets based on season
   const soundIcon = isWinter ? "/images/sound_winter.svg" : isAutumn ? "/images/sound_autumn.svg" : theme.soundIcon
   const menuIcon = isWinter ? "/images/menu_winter.svg" : isAutumn ? "/images/menu_autumn.svg" : theme.menuIcon
-  const titleBox = isWinter
-    ? "/images/title_box_small_winter.svg"
-    : isAutumn
-      ? "/images/title_box_small_autumn.svg"
-      : isSummer
-        ? "/images/title_box_small_summer.svg"
-        : "/images/title_box_small.png"
+  // titleBox now comes from theme.titleBox
   const titleText = isWinter ? "DOKOŃCZ UKŁADANIE." : isAutumn ? "DOKOŃCZ UKŁADANIE." : "DOKOŃCZ UKŁADANIE."
 
   return (
@@ -149,7 +143,7 @@ export default function BranchSequenceGame({ onMenuClick, onBack, onNext, onRetr
         </div>
 
         <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
-          <Image src={titleBox || "/placeholder.svg"} alt="Title box" fill className="object-contain" />
+          <Image src={theme.titleBox || "/images/title_box_small.png"} alt="Title box" fill className="object-contain" />
           <span className="relative z-10 text-white text-2xl md:text-3xl font-sour-gummy font-thin">{titleText}</span>
         </div>
 

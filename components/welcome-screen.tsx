@@ -56,7 +56,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
       {/* Dragon Welcome - Bottom Right with improved responsive sizing */}
       <div className="absolute bottom-0 right-0 z-40 dragon-small">
         <Image
-          src="/images/welcome/dragon_welcome.svg"
+          src="/images/welcome/dragon_welcome 1.svg"
           alt="Dragon Welcome"
           width={1400}
           height={1750}
@@ -74,7 +74,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
       {/* Dragon Welcome - Larger for screens above 1600px */}
       <div className="absolute bottom-0 right-0 z-40 dragon-large">
         <Image
-          src="/images/welcome/dragon_welcome.svg"
+          src="/images/welcome/dragon_welcome 1.svg"
           alt="Dragon Welcome"
           width={1800}
           height={2250}

@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import SoundButtonEnhanced from "./sound-button-enhanced"
 
 interface MainMenuProps {
   onStudentLogin: () => void
@@ -14,79 +15,131 @@ export default function MainMenu({
   onPlayWithoutLogin,
 }: MainMenuProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#e3f7ff] to-[#b8e6ff] flex flex-col items-center justify-center p-[clamp(16px,2vw,32px)] relative">
-      <div className="flex flex-col items-center space-y-[clamp(20px,2.5vw,40px)] w-full max-w-[clamp(240px,30vw,350px)] ml-[clamp(5%,20vw,35%)] z-50">
-        {/* Student Login Button */}
-        <button
-          onClick={onStudentLogin}
-          className="relative w-full h-[clamp(108px,12.6vw,180px)] flex items-center justify-center group hover:scale-105 transition-transform duration-200"
-        >
-          <Image 
-            src="/images/main_menu_box.svg" 
-            alt="Menu Button" 
-            width={323} 
-            height={51} 
-            className="w-full h-full" 
-            style={{ transform: 'scale(2.0)' }} 
-          />
-          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-[clamp(1.8rem,1.8vw,3.6rem)] font-dongle tracking-wide whitespace-nowrap px-2">
-            LOGOWANIE DLA UCZNIA
-          </span>
-        </button>
-
-        {/* Teacher Login Button */}
-        <button
-          onClick={onTeacherLogin}
-          className="relative w-full h-[clamp(108px,12.6vw,180px)] flex items-center justify-center group hover:scale-105 transition-transform duration-200"
-        >
-          <Image 
-            src="/images/main_menu_box.svg" 
-            alt="Menu Button" 
-            width={323} 
-            height={51} 
-            className="w-full h-full" 
-            style={{ transform: 'scale(2.0)' }} 
-          />
-          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-[clamp(1.8rem,1.8vw,3.6rem)] font-dongle tracking-wide whitespace-nowrap px-2">
-            LOGOWANIE DLA NAUCZYCIELA
-          </span>
-        </button>
-
-        {/* Play Without Login Button */}
-        <button
-          onClick={onPlayWithoutLogin}
-          className="relative w-full h-[clamp(108px,12.6vw,180px)] flex items-center justify-center group hover:scale-105 transition-transform duration-200"
-        >
-          <Image 
-            src="/images/main_menu_box.svg" 
-            alt="Menu Button" 
-            width={323} 
-            height={51} 
-            className="w-full h-full" 
-            style={{ transform: 'scale(2.0)' }} 
-          />
-          <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold text-[clamp(1.8rem,1.8vw,3.6rem)] font-dongle tracking-wide whitespace-nowrap px-2">
-            ZAGRAJ BEZ LOGOWANIA
-          </span>
-        </button>
+    <div className="w-full h-screen bg-[#E8F4FD] relative">
+      {/* Sound Icon - Top Right Corner with 50px margins */}
+      <div className="absolute top-[60px] right-[60px]">
+        <SoundButtonEnhanced
+          text="Cześć! Jestem MAX! Będę Ci towarzyszyć podczas rozwiązywania zadań."
+          soundIcon="/images/sound_main_menu.svg"
+          size="lg"
+          className="w-20 h-20"
+        />
       </div>
 
-      {/* Dragon in bottom left corner */}
-      <div className="absolute bottom-0 left-0 z-10">
+      {/* Dragon - Always stuck to left bottom corner, 75% of screen height */}
+      <Image
+        src="/images/dragon_menu.svg"
+        alt="Dragon Menu"
+        width={800}
+        height={800}
+        className="absolute bottom-0 left-0"
+        style={{ 
+          height: '75vh',
+          width: 'auto',
+          objectFit: 'contain',
+          objectPosition: 'bottom left'
+        }}
+      />
+
+      {/* Cloud - Positioned relative to dragon */}
+      <div 
+        className="absolute"
+        style={{
+          top: 'calc(25vh - 18.75vh - 20px)',
+          left: 'calc(75vh - 120px)',
+          width: 'clamp(75vh, 75vh, 75vh)',
+          height: 'clamp(37.5vh, 37.5vh, 37.5vh)'
+        }}
+      >
         <Image
-          src="/images/dragon_menu.svg"
-          alt="Dragon Menu"
-          width={1440}
-          height={1920}
-          className="object-contain"
-          style={{ 
-            width: 'clamp(60vw, 75vw, 90vw)', 
-            height: 'clamp(60vh, 75vh, 90vh)',
-            maxWidth: 'none',
-            maxHeight: 'none',
-            objectPosition: 'bottom left'
-          }}
+          src="/images/cloud_main_menu.svg"
+          alt="Cloud"
+          width={1250}
+          height={625}
+          className="w-full h-full object-contain"
         />
+        <div className="absolute inset-3 flex items-center justify-center px-1 py-1" style={{ transform: 'translateY(-10px)' }}>
+          <span className="text-[#3e459c] font-sour-gummy font-bold text-left leading-tight" style={{ fontSize: 'clamp(1.5rem, 1.6vw, 3.9rem)', marginLeft: 'clamp(20px, 5vw, 40px)' }}>
+            Cześć! Jestem MAX! Będę Ci towarzyszyć podczas rozwiązywania zadań. <br/><br/>
+            
+          </span>
+        </div>
+      </div>
+
+      {/* Menu Buttons - Below the cloud */}
+      <div className="absolute" style={{ top: 'calc(37.5vh + 50px)', left: 'calc(75vh * 1 + 80px)' }}>
+        <div>
+          {/* Student Login Button */}
+          <button
+            onClick={onStudentLogin}
+            className="relative w-[clamp(200px, 25vw, 800px)] h-[clamp(40px, 5vh, 120px)] flex items-center justify-center group hover:scale-105 transition-transform duration-200"
+            style={{ marginBottom: 'clamp(30px, 8vh, 90px)' }}
+          >
+            <Image 
+              src="/images/main_menu_box.svg" 
+              alt="Menu Button" 
+              width={1600} 
+              height={240} 
+              className="w-full h-full object-contain" 
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'cover',
+                transform: 'scale(1.5)'
+              }}
+            />
+            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold tracking-wide whitespace-nowrap px-2 font-sour-gummy" style={{ fontSize: 'clamp(0.6rem, 1.5vw, 2rem)' }}>
+              LOGOWANIE DLA UCZNIA
+            </span>
+          </button>
+
+          {/* Play Without Login Button */}
+          <button
+            onClick={onPlayWithoutLogin}
+            className="relative w-[clamp(200px, 25vw, 800px)] h-[clamp(40px, 5vh, 120px)] flex items-center justify-center group hover:scale-105 transition-transform duration-200"
+            style={{ marginBottom: 'clamp(30px, 8vh, 90px)' }}
+          >
+            <Image 
+              src="/images/main_menu_box.svg" 
+              alt="Menu Button" 
+              width={1600} 
+              height={240} 
+              className="w-full h-full object-contain" 
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'cover',
+                transform: 'scale(1.5)'
+              }}
+            />
+            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold tracking-wide whitespace-nowrap px-2 font-sour-gummy" style={{ fontSize: 'clamp(0.6rem, 1.5vw, 2rem)' }}>
+              ZAGRAJ BEZ LOGOWANIA
+            </span>
+          </button>
+
+          {/* Teacher Login Button */}
+          <button
+            onClick={onTeacherLogin}
+            className="relative w-[clamp(200px, 25vw, 800px)] h-[clamp(40px, 5vh, 120px)] flex items-center justify-center group hover:scale-105 transition-transform duration-200"
+          >
+            <Image 
+              src="/images/main_menu_box.svg" 
+              alt="Menu Button" 
+              width={1600} 
+              height={240} 
+              className="w-full h-full object-contain" 
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'cover',
+                transform: 'scale(1.5)'
+              }}
+            />
+            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold tracking-wide whitespace-nowrap px-2 font-sour-gummy" style={{ fontSize: 'clamp(0.6rem, 1.5vw, 2rem)' }}>
+              LOGOWANIE DLA NAUCZYCIELA
+            </span>
+          </button>
+        </div>
       </div>
     </div>
   )

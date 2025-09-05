@@ -54,7 +54,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
       </div>
 
       {/* Dragon Welcome - Bottom Right with improved responsive sizing */}
-      <div className="absolute bottom-0 right-0 z-40">
+      <div className="absolute bottom-0 right-0 z-40 dragon-small">
         <Image
           src="/images/welcome/dragon_welcome.svg"
           alt="Dragon Welcome"
@@ -70,6 +70,41 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
           }}
         />
       </div>
+      
+      {/* Dragon Welcome - Larger for screens above 1600px */}
+      <div className="absolute bottom-0 right-0 z-40 dragon-large">
+        <Image
+          src="/images/welcome/dragon_welcome.svg"
+          alt="Dragon Welcome"
+          width={1800}
+          height={2250}
+          className="object-contain"
+          style={{ 
+            width: 'clamp(80vw, 90vw, 100vw)', 
+            height: 'clamp(80vh, 90vh, 100vh)',
+            maxWidth: '1800px',
+            maxHeight: '2250px',
+            objectPosition: 'bottom right'
+          }}
+        />
+      </div>
+      
+      <style jsx>{`
+        .dragon-small {
+          display: block;
+        }
+        .dragon-large {
+          display: none;
+        }
+        @media (min-width: 1600px) {
+          .dragon-small {
+            display: none;
+          }
+          .dragon-large {
+            display: block;
+          }
+        }
+      `}</style>
 
       {/* START Button - Improved responsive positioning */}
       <div className="absolute bottom-[clamp(50px,7vh,100px)] xs:bottom-[clamp(60px,8vh,120px)] sm:bottom-[clamp(80px,10vh,175px)] md:bottom-[clamp(100px,12vh,175px)] left-0 right-0 z-50 px-2 xs:px-4">

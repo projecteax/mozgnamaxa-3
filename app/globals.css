@@ -6,6 +6,30 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "SourGummy";
+  src: url("/fonts/SourGummy-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SourGummy";
+  src: url("/fonts/SourGummy-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SourGummy";
+  src: url("/fonts/SourGummy-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -79,7 +103,21 @@
 @layer utilities {
   .font-sour-gummy {
     font-family: "SourGummy", "Comic Sans MS", cursive !important;
-    font-weight: 300 !important;
+  }
+  
+  .font-sour-gummy-bold {
+    font-family: "SourGummy", "Comic Sans MS", cursive !important;
+    font-weight: bold !important;
+  }
+  
+  .font-sour-gummy-extrabold {
+    font-family: "SourGummy", "Comic Sans MS", cursive !important;
+    font-weight: 800 !important;
+  }
+  
+  .font-sour-gummy-black {
+    font-family: "SourGummy", "Comic Sans MS", cursive !important;
+    font-weight: 900 !important;
   }
 }
 

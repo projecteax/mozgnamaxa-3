@@ -1,3 +1,4 @@
+
 "use client"
 
 import Image from "next/image"
@@ -59,7 +60,13 @@ export default function MainMenu({
           className="w-full h-full object-contain"
         />
         <div className="absolute inset-3 flex items-center justify-center px-1 py-1" style={{ transform: 'translateY(-10px)' }}>
-          <span className="text-[#3e459c] font-sour-gummy font-bold text-left leading-tight" style={{ fontSize: 'clamp(1.5rem, 1.6vw, 3.9rem)', marginLeft: 'clamp(20px, 5vw, 40px)' }}>
+          <span className="text-[#3e459c] font-sour-gummy text-left leading-tight" style={{ 
+            fontSize: 'clamp(1.2rem, 1.8vw, 3.2rem)', 
+            marginLeft: 'clamp(10px, 3vw, 30px)',
+            maxWidth: '85%',
+            wordWrap: 'break-word',
+            fontWeight: 'normal'
+          }}>
             Cześć! Jestem MAX! Będę Ci towarzyszyć podczas rozwiązywania zadań. <br/><br/>
             
           </span>
@@ -88,7 +95,7 @@ export default function MainMenu({
                 transform: 'scale(1.5)'
               }}
             />
-            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold tracking-wide whitespace-nowrap px-2 font-sour-gummy" style={{ fontSize: 'clamp(0.6rem, 1.5vw, 2rem)' }}>
+            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide whitespace-nowrap px-2" style={{ fontSize: 'clamp(1rem, 2vw, 2.8rem)' }}>
               LOGOWANIE DLA UCZNIA
             </span>
           </button>
@@ -112,7 +119,7 @@ export default function MainMenu({
                 transform: 'scale(1.5)'
               }}
             />
-            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold tracking-wide whitespace-nowrap px-2 font-sour-gummy" style={{ fontSize: 'clamp(0.6rem, 1.5vw, 2rem)' }}>
+            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide whitespace-nowrap px-2" style={{ fontSize: 'clamp(1rem, 2vw, 2.8rem)' }}>
               ZAGRAJ BEZ LOGOWANIA
             </span>
           </button>
@@ -135,7 +142,7 @@ export default function MainMenu({
                 transform: 'scale(1.5)'
               }}
             />
-            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-bold tracking-wide whitespace-nowrap px-2 font-sour-gummy" style={{ fontSize: 'clamp(0.6rem, 1.5vw, 2rem)' }}>
+            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide whitespace-nowrap px-2" style={{ fontSize: 'clamp(1rem, 2vw, 2.8rem)' }}>
               LOGOWANIE DLA NAUCZYCIELA
             </span>
           </button>

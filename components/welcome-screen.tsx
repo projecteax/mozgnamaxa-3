@@ -49,7 +49,11 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
           alt="App Logo"
           width={400}
           height={200}
-          className="object-contain w-[clamp(160px,45vw,400px)] h-[clamp(80px,22.5vw,200px)] xs:w-[clamp(200px,50vw,400px)] xs:h-[clamp(100px,25vw,200px)] sm:w-[clamp(288px,28.8vw,720px)] sm:h-[clamp(144px,14.4vw,360px)] md:w-[clamp(360px,36vw,720px)] md:h-[clamp(180px,18vw,360px)] lg:w-[clamp(400px,36vw,720px)] lg:h-[clamp(200px,18vw,360px)]"
+          className="object-contain"
+          style={{
+            height: '30vh',
+            width: 'auto'
+          }}
         />
       </div>
 
@@ -62,10 +66,8 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
           height={1750}
           className="object-contain"
           style={{ 
-            width: 'clamp(60vw, 75vw, 90vw)', 
-            height: 'clamp(60vh, 75vh, 90vh)',
-            maxWidth: '1400px',
-            maxHeight: '1750px',
+            height: '75vh',
+            width: 'auto',
             objectPosition: 'bottom right'
           }}
         />
@@ -80,10 +82,8 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
           height={2250}
           className="object-contain"
           style={{ 
-            width: 'clamp(80vw, 90vw, 100vw)', 
-            height: 'clamp(80vh, 90vh, 100vh)',
-            maxWidth: '1800px',
-            maxHeight: '2250px',
+            height: '75vh',
+            width: 'auto',
             objectPosition: 'bottom right'
           }}
         />
@@ -107,7 +107,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
       `}</style>
 
       {/* START Button - Improved responsive positioning */}
-      <div className="absolute bottom-[clamp(50px,7vh,100px)] xs:bottom-[clamp(60px,8vh,120px)] sm:bottom-[clamp(80px,10vh,175px)] md:bottom-[clamp(100px,12vh,175px)] left-0 right-0 z-50 px-2 xs:px-4">
+      <div className="absolute left-0 right-0 z-50 px-2 xs:px-4" style={{ bottom: '12vh' }}>
         <div className="flex justify-center">
           <button
             onClick={handleStart}
@@ -119,7 +119,11 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
               alt="Start Button"
               width={200}
               height={60}
-              className="object-contain w-[clamp(100px,18vw,200px)] h-[clamp(30px,5.4vw,60px)] xs:w-[clamp(120px,20vw,200px)] xs:h-[clamp(36px,6vw,60px)] sm:w-[clamp(150px,15vw,300px)] sm:h-[clamp(45px,4.5vw,90px)] md:w-[clamp(180px,18vw,300px)] md:h-[clamp(54px,5.4vw,90px)] lg:w-[clamp(200px,18vw,300px)] lg:h-[clamp(60px,5.4vw,90px)]"
+              className="object-contain"
+              style={{
+                height: '7vh',
+                width: 'auto'
+              }}
             />
           </button>
         </div>

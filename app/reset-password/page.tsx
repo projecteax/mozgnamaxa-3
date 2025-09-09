@@ -1,13 +1,13 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
 import { confirmPasswordReset, verifyPasswordResetCode } from "firebase/auth"
 import { getAuth } from "firebase/auth"
 import app from "@/lib/firebase"
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [error, setError] = useState("")
@@ -179,5 +179,24 @@ export default function ResetPasswordPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#e3f7ff] flex justify-center items-center p-4">
+        <div className="w-full max-w-md">
+          <div className="bg-white p-8 rounded-2xl shadow-lg">
+            <div className="flex justify-center items-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#3e459c]"></div>
+            </div>
+            <p className="text-center mt-4 text-gray-600 font-dongle">Ładowanie...</p>
+          </div>
+        </div>
+      </div>
+    }>
+      <ResetPasswordContent />
+    </Suspense>
   )
 }

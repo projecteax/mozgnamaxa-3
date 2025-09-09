@@ -26,7 +26,7 @@ export default function ForgotPasswordForm({ onBackToLogin }: ForgotPasswordForm
       console.log("Attempting to send password reset email to:", email)
       await resetPassword(email)
       console.log("Password reset email sent successfully")
-      setMessage("Link do resetowania hasła został wysłany na podany adres email.")
+      setMessage("Link do resetowania hasła został wysłany na podany adres email. Sprawdź folder spam, jeśli nie otrzymałeś wiadomości w ciągu kilku minut.")
     } catch (err: any) {
       console.error("Password reset error:", err)
       console.error("Error code:", err.code)

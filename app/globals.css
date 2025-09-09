@@ -119,6 +119,10 @@
     font-family: "SourGummy", "Comic Sans MS", cursive !important;
     font-weight: 900 !important;
   }
+  
+  .p-4 {
+    padding: 0rem !important;
+  }
 }
 
 /* Specific class for dragon speech bubble text */

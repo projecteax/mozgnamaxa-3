@@ -1205,12 +1205,6 @@ export default function Home() {
         className="min-h-screen flex flex-col items-center justify-center p-4"
         style={{ backgroundColor: theme.backgroundColor }}
       >
-        <button
-          onClick={handleBackToMenu}
-          className="self-start mb-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 font-dongle"
-        >
-          ← Powrót do menu
-        </button>
         <ForgotPasswordForm onBackToLogin={() => setCurrentView("teacher-login")} />
       </main>
     )

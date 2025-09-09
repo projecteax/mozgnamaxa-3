@@ -368,16 +368,6 @@ export default function TeacherPanel({ onMenuClick, isCreatingStudent, setIsCrea
                   )}
                 </div>
 
-                <div className="bg-[#e3f7ff] border-l-4 border-[#3e459c] p-6 rounded-lg">
-                  <div className="flex">
-                    <div className="ml-3">
-                      <p className="text-xl text-[#3e459c] font-dongle">
-                        <strong>Informacja:</strong> Twój unikalny kod to{" "}
-                        <span className="font-bold text-2xl">{teacherData?.unique_code}</span>. Udostępnij go uczniom wraz z mailem, np. imię@mozgnamaxa.pl, aby mogli dołączyć do Twojego panelu. Kliknij na ucznia, aby zobaczyć jego postępy.
-                      </p>
-                    </div>
-                  </div>
-                </div>
               </div>
             )}
           </div>

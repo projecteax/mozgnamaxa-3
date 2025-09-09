@@ -74,7 +74,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const resetPassword = async (email: string) => {
-    await sendPasswordResetEmail(auth, email)
+    try {
+      const actionCodeSettings = {
+        url: `${window.location.origin}/reset-password`,
+        handleCodeInApp: true,
+      }
+      console.log("Sending password reset email with settings:", actionCodeSettings)
+      await sendPasswordResetEmail(auth, email, actionCodeSettings)
+      console.log("Password reset email sent successfully")
+    } catch (error) {
+      console.error("Error in resetPassword function:", error)
+      throw error
+    }
   }
 
   const value = {

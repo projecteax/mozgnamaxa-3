@@ -217,9 +217,6 @@ export default function SeasonGamePopup({
                               <h3 className={`font-sour-gummy font-bold text-lg truncate ${isClickable ? 'text-gray-800' : 'text-gray-500'}`}>
                                 {mapping.module} {mapping.task}
                               </h3>
-                              <p className={`font-sour-gummy text-sm ${isClickable ? 'text-gray-600' : 'text-gray-400'}`}>
-                                {mapping.polishName}
-                              </p>
                             </>
                           )
                         } else {

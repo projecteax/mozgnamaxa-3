@@ -23,15 +23,27 @@ export default function ForgotPasswordForm({ onBackToLogin }: ForgotPasswordForm
     setIsLoading(true)
 
     try {
+      console.log("Attempting to send password reset email to:", email)
       await resetPassword(email)
+      console.log("Password reset email sent successfully")
       setMessage("Link do resetowania hasła został wysłany na podany adres email.")
     } catch (err: any) {
+      console.error("Password reset error:", err)
+      console.error("Error code:", err.code)
+      console.error("Error message:", err.message)
+      
       let errorMessage = "Wystąpił błąd podczas wysyłania linku resetującego hasło."
 
       if (err.code === "auth/user-not-found") {
         errorMessage = "Nie znaleziono użytkownika z podanym adresem email."
       } else if (err.code === "auth/invalid-email") {
         errorMessage = "Nieprawidłowy format adresu email."
+      } else if (err.code === "auth/too-many-requests") {
+        errorMessage = "Zbyt wiele prób. Spróbuj ponownie później."
+      } else if (err.code === "auth/network-request-failed") {
+        errorMessage = "Błąd połączenia. Sprawdź połączenie internetowe."
+      } else {
+        errorMessage = `Błąd: ${err.message || err.code || "Nieznany błąd"}`
       }
 
       setError(errorMessage)

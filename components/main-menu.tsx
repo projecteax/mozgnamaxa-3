@@ -61,9 +61,9 @@ export default function MainMenu({
         />
         <div className="absolute inset-3 flex items-center justify-center px-1 py-1" style={{ transform: 'translateY(-10px)' }}>
           <span className="text-[#3e459c] font-sour-gummy text-left leading-tight" style={{ 
-            fontSize: 'clamp(1.2rem, 1.8vw, 3.2rem)', 
-            marginLeft: 'clamp(10px, 3vw, 30px)',
-            maxWidth: '85%',
+            fontSize: 'clamp(0.8rem, 1.4vw, 2.8rem)', 
+            marginLeft: 'clamp(8px, 2.5vw, 25px)',
+            maxWidth: '90%',
             wordWrap: 'break-word',
             fontWeight: 'normal'
           }}>

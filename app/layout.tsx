@@ -14,7 +14,7 @@ const dongle = Dongle({
 })
 
 export const metadata: Metadata = {
-  title: "Children's Learning Platform",
+  title: "MÓZG NA MAXA",
   description: "Interactive educational games for children",
     generator: 'v0.dev'
 }

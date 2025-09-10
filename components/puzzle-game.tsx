@@ -59,19 +59,19 @@ export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userL
         ]
       case "lato":
         return [
-          "/images/puzzle_field_01_summer.png",
-          "/images/puzzle_field_02_summer.png",
-          "/images/puzzle_field_03_summer.png",
-          "/images/puzzle_field_04_summer.png",
-          "/images/puzzle_field_05_summer.png",
+          "/images/puzzle-game/playground_1.svg",
+          "/images/puzzle-game/playground_2.svg",
+          "/images/puzzle-game/playground_3.svg",
+          "/images/puzzle-game/playground_4.svg",
+          "/images/puzzle-game/playground_5.svg",
         ]
       case "zima":
         return [
-          "/images/puzzle_field_01_winter.png",
-          "/images/puzzle_field_02_winter.png",
-          "/images/puzzle_field_03_winter.png",
-          "/images/puzzle_field_04_winter.png",
-          "/images/puzzle_field_05_winter.png",
+          "/images/puzzle-game/winter_landscape_1.svg",
+          "/images/puzzle-game/winter_landscape_2.svg",
+          "/images/puzzle-game/winter_landscape_3.svg",
+          "/images/puzzle-game/winter_landscape_4.svg",
+          "/images/puzzle-game/winter_landscape_5.svg",
         ]
       default: // wiosna (spring)
         return [

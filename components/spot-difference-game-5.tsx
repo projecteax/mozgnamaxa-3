@@ -144,7 +144,7 @@ export default function SpotDifferenceGame5({ onMenuClick, onComplete, onBack, o
       const distance = Math.sqrt(Math.pow(xProp - diff.xProp, 2) + Math.pow(yProp - diff.yProp, 2))
 
       // Convert radius to proportional value based on image width
-      const radiusProp = diff.radius / 500
+      const radiusProp = diff.radius / 400
 
       // If click is within the proportional radius of the difference
       if (distance <= radiusProp) {
@@ -214,7 +214,7 @@ export default function SpotDifferenceGame5({ onMenuClick, onComplete, onBack, o
   return (
     <div className="w-full max-w-4xl" style={{ backgroundColor: theme.background }}>
       {/* Header with title */}
-      <div className="w-full flex justify-between items-center mb-8">
+      <div className="w-full flex justify-between items-center mb-4">
         <div className="relative w-16 h-16">
           <SoundButtonEnhanced
             text="ZNAJDŹ 5 RÓŻNIC."
@@ -236,9 +236,9 @@ export default function SpotDifferenceGame5({ onMenuClick, onComplete, onBack, o
 
       {/* Game area */}
       <div className="flex flex-col items-center">
-        <div className="flex flex-col md:flex-row justify-center gap-4 w-full">
+        <div className="flex flex-col md:flex-row justify-center gap-4">
           {/* Left image */}
-          <div className="relative" style={{ width: "500px", height: "400px" }}>
+          <div className="relative" style={{ width: "400px", height: "300px" }}>
             <div className="absolute inset-0 cursor-pointer" onClick={handleClickLeft}>
               <Image
                 src={images.leftImage || "/placeholder.svg"}
@@ -268,7 +268,7 @@ export default function SpotDifferenceGame5({ onMenuClick, onComplete, onBack, o
           </div>
 
           {/* Right image */}
-          <div className="relative" style={{ width: "500px", height: "400px" }}>
+          <div className="relative" style={{ width: "400px", height: "300px" }}>
             <div className="absolute inset-0 cursor-pointer" onClick={handleClickRight}>
               <Image
                 src={images.rightImage || "/placeholder.svg"}
@@ -304,7 +304,7 @@ export default function SpotDifferenceGame5({ onMenuClick, onComplete, onBack, o
         )}
 
         {/* New Navigation Buttons */}
-        <div className="flex justify-center gap-4 mt-8 w-full">
+        <div className="flex justify-center gap-4 mt-2 w-full">
           {/* All buttons in same container with identical dimensions */}
           <div className="flex gap-4 items-end">
             {/* WRÓĆ Button - always available in spot-difference-game-5 */}

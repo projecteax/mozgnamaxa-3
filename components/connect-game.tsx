@@ -537,29 +537,37 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
           {/* Game container */}
           <div className="flex justify-between w-full max-w-4xl">
             {/* Left column - single items */}
-            <div className="flex flex-col gap-16">
+            <div className="flex flex-col gap-4">
               {leftItems.map((item) => (
                 <div key={item.id} className="relative">
                   {item.matched ? (
                     // When matched, display both items side by side
                     <div className="flex items-center gap-4">
                       {/* Left item */}
-                      <div className="relative h-24 w-24">
+                      <div className="relative h-20 w-20">
                         <Image
                           src={getImageForSeason(item) || "/placeholder.svg"}
                           alt={`Single ${item.pairId}`}
                           fill
-                          className={`object-contain ${selectedSeason === "lato" ? "scale-80" : ""}`}
+                          className="object-contain"
+                          style={{
+                            filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))",
+                            transform: "scale(0.8)"
+                          }}
                         />
                       </div>
 
                       {/* Right item */}
-                      <div className="relative h-24 w-24">
+                      <div className="relative h-20 w-20">
                         <Image
                           src={getImageForSeason(rightItems.find((right) => right.pairId === item.pairId)!) || ""}
                           alt={`Set of ${item.pairId}s`}
                           fill
-                          className={`object-contain ${selectedSeason === "lato" ? "scale-80" : ""}`}
+                          className="object-contain"
+                          style={{
+                            filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))",
+                            transform: "scale(0.8)"
+                          }}
                         />
                       </div>
                     </div>
@@ -576,7 +584,7 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
                       {/* Main icon */}
                       <div className="p-1">
                         <div
-                          className="relative h-24 w-24 cursor-grab"
+                          className="relative h-20 w-20 cursor-grab"
                           draggable
                           onDragStart={() => handleDragStart(item.id, true)}
                           onDragOver={handleDragOver}
@@ -587,6 +595,10 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
                             alt={`Single ${item.pairId}`}
                             fill
                             className="object-contain"
+                            style={{
+                              filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))",
+                              transform: "scale(0.8)"
+                            }}
                           />
                         </div>
                       </div>
@@ -604,7 +616,7 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
             </div>
 
             {/* Right column - sets of items */}
-            <div className="flex flex-col gap-16">
+            <div className="flex flex-col gap-4">
               {rightItems.map((item) => (
                 <div key={item.id} className={`relative ${item.matched ? "opacity-0" : ""}`}>
                   {/* Extended drop zone with areas on both sides */}
@@ -619,7 +631,7 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
                     {/* Main icon */}
                     <div className="p-1">
                       <div
-                        className={`relative h-24 w-24 ${item.matched ? "opacity-0" : "cursor-grab"}`}
+                        className={`relative h-20 w-20 ${item.matched ? "opacity-0" : "cursor-grab"}`}
                         draggable={!item.matched}
                         onDragStart={item.matched ? undefined : () => handleDragStart(item.id, false)}
                         onDragOver={item.matched ? undefined : handleDragOver}
@@ -631,7 +643,8 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
                           fill
                           className="object-contain"
                           style={{
-                            transform: selectedSeason === "lato" ? "scale(0.8)" : selectedSeason === "jesien" ? "scale(1.3)" : "none"
+                            filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))",
+                            transform: "scale(0.8)"
                           }}
                         />
                       </div>

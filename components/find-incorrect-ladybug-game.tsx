@@ -107,8 +107,8 @@ export default function FindIncorrectLadybugGame({ onMenuClick, onBack, onNext, 
           <Image
             src={isIncorrect ? incorrectImage : correctImage}
             alt={altText}
-            width={96}
-            height={96}
+            width={isAutumn || isWinter ? 48 : 96}
+            height={isAutumn || isWinter ? 48 : 96}
             className="transition-transform duration-200 relative z-10"
             style={{
               filter: isCorrect
@@ -176,7 +176,7 @@ export default function FindIncorrectLadybugGame({ onMenuClick, onBack, onNext, 
   return (
     <div className="w-full max-w-4xl mx-auto">
       {/* Header with title */}
-      <div className="w-full flex justify-between items-center mb-8">
+      <div className="w-full flex justify-between items-center mb-2">
         <div className="relative w-16 h-16">
           <SoundButtonEnhanced
             text={getTitleText()}
@@ -204,7 +204,7 @@ export default function FindIncorrectLadybugGame({ onMenuClick, onBack, onNext, 
       </div>
 
       {/* Game area */}
-      <div className="flex flex-col items-center mt-16">
+      <div className="flex flex-col items-center mt-2">
         {/* Ladybug grid - 3 rows of 9 ladybugs */}
         <div className="grid grid-cols-12 gap-2 mb-8">
           {Array.from({ length: 48 }, (_, index) => renderLadybug(index))}
@@ -215,7 +215,7 @@ export default function FindIncorrectLadybugGame({ onMenuClick, onBack, onNext, 
       </div>
 
       {/* New Navigation Buttons - Always visible */}
-      <div className="flex justify-center gap-4 mt-8 w-full">
+      <div className="flex justify-center gap-4 mt-1 w-full">
         {/* All buttons in same container with identical dimensions */}
         <div className="flex gap-4 items-end">
           {/* WRÓĆ Button - always available in find-incorrect-ladybug-game */}

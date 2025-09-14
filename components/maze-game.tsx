@@ -38,7 +38,7 @@ export default function MazeGame({ onMenuClick, onBack, onNext, onRetry, userLog
   // Reference to the game container
   const gameContainerRef = useRef<HTMLDivElement>(null)
   // Initial character position - close to but outside maze on the left
-  const initialPosition = { x: 40, y: 160 }
+  const initialPosition = { x: 40, y: 120 }
   // Current character position
   const [characterPosition, setCharacterPosition] = useState(initialPosition)
   // Track if we're dragging
@@ -269,11 +269,11 @@ export default function MazeGame({ onMenuClick, onBack, onNext, onRetry, userLog
 
       {/* Game area - balanced layout with elements close to maze */}
       <div ref={gameContainerRef} className="flex justify-center items-center mt-0 relative">
-        <div className="relative w-full h-[450px]">
+        <div className="relative w-full h-[360px]">
           {/* Character - positioned close to but outside maze on the left */}
           <div
             ref={characterRef}
-            className={`absolute h-32 w-32 cursor-grab ${isDragging ? "opacity-50" : ""}`}
+            className={`absolute h-24 w-24 cursor-grab ${isDragging ? "opacity-50" : ""}`}
             onMouseDown={handleMouseDown}
             style={{
               left: `${characterPosition.x}px`,
@@ -290,12 +290,12 @@ export default function MazeGame({ onMenuClick, onBack, onNext, onRetry, userLog
           </div>
 
           {/* Maze in the center */}
-          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 h-[450px] w-[550px]">
+          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 h-[360px] w-[440px]">
             <Image src={getMazeImage() || "/placeholder.svg"} alt="Maze" fill className="object-contain" />
           </div>
 
           {/* Targets close to but outside the maze on the right */}
-          <div className="absolute right-[40px] top-1/2 transform -translate-y-1/2 flex flex-col gap-16">
+          <div className="absolute right-[40px] top-1/2 transform -translate-y-1/2 flex flex-col gap-12">
             {/* Top target - correct one for winter, summer and autumn, incorrect for spring */}
             <div
               ref={
@@ -303,7 +303,7 @@ export default function MazeGame({ onMenuClick, onBack, onNext, onRetry, userLog
                   ? targetRef
                   : undefined
               }
-              className="relative h-28 w-28"
+              className="relative h-20 w-20"
             >
               <Image src={getTopTargetImage() || "/placeholder.svg"} alt="Target" fill className="object-contain" />
             </div>
@@ -315,7 +315,7 @@ export default function MazeGame({ onMenuClick, onBack, onNext, onRetry, userLog
                   ? undefined
                   : targetRef
               }
-              className="relative h-28 w-28"
+              className="relative h-20 w-20"
             >
               <Image src={getBottomTargetImage() || "/placeholder.svg"} alt="Target" fill className="object-contain" />
             </div>
@@ -329,7 +329,7 @@ export default function MazeGame({ onMenuClick, onBack, onNext, onRetry, userLog
       )}
 
       {/* New Navigation Buttons */}
-      <div className="flex justify-center gap-4 mt-8 w-full">
+      <div className="flex justify-center gap-4 mt-2 w-full">
         {/* All buttons in same container with identical dimensions */}
         <div className="flex gap-4 items-end">
           {/* WRÓĆ Button - always available in maze-game */}

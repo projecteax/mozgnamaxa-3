@@ -32,7 +32,7 @@ export default function MazeGame3({ onMenuClick, onBack, onNext, onRetry, userLo
   // Reference to the game container
   const gameContainerRef = useRef<HTMLDivElement>(null)
   // Initial butterfly position - on the left side of the game area, vertically centered with maze
-  const initialPosition = { x: 20, y: 180 }
+  const initialPosition = { x: 20, y: 120 }
   // Current butterfly position
   const [butterflyPosition, setButterflyPosition] = useState(initialPosition)
   // Track if we're dragging
@@ -161,7 +161,7 @@ export default function MazeGame3({ onMenuClick, onBack, onNext, onRetry, userLo
   return (
     <div className="w-full max-w-4xl" style={{ backgroundColor: theme.backgroundColor }}>
       {/* Header with title */}
-      <div className="w-full flex justify-between items-center mb-8">
+      <div className="w-full flex justify-between items-center mb-1">
         <div className="relative w-16 h-16">
           <SoundButtonEnhanced
             text={getTitleText()}
@@ -202,12 +202,12 @@ export default function MazeGame3({ onMenuClick, onBack, onNext, onRetry, userLo
       </div>
 
       {/* Game area */}
-      <div ref={gameContainerRef} className="flex justify-center items-center mt-2 relative">
-        <div className="relative w-full h-[400px]">
+      <div ref={gameContainerRef} className="flex justify-center items-center mt-0 relative">
+        <div className="relative w-full h-[320px]">
           {/* Butterfly/Squirrel/Eskimo - positioned on the left */}
           <div
             ref={butterflyRef}
-            className={`absolute h-32 w-32 cursor-grab ${isDragging ? "opacity-50" : ""}`}
+            className={`absolute h-24 w-24 cursor-grab ${isDragging ? "opacity-50" : ""}`}
             onMouseDown={handleMouseDown}
             style={{
               left: `${butterflyPosition.x}px`,
@@ -233,7 +233,7 @@ export default function MazeGame3({ onMenuClick, onBack, onNext, onRetry, userLo
           </div>
 
           {/* Maze in the center */}
-          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 h-[400px] w-[500px]">
+          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 h-[320px] w-[400px]">
             <Image
               src={
                 isWinter
@@ -313,13 +313,13 @@ export default function MazeGame3({ onMenuClick, onBack, onNext, onRetry, userLo
 
       {/* Success message and button - only visible when the game is complete */}
       {isCompleted && (
-        <div className="flex flex-col items-center mt-8">
+        <div className="flex flex-col items-center mt-1">
           <SuccessMessage message={getRandomSuccessMessage()} />
         </div>
       )}
 
       {/* New Navigation Buttons - Always visible */}
-      <div className="flex justify-center gap-4 mt-8 w-full">
+      <div className="flex justify-center gap-4 mt-1 w-full">
         {/* All buttons in same container with identical dimensions */}
         <div className="flex gap-4 items-end">
           {/* WRÓĆ Button - always available in maze-game-3 */}

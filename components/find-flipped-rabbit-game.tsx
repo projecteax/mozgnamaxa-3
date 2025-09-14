@@ -135,8 +135,8 @@ export default function FindFlippedRabbitGame({ onMenuClick, onBack, onNext, onR
           <Image
             src={gameIcon || "/placeholder.svg"}
             alt={isWinter ? "Snowman" : isAutumn ? "Squirrel" : isSummer ? "Ball" : "Rabbit"}
-            width={96}
-            height={96}
+            width={isWinter ? 72 : 96}
+            height={isWinter ? 72 : 96}
             className={`${isFlipped ? "scale-x-[-1]" : ""} transition-transform duration-200`}
             style={{
               filter: isCorrect

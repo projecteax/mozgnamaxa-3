@@ -261,7 +261,7 @@ export default function CategorySortingGame({ onMenuClick, onBack, onNext, onRet
 
           <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
             <Image src={getTitleBox()} alt="Title box" fill className="object-contain" />
-            <span className="relative z-10 text-white text-2xl md:text-3xl font-bold font-sour-gummy">
+            <span className="relative z-10 text-white text-2xl md:text-3xl font-sour-gummy font-thin">
               PODZIEL OBRAZKI.
             </span>
           </div>
@@ -280,7 +280,7 @@ export default function CategorySortingGame({ onMenuClick, onBack, onNext, onRet
       {/* Game area */}
       <div className="flex flex-col items-center">
         {/* Draggable items at the top */}
-        <div className="flex justify-center gap-8 mb-16 flex-wrap">
+        <div className="flex justify-center gap-8 mb-6 flex-wrap">
           {items.map((item) => {
             // Skip items that have been placed
             if (item.placed) return null
@@ -290,9 +290,18 @@ export default function CategorySortingGame({ onMenuClick, onBack, onNext, onRet
                 key={`draggable-${item.id}`}
                 draggable
                 onDragStart={() => handleDragStart(item.id)}
-                className="relative h-24 w-24 cursor-grab drop-shadow-md"
+                className="relative h-20 w-20 cursor-grab"
               >
-                <Image src={getItemImage(item) || "/placeholder.svg"} alt={item.name} fill className="object-contain" />
+                <Image 
+                  src={getItemImage(item) || "/placeholder.svg"} 
+                  alt={item.name} 
+                  fill 
+                  className="object-contain" 
+                  style={{
+                    filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))",
+                    transform: "scale(0.8)"
+                  }}
+                />
               </div>
             )
           })}
@@ -314,6 +323,9 @@ export default function CategorySortingGame({ onMenuClick, onBack, onNext, onRet
                     alt="Left category"
                     fill
                     className="object-contain"
+                    style={{
+                      filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))"
+                    }}
                   />
                 </div>
 
@@ -330,6 +342,9 @@ export default function CategorySortingGame({ onMenuClick, onBack, onNext, onRet
                           alt={item.name}
                           fill
                           className="object-contain"
+                          style={{
+                            filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))"
+                          }}
                         />
                       </div>
                     )
@@ -353,6 +368,9 @@ export default function CategorySortingGame({ onMenuClick, onBack, onNext, onRet
                     alt="Right category"
                     fill
                     className="object-contain"
+                    style={{
+                      filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))"
+                    }}
                   />
                 </div>
 
@@ -369,6 +387,9 @@ export default function CategorySortingGame({ onMenuClick, onBack, onNext, onRet
                           alt={item.name}
                           fill
                           className="object-contain"
+                          style={{
+                            filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))"
+                          }}
                         />
                       </div>
                     )

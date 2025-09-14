@@ -228,7 +228,7 @@ export default function Find6DifferencesGame({ onMenuClick, onComplete, onBack, 
   return (
     <div className="w-full max-w-4xl">
       {/* Header with title */}
-      <div className="w-full flex justify-between items-center mb-8">
+      <div className="w-full flex justify-between items-center mb-2">
         <div className="relative w-16 h-16">
           <SoundButtonEnhanced
             text="ZNAJDŹ 6 RÓŻNIC."
@@ -240,7 +240,7 @@ export default function Find6DifferencesGame({ onMenuClick, onComplete, onBack, 
 
         <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
           <Image src={theme.titleBox || "/images/title_box_small.png"} alt="Title box" fill className="object-contain" />
-          <span className="relative z-10 text-white text-2xl md:text-3xl font-bold font-sour-gummy">
+          <span className="relative z-10 text-white text-2xl md:text-3xl font-sour-gummy font-thin">
             ZNAJDŹ 6 RÓŻNIC.
           </span>
         </div>
@@ -319,7 +319,7 @@ export default function Find6DifferencesGame({ onMenuClick, onComplete, onBack, 
       </div>
 
       {/* New Navigation Buttons - Always visible */}
-      <div className="flex justify-center gap-4 mt-8 w-full">
+      <div className="flex justify-center gap-4 mt-1 w-full">
         {/* All buttons in same container with identical dimensions */}
         <div className="flex gap-4 items-end">
           {/* WRÓĆ Button - always available in find-6-differences-game */}

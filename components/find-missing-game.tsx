@@ -140,9 +140,9 @@ export default function FindMissingGame({ onMenuClick, onBack, onNext, onRetry, 
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4" style={{ backgroundColor: theme.background }}>
+    <div className="w-full max-w-4xl mx-auto px-4" style={{ backgroundColor: theme.background }}>
       {/* Header with title */}
-      <div className="w-full flex justify-between items-center mb-8">
+      <div className="w-full flex justify-between items-center mb-4">
         <div className="relative w-16 h-16">
           <SoundButtonEnhanced
             text="ZAZNACZ TO, CZEGO BRAKUJE NA OBRAZKU."
@@ -168,7 +168,7 @@ export default function FindMissingGame({ onMenuClick, onBack, onNext, onRetry, 
       <div className="w-full flex gap-8 justify-center items-start">
         {/* Main image - div size matches picture size */}
         <div className="flex-shrink-0">
-          <div className="relative w-[900px] h-[450px]">
+          <div className="relative w-[720px] h-[360px]">
             <Image
               src={getMainImage() || "/placeholder.svg"}
               alt="Find what's missing"
@@ -179,11 +179,11 @@ export default function FindMissingGame({ onMenuClick, onBack, onNext, onRetry, 
         </div>
 
         {/* Options layout - takes up 1/4 of the space */}
-        <div className="flex-shrink-0 w-[200px] h-[450px] flex flex-col justify-between">
+        <div className="flex-shrink-0 w-[160px] h-[360px] flex flex-col justify-between">
           {/* First row: First two options */}
           <div className="flex gap-4 justify-center">
             <div
-              className={`relative h-20 w-20 cursor-pointer transition-all duration-300 hover:scale-105 ${
+              className={`relative h-16 w-16 cursor-pointer transition-all duration-300 hover:scale-105 ${
                 selectedOption === options[0].id ? (options[0].isCorrect ? "scale-105 drop-shadow-lg" : "") : ""
               }`}
               onClick={() => handleOptionClick(options[0].id, options[0].isCorrect)}
@@ -197,7 +197,7 @@ export default function FindMissingGame({ onMenuClick, onBack, onNext, onRetry, 
             </div>
 
             <div
-              className={`relative h-20 w-20 cursor-pointer transition-all duration-300 hover:scale-105 ${
+              className={`relative h-16 w-16 cursor-pointer transition-all duration-300 hover:scale-105 ${
                 selectedOption === options[1].id ? (options[1].isCorrect ? "scale-105 drop-shadow-lg" : "") : ""
               }`}
               onClick={() => handleOptionClick(options[1].id, options[1].isCorrect)}
@@ -214,10 +214,10 @@ export default function FindMissingGame({ onMenuClick, onBack, onNext, onRetry, 
           {/* Second row: Third option (130% larger, centered) */}
           <div className="flex justify-center">
             <div
-              className={`relative h-30 w-30 cursor-pointer transition-all duration-300 hover:scale-105 ${
+              className={`relative cursor-pointer transition-all duration-300 hover:scale-105 ${
                 selectedOption === options[2].id ? (options[2].isCorrect ? "scale-105 drop-shadow-lg" : "") : ""
               }`}
-              style={{ height: "120px", width: "120px" }}
+              style={{ height: "96px", width: "96px" }}
               onClick={() => handleOptionClick(options[2].id, options[2].isCorrect)}
             >
               <Image
@@ -232,7 +232,7 @@ export default function FindMissingGame({ onMenuClick, onBack, onNext, onRetry, 
           {/* Third row: Last two options */}
           <div className="flex gap-4 justify-center">
             <div
-              className={`relative h-20 w-20 cursor-pointer transition-all duration-300 hover:scale-105 ${
+              className={`relative h-16 w-16 cursor-pointer transition-all duration-300 hover:scale-105 ${
                 selectedOption === options[3].id ? (options[3].isCorrect ? "scale-105" : "") : ""
               }`}
               onClick={() => handleOptionClick(options[3].id, options[3].isCorrect)}
@@ -251,7 +251,7 @@ export default function FindMissingGame({ onMenuClick, onBack, onNext, onRetry, 
             </div>
 
             <div
-              className={`relative h-20 w-20 cursor-pointer transition-all duration-300 hover:scale-105 ${
+              className={`relative h-16 w-16 cursor-pointer transition-all duration-300 hover:scale-105 ${
                 selectedOption === options[4].id ? (options[4].isCorrect ? "scale-105 drop-shadow-lg" : "") : ""
               }`}
               onClick={() => handleOptionClick(options[4].id, options[4].isCorrect)}
@@ -271,7 +271,7 @@ export default function FindMissingGame({ onMenuClick, onBack, onNext, onRetry, 
       {isCompleted && <SuccessMessage message={successMessage} />}
 
       {/* New Navigation Buttons */}
-      <div className="flex justify-center gap-4 mt-8 w-full">
+      <div className="flex justify-center gap-4 mt-2 w-full">
         {/* All buttons in same container with identical dimensions */}
         <div className="flex gap-4 items-end">
           {/* WRÓĆ Button - always available in find-missing-game */}

@@ -347,7 +347,7 @@ export default function CategorySortingGame3({ onMenuClick, onBack, onNext, onRe
 
         <div className="relative h-24 w-80 md:w-[500px] flex items-center justify-center">
           <Image src={theme.titleBox || "/placeholder.svg"} alt="Title box" fill className="object-contain" />
-          <span className="relative z-10 text-white text-2xl md:text-3xl font-bold font-sour-gummy">
+          <span className="relative z-10 text-white text-2xl md:text-3xl font-sour-gummy font-thin">
             PODZIEL OBRAZKI.
           </span>
         </div>

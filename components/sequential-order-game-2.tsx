@@ -240,7 +240,7 @@ export default function SequentialOrderGame2({ onMenuClick, onBack, onNext, onRe
                   ? "/images/title_box_small_autumn.svg"
                   : selectedSeason === "zima"
                     ? "/images/title_box_small_winter.svg"
-                    : "/images/green_large_box.svg"
+                    : "/images/title_box_small.png"
             }
             alt="Title box"
             fill

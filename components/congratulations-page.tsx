@@ -83,26 +83,26 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
 
   return (
     <div 
-      className="w-full min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 lg:p-12 overflow-hidden"
+      className="w-full min-h-screen flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-hidden"
       style={{ backgroundColor: theme.backgroundColor }}
     >
-      <div className="flex flex-col lg:flex-row items-center justify-center w-full max-w-7xl gap-4 sm:gap-6 md:gap-4 sm:gap-6 md:gap-8 lg:gap-4 sm:gap-6 md:gap-4 sm:gap-6 md:gap-8 lg:gap-16">
-        {/* Speech bubble with joke text - responsive sizing */}
-        <div className="relative w-full max-w-[280px] sm:max-w-[400px] md:max-w-[600px] lg:max-w-[800px] xl:max-w-[969px] aspect-[969/444] flex-shrink-0 drop-shadow-lg">
+      <div className="flex flex-col lg:flex-row items-center justify-between w-full max-w-6xl gap-2 sm:gap-4 md:gap-6">
+        {/* Speech bubble with joke text */}
+        <div className="relative w-full max-w-[390px] sm:max-w-[520px] md:max-w-[650px] lg:max-w-[780px] aspect-[969/444] flex-shrink-0 drop-shadow-lg">
           <Image src="/images/cloud_text.svg" alt="Speech bubble" fill className="object-contain" />
 
-          {/* Joke text overlay - responsive text sizing and positioning */}
-          <div className="absolute inset-0 flex flex-col justify-center pl-4 sm:pl-8 md:pl-12 lg:pl-16 xl:pl-20 pr-3 sm:pr-6 md:pr-10 lg:pr-14 xl:pr-16">
-            <div className={`font-bold text-sm sm:text-lg md:text-xl lg:text-2xl xl:text-3xl leading-tight text-left dragon-speech-text ${seasonContent.textColor}`}>
+          {/* Joke text overlay */}
+          <div className="absolute inset-0 flex flex-col justify-center px-4 sm:px-6 md:px-8 lg:px-10">
+            <div className={`font-bold leading-tight text-left dragon-speech-text ${seasonContent.textColor}`} style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }}>
               {seasonContent.text}
             </div>
           </div>
         </div>
 
-        {/* Dragon and buttons column - responsive sizing */}
-        <div className="flex flex-col items-center gap-4 sm:gap-6 md:gap-4 sm:gap-6 md:gap-8 flex-shrink-0">
-          {/* Dragon character with responsive sizing */}
-          <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 xl:w-[420px] xl:h-[420px] drop-shadow-lg">
+        {/* Dragon and buttons column */}
+        <div className="flex flex-col items-center gap-2 sm:gap-4 md:gap-6 flex-shrink-0">
+          {/* Dragon character with shadow */}
+          <div className="relative drop-shadow-lg" style={{ width: 'clamp(120px, 25vw, 280px)', height: 'clamp(120px, 25vw, 280px)' }}>
             <Image
               src={seasonContent.dragonImage || "/placeholder.svg"}
               alt="Funny dragon"
@@ -111,8 +111,8 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
             />
           </div>
 
-          {/* Buttons positioned under the dragon - responsive sizing */}
-          <div className="flex items-center gap-4 sm:gap-6 md:gap-4 sm:gap-6 md:gap-8">
+          {/* Buttons positioned under the dragon */}
+          <div className="flex items-center gap-2 sm:gap-4 md:gap-6">
             {/* Enhanced Sound button with better Polish pronunciation */}
             <SoundButtonEnhanced 
               text={seasonContent.speechText}
@@ -120,9 +120,10 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
               size="md"
             />
 
-            {/* START button with responsive sizing and matching text styling */}
+            {/* START button with shadow */}
             <div
-              className="relative w-32 h-8 sm:w-36 sm:h-9 md:w-40 md:h-10 lg:w-44 lg:h-11 xl:w-48 xl:h-12 cursor-pointer hover:scale-105 transition-transform drop-shadow-lg"
+              className="relative cursor-pointer hover:scale-105 transition-transform drop-shadow-lg"
+              style={{ width: 'clamp(80px, 15vw, 140px)', height: 'clamp(24px, 4vw, 40px)' }}
               onClick={onStartClick}
             >
               <Image
@@ -134,7 +135,7 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
               {/* Only show START text for non-summer seasons */}
               {selectedSeason !== "lato" && (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className={`font-bold text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl dragon-speech-text ${seasonContent.textColor}`}>START</span>
+                  <span className={`font-bold dragon-speech-text ${seasonContent.textColor}`} style={{ fontSize: 'clamp(0.6rem, 1.5vw, 1.2rem)' }}>START</span>
                 </div>
               )}
             </div>

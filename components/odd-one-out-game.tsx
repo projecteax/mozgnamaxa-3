@@ -45,7 +45,7 @@ export default function OddOneOutGame({ onMenuClick, onBack, onNext, onRetry, us
       isCorrect: false,
       category: "animal",
       position: "top-0 left-[25%] transform -translate-x-1/2",
-      size: "h-36 w-36",
+      size: "h-20 w-20", // Standardized to smaller size (60% of h-36)
     },
     {
       id: "stork",
@@ -55,8 +55,8 @@ export default function OddOneOutGame({ onMenuClick, onBack, onNext, onRetry, us
       winterImage: "/images/jacket_winter.svg",
       isCorrect: false,
       category: "animal",
-      position: "top-[150px] left-[50%] transform -translate-x-1/2",
-      size: "h-56 w-56",
+      position: "top-[90px] left-[50%] transform -translate-x-1/2",
+      size: "h-20 w-20", // Standardized to same size as others (60% of h-36)
     },
     {
       id: "butterfly",
@@ -66,8 +66,8 @@ export default function OddOneOutGame({ onMenuClick, onBack, onNext, onRetry, us
       winterImage: "/images/hat_winter.svg",
       isCorrect: false,
       category: "animal",
-      position: "top-[300px] left-[25%] transform -translate-x-1/2",
-      size: "h-36 w-36",
+      position: "top-[180px] left-[25%] transform -translate-x-1/2",
+      size: "h-20 w-20", // Standardized to smaller size (60% of h-36)
     },
     {
       id: "ladybug",
@@ -78,7 +78,7 @@ export default function OddOneOutGame({ onMenuClick, onBack, onNext, onRetry, us
       isCorrect: false,
       category: "animal",
       position: "top-0 left-[75%] transform -translate-x-1/2",
-      size: "h-36 w-36",
+      size: "h-20 w-20", // Standardized to smaller size (60% of h-36)
     },
     {
       id: "flower",
@@ -88,8 +88,8 @@ export default function OddOneOutGame({ onMenuClick, onBack, onNext, onRetry, us
       winterImage: "/images/sanki_winter.svg",
       isCorrect: true,
       category: "plant",
-      position: "top-[300px] left-[75%] transform -translate-x-1/2",
-      size: "h-36 w-36",
+      position: "top-[180px] left-[75%] transform -translate-x-1/2",
+      size: "h-20 w-20", // Standardized to smaller size (60% of h-36)
     },
   ]
 
@@ -189,7 +189,7 @@ export default function OddOneOutGame({ onMenuClick, onBack, onNext, onRetry, us
       <div className="flex justify-center items-center mt-8">
         <div className="flex flex-col items-center w-full">
           {/* Game items - positioned to be centralized */}
-          <div className="relative w-full max-w-4xl mx-auto h-[450px]">
+          <div className="relative w-full max-w-4xl mx-auto h-[270px]">
             {gameItems.map((item) => (
               <div
                 key={item.id}
@@ -203,8 +203,10 @@ export default function OddOneOutGame({ onMenuClick, onBack, onNext, onRetry, us
                     fill
                     className="object-contain"
                     style={{
-                      filter: isCompleted && item.isCorrect ? "drop-shadow(0 0 8px #539e1b)" : "none",
-                      transform: (selectedSeason === "jesien" && item.id === "stork") || (selectedSeason === "zima" && item.id === "stork") ? "scale(0.75)" : "none",
+                      filter: isCompleted && item.isCorrect 
+                        ? "drop-shadow(0 0 8px #539e1b)" 
+                        : "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))",
+                      transform: item.id === "stork" ? "scale(1.3)" : "none",
                     }}
                   />
                 </div>

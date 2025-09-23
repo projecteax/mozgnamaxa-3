@@ -95,7 +95,7 @@ export default function MainMenu({
                 transform: 'scale(clamp(1.2, 1.5vw, 1.8))'
               }}
             />
-            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide whitespace-nowrap px-2" style={{ fontSize: 'clamp(1rem, 1.8vw, 2.5rem)' }}>
+            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide px-2" style={{ fontSize: 'clamp(0.9rem, 1.4vw, 2rem)' }}>
               LOGOWANIE DLA UCZNIA
             </span>
           </button>
@@ -119,7 +119,7 @@ export default function MainMenu({
                 transform: 'scale(clamp(1.2, 1.5vw, 1.8))'
               }}
             />
-            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide whitespace-nowrap px-2" style={{ fontSize: 'clamp(1rem, 1.8vw, 2.5rem)' }}>
+            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide px-2" style={{ fontSize: 'clamp(0.9rem, 1.4vw, 2rem)' }}>
               ZAGRAJ BEZ LOGOWANIA
             </span>
           </button>
@@ -142,7 +142,7 @@ export default function MainMenu({
                 transform: 'scale(clamp(1.2, 1.5vw, 1.8))'
               }}
             />
-            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide whitespace-nowrap px-2" style={{ fontSize: 'clamp(1rem, 1.8vw, 2.5rem)' }}>
+            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide px-2" style={{ fontSize: 'clamp(0.9rem, 1.4vw, 2rem)' }}>
               LOGOWANIE DLA NAUCZYCIELA
             </span>
           </button>

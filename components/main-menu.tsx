@@ -74,28 +74,27 @@ export default function MainMenu({
       </div>
 
       {/* Menu Buttons - Below the cloud */}
-      <div className="absolute" style={{ top: 'calc(37.5vh + 50px)', left: 'calc(75vh * 1 + 80px)' }}>
-        <div>
+      <div className="absolute" style={{ top: 'calc(37.5vh + 50px)', left: 'calc(75vh * 1 + 80px)', width: 'auto', height: 'auto', maxWidth: 'calc(100vw - 200px)' }}>
+        <div className="flex flex-col items-start gap-8 w-full">
           {/* Student Login Button */}
           <button
             onClick={onStudentLogin}
-            className="relative w-[clamp(200px, 25vw, 800px)] h-[clamp(40px, 5vh, 120px)] flex items-center justify-center group hover:scale-105 transition-transform duration-200"
-            style={{ marginBottom: 'clamp(30px, 8vh, 90px)' }}
+            className="relative group hover:scale-105 transition-transform duration-200"
+            style={{ 
+              width: 'clamp(300px, 40vw, 600px)', 
+              height: 'clamp(60px, 8vh, 120px)',
+              marginBottom: 'clamp(20px, 5vh, 60px)',
+              maxWidth: '100%'
+            }}
           >
             <Image 
               src="/images/main_menu_box.svg" 
               alt="Menu Button" 
-              width={1600} 
-              height={240} 
+              width={800} 
+              height={160} 
               className="w-full h-full object-contain" 
-              style={{ 
-                width: '100%', 
-                height: '100%', 
-                objectFit: 'cover',
-                transform: 'scale(clamp(1.2, 1.5vw, 1.8))'
-              }}
             />
-            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide whitespace-nowrap px-2" style={{ fontSize: 'clamp(0.9rem, 1.3vw, 2rem)' }}>
+            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide whitespace-nowrap px-4" style={{ fontSize: '1.7rem' }}>
               LOGOWANIE DLA UCZNIA
             </span>
           </button>
@@ -103,23 +102,22 @@ export default function MainMenu({
           {/* Play Without Login Button */}
           <button
             onClick={onPlayWithoutLogin}
-            className="relative w-[clamp(200px, 25vw, 800px)] h-[clamp(40px, 5vh, 120px)] flex items-center justify-center group hover:scale-105 transition-transform duration-200"
-            style={{ marginBottom: 'clamp(30px, 8vh, 90px)' }}
+            className="relative group hover:scale-105 transition-transform duration-200"
+            style={{ 
+              width: 'clamp(300px, 40vw, 600px)', 
+              height: 'clamp(60px, 8vh, 120px)',
+              marginBottom: 'clamp(20px, 5vh, 60px)',
+              maxWidth: '100%'
+            }}
           >
             <Image 
               src="/images/main_menu_box.svg" 
               alt="Menu Button" 
-              width={1600} 
-              height={240} 
+              width={800} 
+              height={160} 
               className="w-full h-full object-contain" 
-              style={{ 
-                width: '100%', 
-                height: '100%', 
-                objectFit: 'cover',
-                transform: 'scale(clamp(1.2, 1.5vw, 1.8))'
-              }}
             />
-            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide whitespace-nowrap px-2" style={{ fontSize: 'clamp(0.9rem, 1.3vw, 2rem)' }}>
+            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide whitespace-nowrap px-4" style={{ fontSize: '1.7rem' }}>
               ZAGRAJ BEZ LOGOWANIA
             </span>
           </button>
@@ -127,22 +125,21 @@ export default function MainMenu({
           {/* Teacher Login Button */}
           <button
             onClick={onTeacherLogin}
-            className="relative w-[clamp(200px, 25vw, 800px)] h-[clamp(40px, 5vh, 120px)] flex items-center justify-center group hover:scale-105 transition-transform duration-200"
+            className="relative group hover:scale-105 transition-transform duration-200"
+            style={{ 
+              width: 'clamp(300px, 40vw, 600px)', 
+              height: 'clamp(60px, 8vh, 120px)',
+              maxWidth: '100%'
+            }}
           >
             <Image 
               src="/images/main_menu_box.svg" 
               alt="Menu Button" 
-              width={1600} 
-              height={240} 
+              width={800} 
+              height={160} 
               className="w-full h-full object-contain" 
-              style={{ 
-                width: '100%', 
-                height: '100%', 
-                objectFit: 'cover',
-                transform: 'scale(clamp(1.2, 1.5vw, 1.8))'
-              }}
             />
-            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide whitespace-nowrap px-2" style={{ fontSize: 'clamp(0.9rem, 1.3vw, 2rem)' }}>
+            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide whitespace-nowrap px-4" style={{ fontSize: '1.7rem' }}>
               LOGOWANIE DLA NAUCZYCIELA
             </span>
           </button>

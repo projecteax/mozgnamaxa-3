@@ -62,7 +62,7 @@ export default function SortingGame({ onMenuClick, onBack, onNext, onRetry, user
     if (selectedSeason === "jesien") {
       return "/images/mushroom_brown_autumn.svg"
     }
-    return selectedSeason === "lato" ? "/images/duck_summer.svg" : "/images/butterfly_02.png"
+    return selectedSeason === "lato" ? "/images/duck_summer.svg" : "/images/butterfly_yellow_new.svg"
   }
 
   // Get the appropriate title box based on season

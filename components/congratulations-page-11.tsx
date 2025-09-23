@@ -20,11 +20,11 @@ export default function CongratulationsPage11({ onStartClick }: CongratulationsP
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Jak nazywa się specjalista od owiec?</p>
               <p className="mb-2">Fachowiec!</p>
-              <p className="italic">A tak na poważnie: Krety są pożyteczne — zjadają larwy i pędraki.</p>
+              <p className="italic">A tak na poważnie: Owca ma bardzo szerokie pole widzenia, dzięki czemu doskonale widzi co dzieje się za nią bez odwracania głowy!</p>
             </>
           ),
           
-          speechText: "A to zabawne! Jak nazywa się specjalista od owiec? Fachowiec! A tak na poważnie: Krety są pożyteczne — zjadają larwy i pędraki.",
+          speechText: "A to zabawne! Jak nazywa się specjalista od owiec? Fachowiec! A tak na poważnie: Owca ma bardzo szerokie pole widzenia, dzięki czemu doskonale widzi co dzieje się za nią bez odwracania głowy!",
           textColor: "text-[#FF8C00]",
         }
       case "jesien":

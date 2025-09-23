@@ -32,12 +32,13 @@ export default function CongratulationsPage3({ onStartClick }: CongratulationsPa
         return {
           text: (
             <>
-              <p className="mb-1">A to zabawne!</p>
-              <p className="mb-1">Co robi drzewo gdy się nudzi?</p>
-              <p>Liście się!</p>
+              <p className="mb-1">A to ciekawe!</p>
+              <p className="mb-1">Wysoka wilgotność i umiarkowane temperatury</p>
+              <p className="mb-1">sprzyjają wzrostowi grzybów, dlatego jesienią</p>
+              <p>jest ich najwięcej.</p>
             </>
           ),
-          speechText: "A to zabawne! Co robi drzewo gdy się nudzi? Liście się!",
+          speechText: "A to ciekawe! Wysoka wilgotność i umiarkowane temperatury sprzyjają wzrostowi grzybów, dlatego jesienią jest ich najwięcej.",
           dragon: "/images/dragon_03_autumn.svg",
           
           textColor: "text-[#D2691E]",
@@ -49,10 +50,10 @@ export default function CongratulationsPage3({ onStartClick }: CongratulationsPa
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Jaka część ciała najwięcej razy mówi „pa"?</p>
               <p className="mb-2">Stopa.</p>
-              <p className="italic">A tak na poważnie: Stopy umożliwiają nam chodzenie i utrzymanie równowagi. Składają się z 26 kości i ponad 100 mięśni, więzadeł i ścięgien!</p>
+              <p className="italic">A tak na poważnie: Stopy umożliwiają nam chodzenie i utrzymanie równowagi. Składają się z 26 kości i mają ponad 100 mięśni, więzadeł i ścięgien!</p>
             </>
           ),
-          speechText: "A to zabawne! Jaka część ciała najwięcej razy mówi pa? Stopa. A tak na poważnie: Stopy umożliwiają nam chodzenie i utrzymanie równowagi. Składają się z 26 kości i ponad 100 mięśni, więzadeł i ścięgien!",
+          speechText: "A to zabawne! Jaka część ciała najwięcej razy mówi pa? Stopa. A tak na poważnie: Stopy umożliwiają nam chodzenie i utrzymanie równowagi. Składają się z 26 kości i mają ponad 100 mięśni, więzadeł i ścięgien!",
           dragon: "/images/dragon_03_winter.svg",
           
           textColor: "text-[#4682B4]",

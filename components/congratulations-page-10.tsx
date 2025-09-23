@@ -60,13 +60,13 @@ export default function CongratulationsPage10({ onStartClick }: CongratulationsP
           text: (
             <>
               <p className="mb-1">A to ciekawe!</p>
-              <p className="mb-1">Wiosną można zaobserwować piękne tęcze,</p>
-              <p className="mb-1">które powstają, gdy promienie słońca</p>
-              <p>przechodzą przez krople deszczu w powietrzu.</p>
+              <p className="mb-1">Wiosną dzień staje się coraz dłuższy, ponieważ</p>
+              <p className="mb-1">Ziemia przechyla się bliżej Słońca, co daje</p>
+              <p>więcej światła i ciepła.</p>
             </>
           ),
           
-          speechText: "A to ciekawe! Wiosną można zaobserwować piękne tęcze, które powstają, gdy promienie słońca przechodzą przez krople deszczu w powietrzu.",
+          speechText: "A to ciekawe! Wiosną dzień staje się coraz dłuższy, ponieważ Ziemia przechyla się bliżej Słońca, co daje więcej światła i ciepła.",
           textColor: "text-[#539e1b]",
         }
     }

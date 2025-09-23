@@ -106,15 +106,19 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
         }
       `}</style>
 
-      {/* White Stripe with Bottom Logos - Improved responsive padding */}
-      <div className="absolute bottom-0 left-0 right-0 z-30">
-        <div className="bg-white w-full py-[clamp(4px,0.6vh,12px)] sm:py-[clamp(6px,0.8vh,16px)] md:py-[clamp(8px,1vh,16px)] flex justify-center px-4">
+      {/* White Stripe with Bottom Logos - Responsive scaling like dragon */}
+      <div className="absolute bottom-0 left-0 right-0 z-30 bg-white" style={{ height: '8vh' }}>
+        <div className="relative w-full h-full flex items-center justify-center px-4" style={{ padding: '6px' }}>
           <Image
             src="/images/welcome/bottom_logos.svg"
             alt="Bottom Logos"
             width={600}
             height={80}
-            className="object-contain w-[clamp(200px,30vw,400px)] h-[clamp(26px,4vw,53px)] sm:w-[clamp(250px,25vw,600px)] sm:h-[clamp(32px,3.2vw,80px)] md:w-[clamp(300px,30vw,600px)] md:h-[clamp(40px,4vw,80px)] lg:w-[clamp(400px,30vw,600px)] lg:h-[clamp(53px,4vw,80px)]"
+            className="object-contain"
+            style={{
+              height: '100%',
+              width: 'auto'
+            }}
           />
         </div>
       </div>

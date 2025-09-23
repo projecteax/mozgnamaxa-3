@@ -19,12 +19,12 @@ export default function CongratulationsPage({ onStartClick }: CongratulationsPag
           text: (
             <>
               <p className="mb-1">A to zabawne!</p>
-              <p className="mb-1">W jakie dni pokrzywa nie parzy?</p>
-              <p className="mb-2">W nieparzyste!</p>
-              <p className="italic">A tak na poważnie: Pokrzywa parzy, bo ma na liściach włoski wypełnione kwasem mrówkowym.</p>
+              <p className="mb-1">Jakie ryby łowi matematyk?</p>
+              <p className="mb-2">Sumy!</p>
+              <p className="italic">A tak na poważnie: Suma to wynik dodawania. Sum to jedna z największych ryb w Europie.</p>
             </>
           ),
-          speechText: "A to zabawne! W jakie dni pokrzywa nie parzy? W nieparzyste! A tak na poważnie: Pokrzywa parzy, bo ma na liściach włoski wypełnione kwasem mrówkowym.",
+          speechText: "A to zabawne! Jakie ryby łowi matematyk? Sumy! A tak na poważnie: Suma to wynik dodawania. Sum to jedna z największych ryb w Europie.",
           dragonImage: "/images/dragon_01_summer.svg",
           soundIcon: "/images/sound_summer.svg",
           startButtonBg: "/images/start_summer.svg",

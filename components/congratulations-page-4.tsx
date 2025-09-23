@@ -34,10 +34,10 @@ export default function CongratulationsPage4({ onStartClick }: CongratulationsPa
               <p className="mb-1">A to zabawne!</p>
               <p className="mb-1">Dlaczego woda nie zdała egzaminu?</p>
               <p className="mb-2">Bo go oblała!</p>
-              <p className="italic">A tak na poważnie: Woda jest nam niezbędna do życia — organizm człowieka składa się w ok. 60% z wody.</p>
+              <p className="italic">A tak na poważnie: Woda jest nam niezbędna do życia — organizm człowieka składa się w większości z wody.</p>
             </>
           ),
-          speechText: "A to zabawne! Dlaczego woda nie zdała egzaminu? Bo go oblała! A tak na poważnie: Woda jest nam niezbędna do życia — organizm człowieka składa się w ok. 60% z wody.",
+          speechText: "A to zabawne! Dlaczego woda nie zdała egzaminu? Bo go oblała! A tak na poważnie: Woda jest nam niezbędna do życia — organizm człowieka składa się w większości z wody.",
           
           textColor: "text-[#D2691E]",
         }

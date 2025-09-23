@@ -18,13 +18,13 @@ export default function CongratulationsPage8({ onStartClick }: CongratulationsPa
           text: (
             <>
               <p className="mb-1">A to ciekawe!</p>
-              <p className="mb-1">W sierpniu obserwować możemy noce spadających</p>
-              <p className="mb-1">gwiazd. Są to Perseidy, czyli jedne</p>
-              <p>z najpiękniejszych rojów meteorów.</p>
+              <p className="mb-1">W sierpniu możemy obserwować roje meteorów,</p>
+              <p className="mb-1">czyli deszcze spadających gwiazd. To zjawisko</p>
+              <p>spalania się w atmosferze kosmicznego pyłu i okruchów skalnych.</p>
             </>
           ),
           
-          speechText: "A to ciekawe! W sierpniu obserwować możemy noce spadających gwiazd. Są to Perseidy, czyli jedne z najpiękniejszych rojów meteorów.",
+          speechText: "A to ciekawe! W sierpniu możemy obserwować roje meteorów, czyli deszcze spadających gwiazd. To zjawisko spalania się w atmosferze kosmicznego pyłu i okruchów skalnych.",
           textColor: "text-[#FF8C00]",
         }
       case "jesien":

@@ -130,6 +130,9 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
   const [draggedItem, setDraggedItem] = useState<string | null>(null)
   const [isGameComplete, setIsGameComplete] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string>("")
+  const [touchStartPos, setTouchStartPos] = useState<{ x: number; y: number } | null>(null)
+  const [isDragging, setIsDragging] = useState(false)
+  const [dragOffset, setDragOffset] = useState<{ x: number; y: number } | null>(null)
   const { recordCompletion, isLoggedIn } = useGameCompletionWithHistory("matching-game")
 
   // Reset game state when items change (season change or new game)
@@ -138,6 +141,28 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
     setIsGameComplete(false)
     setSuccessMessage("")
   }, [scrambledTargetItems])
+
+  // Prevent scrolling during drag operations
+  useEffect(() => {
+    const preventScroll = (e: TouchEvent) => {
+      if (isDragging) {
+        e.preventDefault()
+      }
+    }
+
+    if (isDragging) {
+      document.addEventListener('touchmove', preventScroll, { passive: false })
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.removeEventListener('touchmove', preventScroll)
+      document.body.style.overflow = 'auto'
+    }
+
+    return () => {
+      document.removeEventListener('touchmove', preventScroll)
+      document.body.style.overflow = 'auto'
+    }
+  }, [isDragging])
 
   useEffect(() => {
     if (correctItems.length === scrambledTargetItems.length) {
@@ -181,13 +206,48 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
 
   const handleTouchStart = (e: React.TouchEvent, id: string) => {
     e.preventDefault()
+    e.stopPropagation()
+    
+    const touch = e.touches[0]
+    const rect = e.currentTarget.getBoundingClientRect()
+    
+    setTouchStartPos({ x: touch.clientX, y: touch.clientY })
+    setDragOffset({ 
+      x: touch.clientX - rect.left, 
+      y: touch.clientY - rect.top 
+    })
     setDraggedItem(id)
+    setIsDragging(true)
   }
 
-  const handleTouchMove = (e: React.TouchEvent) => e.preventDefault()
+  const handleTouchMove = (e: React.TouchEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    if (!isDragging || !draggedItem) return
+    
+    const touch = e.touches[0]
+    const deltaX = Math.abs(touch.clientX - (touchStartPos?.x || 0))
+    const deltaY = Math.abs(touch.clientY - (touchStartPos?.y || 0))
+    
+    // Only consider it dragging if moved more than 10px
+    if (deltaX > 10 || deltaY > 10) {
+      setIsDragging(true)
+    }
+  }
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     e.preventDefault()
+    e.stopPropagation()
+    
+    if (!isDragging || !draggedItem) {
+      setIsDragging(false)
+      setTouchStartPos(null)
+      setDragOffset(null)
+      setDraggedItem(null)
+      return
+    }
+
     const touch = e.changedTouches[0]
     const dropZone = document.elementFromPoint(touch.clientX, touch.clientY)
     const targetId = dropZone?.getAttribute("data-id")
@@ -203,10 +263,25 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
       const expectedNextItem = scrambledTargetItems[currentCorrectCount]
       
       if (targetId === expectedNextItem.id) {
-      setCorrectItems([...correctItems, targetId])
+        setCorrectItems([...correctItems, targetId])
       }
     }
+    
     setDraggedItem(null)
+    setIsDragging(false)
+    setTouchStartPos(null)
+    setDragOffset(null)
+  }
+
+  const handleClick = (itemId: string) => {
+    if (correctItems.length < scrambledTargetItems.length) {
+      const currentCorrectCount = correctItems.length
+      const expectedNextItem = scrambledTargetItems[currentCorrectCount]
+      
+      if (itemId === expectedNextItem.id) {
+        setCorrectItems([...correctItems, itemId])
+      }
+    }
   }
 
   const handleRetry = () => {
@@ -215,6 +290,9 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
     setIsGameComplete(false)
     setSuccessMessage("")
     setDraggedItem(null)
+    setIsDragging(false)
+    setTouchStartPos(null)
+    setDragOffset(null)
   }
 
   // Get the appropriate title box based on season
@@ -298,10 +376,21 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
                 <div
                   key={`dropzone-${item.id}`}
                   data-id={item.id}
-                  className={`relative h-[140px] w-[140px] ${!isAvailable && !isFilled ? 'opacity-40' : ''}`}
+                  className={`relative h-[140px] w-[140px] transition-all duration-200 ${
+                    !isAvailable && !isFilled 
+                      ? 'opacity-40' 
+                      : isAvailable 
+                        ? 'hover:scale-105 cursor-pointer' 
+                        : ''
+                  }`}
                   onDragOver={isAvailable ? handleDragOver : undefined}
                   onDrop={isAvailable ? (e) => handleDrop(e, item.id) : undefined}
                   onTouchEnd={isAvailable ? handleTouchEnd : undefined}
+                  style={{
+                    touchAction: 'none',
+                    userSelect: 'none',
+                    WebkitUserSelect: 'none'
+                  }}
                 >
                   <Image 
                     src="/images/white_box_medium.svg" 
@@ -342,15 +431,31 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
                   onTouchStart={(e) => handleTouchStart(e, item.id)}
                   onTouchMove={handleTouchMove}
                   onTouchEnd={handleTouchEnd}
-                  className="relative h-[80px] w-[80px] cursor-grab touch-manipulation"
+                  onClick={() => handleClick(item.id)}
+                  className={`relative h-[80px] w-[80px] cursor-grab touch-manipulation transition-all duration-200 ${
+                    draggedItem === item.id && isDragging 
+                      ? 'scale-110 opacity-80 shadow-lg z-50' 
+                      : 'hover:scale-105'
+                  }`}
+                  style={{
+                    touchAction: 'none',
+                    userSelect: 'none',
+                    WebkitUserSelect: 'none',
+                    WebkitTouchCallout: 'none',
+                    transform: draggedItem === item.id && isDragging && dragOffset 
+                      ? `translate(${dragOffset.x - 40}px, ${dragOffset.y - 40}px)` 
+                      : undefined
+                  }}
                 >
                   <Image
                     src={item.image || "/placeholder.svg"}
                     alt={item.name}
                     fill
-                    className="object-contain"
+                    className="object-contain pointer-events-none"
                     style={{
-                      filter: "drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.25))",
+                      filter: draggedItem === item.id && isDragging 
+                        ? "drop-shadow(4px 4px 8px rgba(0, 0, 0, 0.4))" 
+                        : "drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.25))",
                     }}
                   />
                 </div>

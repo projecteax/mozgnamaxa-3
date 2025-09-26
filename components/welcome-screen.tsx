@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
+import MobileNotSupported from "./mobile-not-supported"
 
 interface WelcomeScreenProps {
   onStart: () => void
@@ -19,7 +20,9 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{ backgroundColor: "#E3F7FF" }}>
+    <>
+      <MobileNotSupported />
+      <div className="min-h-screen relative overflow-hidden" style={{ backgroundColor: "#E3F7FF" }}>
       {/* Top Left Cloud with Fundacja Logo */}
       <div className="absolute top-0 left-0 z-10">
         <div className="relative">
@@ -43,7 +46,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
       </div>
 
       {/* Main App Logo - Responsive positioning and sizing */}
-      <div className="absolute top-[clamp(30px,6vh,60px)] xs:top-[clamp(40px,8vh,80px)] sm:top-[clamp(60px,6vw,150px)] md:top-[clamp(80px,8vw,150px)] left-1/2 transform -translate-x-1/2 z-20 px-2 xs:px-4 sm:px-0">
+      <div className="absolute top-[clamp(30px,6vh,60px)] xs:top-[clamp(40px,8vh,80px)] sm:top-[clamp(60px,6vw,150px)] md:top-[clamp(80px,8vw,150px)] left-1/2 transform -translate-x-1/2 z-20 px-2 xs:px-4 sm:px-0" style={{ marginLeft: '-50px' }}>
         <Image
           src="/images/welcome/app_logo.svg"
           alt="App Logo"
@@ -58,7 +61,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
       </div>
 
       {/* Dragon Welcome - Bottom Right with improved responsive sizing */}
-      <div className="absolute bottom-0 right-0 z-40 dragon-small">
+      <div className="absolute right-0 z-20 dragon-small" style={{ bottom: '14vh' }}>
         <Image
           src="/images/welcome/dragon_welcome 1.svg"
           alt="Dragon Welcome"
@@ -74,7 +77,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
       </div>
       
       {/* Dragon Welcome - Larger for screens above 1600px */}
-      <div className="absolute bottom-0 right-0 z-40 dragon-large">
+      <div className="absolute right-0 z-20 dragon-large" style={{ bottom: '14vh' }}>
         <Image
           src="/images/welcome/dragon_welcome 1.svg"
           alt="Dragon Welcome"
@@ -107,8 +110,8 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
       `}</style>
 
       {/* White Stripe with Bottom Logos - Responsive scaling like dragon */}
-      <div className="absolute bottom-0 left-0 right-0 z-30 bg-white" style={{ height: '8vh' }}>
-        <div className="relative w-full h-full flex items-center justify-center px-4" style={{ padding: '6px' }}>
+      <div className="absolute bottom-0 left-0 right-0 z-40 bg-white" style={{ height: '14vh' }}>
+        <div className="relative w-full h-full flex items-center justify-center px-4">
           <Image
             src="/images/welcome/bottom_logos.svg"
             alt="Bottom Logos"
@@ -124,7 +127,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
       </div>
 
       {/* START Button - Positioned above bottom stripe with proper spacing */}
-      <div className="absolute left-0 right-0 z-50 px-2 xs:px-4" style={{ bottom: 'calc(4vw + 2vh + 20px)' }}>
+      <div className="absolute left-0 right-0 z-50 px-2 xs:px-4" style={{ bottom: 'calc(14vh + 2vh + 20px)' }}>
         <div className="flex justify-center">
           <button
             onClick={handleStart}
@@ -153,6 +156,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
           <span className="text-blue-600 text-sm">Ładowanie...</span>
         </div>
       )}
-    </div>
+      </div>
+    </>
   )
 }

@@ -142,8 +142,19 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
     setSuccessMessage("")
   }, [scrambledTargetItems])
 
-  // Prevent scrolling during drag operations
+  // Prevent scrolling during drag operations and update drag position
   useEffect(() => {
+    const handleGlobalTouchMove = (e: TouchEvent) => {
+      if (isDragging && draggedItem) {
+        e.preventDefault()
+        const touch = e.touches[0]
+        setDragOffset({ 
+          x: touch.clientX, 
+          y: touch.clientY 
+        })
+      }
+    }
+
     const preventScroll = (e: TouchEvent) => {
       if (isDragging) {
         e.preventDefault()
@@ -151,18 +162,21 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
     }
 
     if (isDragging) {
+      document.addEventListener('touchmove', handleGlobalTouchMove, { passive: false })
       document.addEventListener('touchmove', preventScroll, { passive: false })
       document.body.style.overflow = 'hidden'
     } else {
+      document.removeEventListener('touchmove', handleGlobalTouchMove)
       document.removeEventListener('touchmove', preventScroll)
       document.body.style.overflow = 'auto'
     }
 
     return () => {
+      document.removeEventListener('touchmove', handleGlobalTouchMove)
       document.removeEventListener('touchmove', preventScroll)
       document.body.style.overflow = 'auto'
     }
-  }, [isDragging])
+  }, [isDragging, draggedItem])
 
   useEffect(() => {
     if (correctItems.length === scrambledTargetItems.length) {
@@ -224,7 +238,7 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
     e.preventDefault()
     e.stopPropagation()
     
-    if (!isDragging || !draggedItem) return
+    if (!draggedItem) return
     
     const touch = e.touches[0]
     const deltaX = Math.abs(touch.clientX - (touchStartPos?.x || 0))
@@ -233,6 +247,12 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
     // Only consider it dragging if moved more than 10px
     if (deltaX > 10 || deltaY > 10) {
       setIsDragging(true)
+      // Update drag offset for visual feedback
+      const rect = e.currentTarget.getBoundingClientRect()
+      setDragOffset({ 
+        x: touch.clientX - rect.left, 
+        y: touch.clientY - rect.top 
+      })
     }
   }
 
@@ -240,7 +260,7 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
     e.preventDefault()
     e.stopPropagation()
     
-    if (!isDragging || !draggedItem) {
+    if (!draggedItem) {
       setIsDragging(false)
       setTouchStartPos(null)
       setDragOffset(null)
@@ -442,9 +462,14 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
                     userSelect: 'none',
                     WebkitUserSelect: 'none',
                     WebkitTouchCallout: 'none',
-                    transform: draggedItem === item.id && isDragging && dragOffset 
-                      ? `translate(${dragOffset.x - 40}px, ${dragOffset.y - 40}px)` 
-                      : undefined
+                    position: draggedItem === item.id && isDragging ? 'fixed' : 'relative',
+                    left: draggedItem === item.id && isDragging && dragOffset 
+                      ? `${dragOffset.x - 40}px` 
+                      : undefined,
+                    top: draggedItem === item.id && isDragging && dragOffset 
+                      ? `${dragOffset.y - 40}px` 
+                      : undefined,
+                    zIndex: draggedItem === item.id && isDragging ? 1000 : undefined
                   }}
                 >
                   <Image

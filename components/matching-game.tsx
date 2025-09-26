@@ -227,8 +227,8 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
     
     setTouchStartPos({ x: touch.clientX, y: touch.clientY })
     setDragOffset({ 
-      x: touch.clientX - rect.left, 
-      y: touch.clientY - rect.top 
+      x: touch.clientX, 
+      y: touch.clientY 
     })
     setDraggedItem(id)
     setIsDragging(true)
@@ -244,14 +244,13 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
     const deltaX = Math.abs(touch.clientX - (touchStartPos?.x || 0))
     const deltaY = Math.abs(touch.clientY - (touchStartPos?.y || 0))
     
-    // Only consider it dragging if moved more than 10px
-    if (deltaX > 10 || deltaY > 10) {
+    // Only consider it dragging if moved more than 5px (reduced threshold)
+    if (deltaX > 5 || deltaY > 5) {
       setIsDragging(true)
       // Update drag offset for visual feedback
-      const rect = e.currentTarget.getBoundingClientRect()
       setDragOffset({ 
-        x: touch.clientX - rect.left, 
-        y: touch.clientY - rect.top 
+        x: touch.clientX, 
+        y: touch.clientY 
       })
     }
   }
@@ -272,18 +271,26 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
     const dropZone = document.elementFromPoint(touch.clientX, touch.clientY)
     const targetId = dropZone?.getAttribute("data-id")
 
-    if (
-      draggedItem &&
-      targetId &&
-      targetId === draggedItem &&
-      correctItems.length < scrambledTargetItems.length
-    ) {
+    // Debug logging
+    console.log('Touch end:', { draggedItem, targetId, touchX: touch.clientX, touchY: touch.clientY })
+
+    // Check if we're dropping on a valid drop zone
+    if (draggedItem && targetId && correctItems.length < scrambledTargetItems.length) {
       // Check if this is the next correct item in sequence
       const currentCorrectCount = correctItems.length
       const expectedNextItem = scrambledTargetItems[currentCorrectCount]
       
-      if (targetId === expectedNextItem.id) {
-        setCorrectItems([...correctItems, targetId])
+      console.log('Drop check:', { 
+        draggedItem, 
+        targetId, 
+        expectedNextItem: expectedNextItem.id,
+        currentCorrectCount 
+      })
+      
+      // The dragged item should match the expected next item
+      if (draggedItem === expectedNextItem.id && targetId === expectedNextItem.id) {
+        console.log('Correct match!')
+        setCorrectItems([...correctItems, draggedItem])
       }
     }
     
@@ -294,11 +301,19 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
   }
 
   const handleClick = (itemId: string) => {
+    console.log('Click handler:', { itemId, correctItemsLength: correctItems.length })
     if (correctItems.length < scrambledTargetItems.length) {
       const currentCorrectCount = correctItems.length
       const expectedNextItem = scrambledTargetItems[currentCorrectCount]
       
+      console.log('Click check:', { 
+        itemId, 
+        expectedNextItem: expectedNextItem.id,
+        currentCorrectCount 
+      })
+      
       if (itemId === expectedNextItem.id) {
+        console.log('Click: Correct match!')
         setCorrectItems([...correctItems, itemId])
       }
     }

@@ -1,9 +1,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import PublicPrivacyPolicy from "./public-privacy-policy"
 
 export default function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false)
+  const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false)
 
   useEffect(() => {
     // Sprawdź czy użytkownik już wyraził zgodę
@@ -108,13 +110,10 @@ export default function CookieConsent() {
                   Kontynuując korzystanie ze strony, wyrażasz zgodę na używanie plików cookies.
                   <br />
                   <button 
-                    onClick={() => {
-                      // W przyszłości można dodać modal z pełną polityką prywatności
-                      alert("Szczegółowa polityka prywatności będzie dostępna wkrótce.")
-                    }}
+                    onClick={() => setShowPrivacyPolicy(true)}
                     className="text-[#4A90E2] hover:text-[#357ABD] underline font-bold mt-1 inline-block"
                   >
-                    Przeczytaj naszą Politykę Prywatności
+                    📋 Przeczytaj naszą Politykę Prywatności
                   </button>
                 </p>
               </div>
@@ -122,6 +121,11 @@ export default function CookieConsent() {
           </div>
         </div>
       </div>
+
+      {/* Privacy Policy Modal */}
+      {showPrivacyPolicy && (
+        <PublicPrivacyPolicy onClose={() => setShowPrivacyPolicy(false)} />
+      )}
     </>
   )
 }

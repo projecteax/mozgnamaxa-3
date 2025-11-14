@@ -1,15 +1,21 @@
 "use client"
+import { useState } from "react"
 import Image from "next/image"
 import { useSeason } from "@/contexts/season-context"
 import SoundButtonEnhanced from "./sound-button-enhanced"
+import StudentGameMenu from "./student-game-menu"
 
 interface CongratulationsPage3Props {
   onStartClick: () => void
+  onGoHome?: () => void
+  onLogin?: () => void
+  onLogout?: () => void
 }
 
-export default function CongratulationsPage3({ onStartClick }: CongratulationsPage3Props) {
+export default function CongratulationsPage3({ onStartClick, onGoHome, onLogin, onLogout }: CongratulationsPage3Props) {
   const { selectedSeason, getThemeColors } = useSeason()
   const theme = getThemeColors()
+  const [showMenu, setShowMenu] = useState(false)
 
   const getSeasonContent = () => {
     switch (selectedSeason) {
@@ -26,7 +32,7 @@ export default function CongratulationsPage3({ onStartClick }: CongratulationsPa
           speechText: "A to zabawne! Przez jakie ryby można skakać? Przez płotki! A tak na poważnie: Płotka to niewielka ryba słodkowodna żyjąca w jeziorach i rzekach. Jej ciało jest spłaszczone i błyszczące.",
           dragon: "/images/dragon_03_summer.svg",
           
-          textColor: "text-[#FF8C00]",
+          textColor: "text-[#CC6600]",
         }
       case "jesien":
         return {
@@ -41,7 +47,7 @@ export default function CongratulationsPage3({ onStartClick }: CongratulationsPa
           speechText: "A to ciekawe! Wysoka wilgotność i umiarkowane temperatury sprzyjają wzrostowi grzybów, dlatego jesienią jest ich najwięcej.",
           dragon: "/images/dragon_03_autumn.svg",
           
-          textColor: "text-[#D2691E]",
+          textColor: "text-[#8B4513]",
         }
       case "zima":
         return {
@@ -80,9 +86,36 @@ export default function CongratulationsPage3({ onStartClick }: CongratulationsPa
 
   return (
     <div
-      className="w-full min-h-screen flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-hidden"
+      className="w-full min-h-screen flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-hidden relative"
       style={{ backgroundColor: theme.backgroundColor }}
     >
+      {/* Menu icon in top right corner */}
+      {onGoHome && (
+        <div className="absolute top-4 right-4 z-40">
+          <div className="relative w-16 h-16" onClick={() => setShowMenu(!showMenu)}>
+            <Image
+              src={theme.menuIcon || "/placeholder.svg"}
+              alt="Menu"
+              fill
+              className="object-contain cursor-pointer"
+              style={{
+                filter: "drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3))",
+              }}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Menu dropdown */}
+      {showMenu && onGoHome && (
+        <StudentGameMenu 
+          onGoHome={onGoHome} 
+          onLogout={onLogout || (() => {})} 
+          onClose={() => setShowMenu(false)}
+          onLogin={onLogin}
+        />
+      )}
+
       <div className="flex flex-col lg:flex-row items-center justify-between w-full max-w-6xl gap-2 sm:gap-4 md:gap-6">
         {/* Speech bubble with seasonal text */}
         <div className="relative w-full max-w-[390px] sm:max-w-[520px] md:max-w-[650px] lg:max-w-[780px] aspect-[969/444] flex-shrink-0 drop-shadow-lg">

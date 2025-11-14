@@ -8,9 +8,10 @@ interface StudentGameMenuProps {
   onGoHome: () => void
   onLogout: () => void
   onClose: () => void
+  onLogin?: () => void
 }
 
-export default function StudentGameMenu({ onGoHome, onLogout, onClose }: StudentGameMenuProps) {
+export default function StudentGameMenu({ onGoHome, onLogout, onClose, onLogin }: StudentGameMenuProps) {
   const { user, logout } = useAuth()
   const { selectedSeason, getThemeColors } = useSeason()
   const theme = getThemeColors()
@@ -40,6 +41,13 @@ export default function StudentGameMenu({ onGoHome, onLogout, onClose }: Student
     }
   }
 
+  const handleLogin = () => {
+    if (onLogin) {
+      onLogin()
+    }
+    onClose()
+  }
+
   return (
     <div className="fixed top-24 right-8 bg-white rounded-lg shadow-lg p-4 z-50 min-w-48">
       <div className="flex flex-col gap-3">
@@ -55,8 +63,21 @@ export default function StudentGameMenu({ onGoHome, onLogout, onClose }: Student
             Strona Główna
           </span>
         </button>
-        {/* Only show logout button for logged-in users */}
-        {user && (
+        {/* Show login button for non-logged-in users, logout button for logged-in users */}
+        {!user && onLogin ? (
+          <button
+            className="relative w-full h-12 flex items-center justify-center group hover:scale-105 transition-transform duration-200"
+            onClick={handleLogin}
+          >
+            <Image src="/images/button_default.svg" alt="Button background" width={200} height={48} className="w-full h-full" />
+            <span 
+              className="absolute inset-0 flex items-center justify-center font-bold text-lg font-sour-gummy tracking-wide"
+              style={{ color: getTextColor() }}
+            >
+              Zaloguj
+            </span>
+          </button>
+        ) : user ? (
           <button
             className="relative w-full h-12 flex items-center justify-center group hover:scale-105 transition-transform duration-200"
             onClick={handleLogout}
@@ -69,7 +90,7 @@ export default function StudentGameMenu({ onGoHome, onLogout, onClose }: Student
               Wyloguj
             </span>
           </button>
-        )}
+        ) : null}
       </div>
     </div>
   )

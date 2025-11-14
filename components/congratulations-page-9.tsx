@@ -1,15 +1,21 @@
 "use client"
+import { useState } from "react"
 import Image from "next/image"
 import SoundButtonEnhanced from "./sound-button-enhanced"
+import StudentGameMenu from "./student-game-menu"
 import { useSeason } from "@/contexts/season-context"
 
 interface CongratulationsPage9Props {
+  onGoHome?: () => void
+  onLogin?: () => void
+  onLogout?: () => void
   onStartClick: () => void
 }
 
-export default function CongratulationsPage9({ onStartClick }: CongratulationsPage9Props) {
+export default function CongratulationsPage9({ onStartClick, onGoHome, onLogin, onLogout }: CongratulationsPage9Props) {
   const { selectedSeason, getThemeColors } = useSeason()
   const theme = getThemeColors()
+  const [showMenu, setShowMenu] = useState(false)
 
   const getSeasonContent = () => {
     switch (selectedSeason) {
@@ -25,7 +31,7 @@ export default function CongratulationsPage9({ onStartClick }: CongratulationsPa
           ),
           
           speechText: "A to zabawne! Jak nazywa się ryba szpieg? Śledź. A tak na poważnie: Śledź to ryba morska. Jest źródłem zdrowych tłuszczów omega-3 oraz witamin D i B12.",
-          textColor: "text-[#FF8C00]",
+          textColor: "text-[#CC6600]",
         }
       case "jesien":
         return {
@@ -38,7 +44,7 @@ export default function CongratulationsPage9({ onStartClick }: CongratulationsPa
           ),
           
           speechText: "A to ciekawe! Rekordowe okazy dyni mogą osiągnąć nawet 1100 kg!",
-          textColor: "text-[#D2691E]",
+          textColor: "text-[#8B4513]",
         }
       case "zima":
         return {
@@ -74,8 +80,34 @@ export default function CongratulationsPage9({ onStartClick }: CongratulationsPa
   const seasonContent = getSeasonContent()
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-hidden"
+    <div className="w-full min-h-screen flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-hidden relative"
       style={{ backgroundColor: theme.backgroundColor }}>
+      {/* Menu icon in top right corner */}
+      {onGoHome && (
+        <div className="absolute top-4 right-4 z-40">
+          <div className="relative w-16 h-16" onClick={() => setShowMenu(!showMenu)}>
+            <Image
+              src={theme.menuIcon || "/placeholder.svg"}
+              alt="Menu"
+              fill
+              className="object-contain cursor-pointer"
+              style={{
+                filter: "drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3))",
+              }}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Menu dropdown */}
+      {showMenu && onGoHome && (
+        <StudentGameMenu 
+          onGoHome={onGoHome} 
+          onLogout={onLogout || (() => {})} 
+          onClose={() => setShowMenu(false)}
+          onLogin={onLogin}
+        />
+      )}
       <div className="flex flex-col lg:flex-row items-center justify-between w-full max-w-6xl gap-2 sm:gap-4 md:gap-6">
         {/* Speech bubble with new text */}
         <div className="relative w-full max-w-[390px] sm:max-w-[520px] md:max-w-[650px] lg:max-w-[780px] aspect-[969/444] flex-shrink-0 drop-shadow-lg">

@@ -39,6 +39,9 @@ export default function MobileNotSupported() {
             Aby uzyskać najlepsze doświadczenie, prosimy o korzystanie z przeglądarki 
             na komputerze lub laptopie.
           </p>
+          <p className="text-gray-600 leading-relaxed mt-3 font-semibold">
+            Zalecana rozdzielczość to 1920x1080
+          </p>
         </div>
         
         <div className="bg-blue-50 rounded-lg p-4 mb-6">

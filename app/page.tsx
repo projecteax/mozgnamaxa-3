@@ -1018,60 +1018,110 @@ export default function Home() {
   if (currentView === "dragon-welcome-4") {
     // Check if we're coming from progress menu (gameInProgress flag is set)
     const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
-    return <CongratulationsPage4 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon4Start} />
+    return <CongratulationsPage4 
+      onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon4Start}
+      onGoHome={handleGoHome}
+      onLogin={handleStudentLogin}
+      onLogout={handleLogout}
+    />
   }
 
   if (currentView === "dragon-welcome-5") {
     // Check if we're coming from progress menu (gameInProgress flag is set)
     const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
-    return <CongratulationsPage5 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon5Start} />
+    return <CongratulationsPage5 
+      onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon5Start}
+      onGoHome={handleGoHome}
+      onLogin={handleStudentLogin}
+      onLogout={handleLogout}
+    />
   }
 
   if (currentView === "dragon-welcome-6") {
     // Check if we're coming from progress menu (gameInProgress flag is set)
     const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
-    return <CongratulationsPage6 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon6Start} />
+    return <CongratulationsPage6 
+      onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon6Start}
+      onGoHome={handleGoHome}
+      onLogin={handleStudentLogin}
+      onLogout={handleLogout}
+    />
   }
 
   if (currentView === "dragon-welcome-7") {
     // Check if we're coming from progress menu (gameInProgress flag is set)
     const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
-    return <CongratulationsPage7 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon7Start} />
+    return <CongratulationsPage7 
+      onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon7Start}
+      onGoHome={handleGoHome}
+      onLogin={handleStudentLogin}
+      onLogout={handleLogout}
+    />
   }
 
   if (currentView === "dragon-welcome-8") {
     // Check if we're coming from progress menu (gameInProgress flag is set)
     const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
-    return <CongratulationsPage8 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon8Start} />
+    return <CongratulationsPage8 
+      onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon8Start}
+      onGoHome={handleGoHome}
+      onLogin={handleStudentLogin}
+      onLogout={handleLogout}
+    />
   }
 
   if (currentView === "dragon-welcome-9") {
     // Check if we're coming from progress menu (gameInProgress flag is set)
     const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
-    return <CongratulationsPage9 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon9Start} />
+    return <CongratulationsPage9 
+      onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon9Start}
+      onGoHome={handleGoHome}
+      onLogin={handleStudentLogin}
+      onLogout={handleLogout}
+    />
   }
 
   if (currentView === "dragon-welcome-10") {
     // Check if we're coming from progress menu (gameInProgress flag is set)
     const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
-    return <CongratulationsPage10 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon10Start} />
+    return <CongratulationsPage10 
+      onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon10Start}
+      onGoHome={handleGoHome}
+      onLogin={handleStudentLogin}
+      onLogout={handleLogout}
+    />
   }
 
   if (currentView === "dragon-welcome-11") {
     // Check if we're coming from progress menu (gameInProgress flag is set)
     const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
-    return <CongratulationsPage11 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon11Start} />
+    return <CongratulationsPage11 
+      onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon11Start}
+      onGoHome={handleGoHome}
+      onLogin={handleStudentLogin}
+      onLogout={handleLogout}
+    />
   }
 
   if (currentView === "dragon-welcome-12") {
     // Check if we're coming from progress menu (gameInProgress flag is set)
     const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
-    return <CongratulationsPage12 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon12Start} />
+    return <CongratulationsPage12 
+      onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon12Start}
+      onGoHome={handleGoHome}
+      onLogin={handleStudentLogin}
+      onLogout={handleLogout}
+    />
   }
   if (currentView === "dragon-welcome-13") {
     // Check if we're coming from progress menu (gameInProgress flag is set)
     const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
-    return <CongratulationsPage13 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon13Start} />
+    return <CongratulationsPage13 
+      onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon13Start}
+      onGoHome={handleGoHome}
+      onLogin={handleStudentLogin}
+      onLogout={handleLogout}
+    />
   }
 
   // Render based on current view
@@ -1112,19 +1162,34 @@ export default function Home() {
   if (currentView === "dragon-welcome") {
     // Check if we're coming from progress menu (gameInProgress flag is set)
     const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
-    return <CongratulationsPage onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragonStart} />
+    return <CongratulationsPage 
+      onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragonStart}
+      onGoHome={handleGoHome}
+      onLogin={handleStudentLogin}
+      onLogout={handleLogout}
+    />
   }
 
   if (currentView === "dragon-welcome-2") {
     // Check if we're coming from progress menu (gameInProgress flag is set)
     const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
-    return <CongratulationsPage2 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon2Start} />
+    return <CongratulationsPage2 
+      onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon2Start}
+      onGoHome={handleGoHome}
+      onLogin={handleStudentLogin}
+      onLogout={handleLogout}
+    />
   }
 
   if (currentView === "dragon-welcome-3") {
     // Check if we're coming from progress menu (gameInProgress flag is set)
     const isFromProgress = typeof window !== 'undefined' && localStorage.getItem("gameInProgress") === "true"
-    return <CongratulationsPage3 onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon3Start} />
+    return <CongratulationsPage3 
+      onStartClick={isFromProgress ? handleDragonWelcomeStart : handleDragon3Start}
+      onGoHome={handleGoHome}
+      onLogin={handleStudentLogin}
+      onLogout={handleLogout}
+    />
   }
 
   if (currentView === "student-login") {
@@ -1700,7 +1765,8 @@ export default function Home() {
         <StudentGameMenu 
           onGoHome={handleGoHome} 
           onLogout={handleLogout} 
-          onClose={() => setShowMenu(false)} 
+          onClose={() => setShowMenu(false)}
+          onLogin={handleStudentLogin}
         />
       )}
     </main>

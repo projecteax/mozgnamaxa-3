@@ -73,15 +73,27 @@ export default function MainMenu({
         </div>
       </div>
 
-      {/* Menu Buttons - Below the cloud */}
-      <div className="absolute" style={{ top: 'calc(37.5vh + 50px)', left: 'calc(75vh * 1 + 80px)', width: 'auto', height: 'auto', maxWidth: 'calc(100vw - 200px)' }}>
+      {/* Menu Buttons Container - Spans from dragon's right edge to screen's right edge */}
+      <div 
+        className="absolute buttons-container" 
+        style={{ 
+          top: 'clamp(200px, calc(37.5vh + 50px), 400px)', 
+          left: '75vh',
+          right: '0',
+          width: 'calc(100vw - 75vh)',
+          height: 'auto',
+          paddingLeft: 'clamp(20px, 3vw, 60px)',
+          paddingRight: '20px',
+          boxSizing: 'border-box'
+        }}
+      >
         <div className="flex flex-col items-start gap-8 w-full">
           {/* Student Login Button */}
           <button
             onClick={onStudentLogin}
             className="relative group hover:scale-105 transition-transform duration-200"
             style={{ 
-              width: 'clamp(300px, 40vw, 600px)', 
+              width: 'clamp(250px, 40vw, 600px)', 
               height: 'clamp(60px, 8vh, 120px)',
               marginBottom: 'clamp(20px, 5vh, 60px)',
               maxWidth: '100%'
@@ -94,7 +106,7 @@ export default function MainMenu({
               height={160} 
               className="w-full h-full object-contain" 
             />
-            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide whitespace-nowrap px-4" style={{ fontSize: '1.7rem' }}>
+            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide whitespace-nowrap px-4 button-text">
               LOGOWANIE DLA UCZNIA
             </span>
           </button>
@@ -104,7 +116,7 @@ export default function MainMenu({
             onClick={onPlayWithoutLogin}
             className="relative group hover:scale-105 transition-transform duration-200"
             style={{ 
-              width: 'clamp(300px, 40vw, 600px)', 
+              width: 'clamp(250px, 40vw, 600px)', 
               height: 'clamp(60px, 8vh, 120px)',
               marginBottom: 'clamp(20px, 5vh, 60px)',
               maxWidth: '100%'
@@ -117,7 +129,7 @@ export default function MainMenu({
               height={160} 
               className="w-full h-full object-contain" 
             />
-            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide whitespace-nowrap px-4" style={{ fontSize: '1.7rem' }}>
+            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide whitespace-nowrap px-4 button-text">
               ZAGRAJ BEZ LOGOWANIA
             </span>
           </button>
@@ -127,7 +139,7 @@ export default function MainMenu({
             onClick={onTeacherLogin}
             className="relative group hover:scale-105 transition-transform duration-200"
             style={{ 
-              width: 'clamp(300px, 40vw, 600px)', 
+              width: 'clamp(250px, 40vw, 600px)', 
               height: 'clamp(60px, 8vh, 120px)',
               maxWidth: '100%'
             }}
@@ -139,12 +151,60 @@ export default function MainMenu({
               height={160} 
               className="w-full h-full object-contain" 
             />
-            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide whitespace-nowrap px-4" style={{ fontSize: '1.7rem' }}>
+            <span className="absolute inset-0 flex items-center justify-center text-[#3e459c] font-sour-gummy-extrabold tracking-wide whitespace-nowrap px-4 button-text">
               LOGOWANIE DLA NAUCZYCIELA
             </span>
           </button>
         </div>
       </div>
+      
+      <style jsx>{`
+        /* Text scaling - scales proportionally with button size */
+        .button-text {
+          font-size: clamp(0.9rem, 1.8vw, 2.2rem);
+          max-height: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        @media (max-width: 1366px) {
+          .button-text {
+            font-size: clamp(0.85rem, 1.6vw, 2rem);
+          }
+        }
+        @media (max-width: 1024px) {
+          .button-text {
+            font-size: clamp(0.8rem, 1.4vw, 1.8rem);
+          }
+        }
+        @media (max-width: 768px) {
+          .button-text {
+            font-size: clamp(0.75rem, 1.2vw, 1.5rem);
+          }
+        }
+        
+        .buttons-container {
+          /* Container spans from dragon's right edge (75vh) to screen's right edge (100vw) */
+          /* This ensures buttons never overlap dragon and always fit on screen */
+        }
+        
+        /* On smaller screens where 75vh might be too wide, adjust container */
+        @media (max-width: 1024px) {
+          .buttons-container {
+            left: 75vh !important;
+            width: calc(100vw - 75vh) !important;
+            paddingLeft: clamp(10px, 2vw, 40px) !important;
+            paddingRight: 20px !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .buttons-container {
+            left: 0 !important;
+            width: 100vw !important;
+            paddingLeft: 20px !important;
+            paddingRight: 20px !important;
+          }
+        }
+      `}</style>
     </div>
   )
 }

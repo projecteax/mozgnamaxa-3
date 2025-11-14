@@ -46,7 +46,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
       </div>
 
       {/* Main App Logo - Responsive positioning and sizing */}
-      <div className="absolute top-[clamp(30px,6vh,60px)] xs:top-[clamp(40px,8vh,80px)] sm:top-[clamp(60px,6vw,150px)] md:top-[clamp(80px,8vw,150px)] left-1/2 transform -translate-x-1/2 z-20 px-2 xs:px-4 sm:px-0" style={{ marginLeft: '-50px' }}>
+      <div className="absolute top-[clamp(30px,6vh,60px)] xs:top-[clamp(40px,8vh,80px)] sm:top-[clamp(60px,6vw,150px)] md:top-[clamp(80px,8vw,150px)] left-1/2 transform -translate-x-1/2 z-20 px-2 xs:px-4 sm:px-0 logo-container">
         <Image
           src="/images/welcome/app_logo.svg"
           alt="App Logo"
@@ -107,14 +107,63 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
             display: block;
           }
         }
+        /* Improve scaling on smaller screens - keep large screens (1920px+) unchanged */
+        @media (max-width: 1919px) {
+          .dragon-small {
+            height: clamp(400px, 70vh, 75vh) !important;
+          }
+        }
+        @media (max-width: 1366px) {
+          .dragon-small {
+            height: clamp(400px, 65vh, 70vh) !important;
+          }
+        }
+        @media (max-width: 1024px) {
+          .dragon-small {
+            height: clamp(350px, 60vh, 65vh) !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .dragon-small {
+            height: clamp(300px, 55vh, 60vh) !important;
+          }
+        }
+        /* Adjust logo margin on smaller screens */
+        @media (max-width: 1919px) {
+          .logo-container {
+            margin-left: clamp(-30px, -2vw, -50px) !important;
+          }
+        }
+        @media (max-width: 1366px) {
+          .logo-container {
+            margin-left: clamp(-20px, -1.5vw, -30px) !important;
+          }
+        }
+        /* Adjust bottom stripe and button on smaller screens */
+        @media (max-width: 1366px) {
+          .bottom-stripe {
+            height: clamp(50px, 12vh, 14vh) !important;
+          }
+          .start-button-container {
+            bottom: calc(clamp(50px, 12vh, 14vh) + clamp(15px, 2vh, 20px)) !important;
+          }
+        }
+        @media (max-width: 1024px) {
+          .bottom-stripe {
+            height: clamp(45px, 10vh, 12vh) !important;
+          }
+          .start-button-container {
+            bottom: calc(clamp(45px, 10vh, 12vh) + clamp(10px, 1.5vh, 20px)) !important;
+          }
+        }
       `}</style>
 
-      {/* White Stripe with Bottom Logos - Responsive scaling like dragon */}
-      <div className="absolute bottom-0 left-0 right-0 z-40 bg-white" style={{ height: '14vh' }}>
+      {/* White Stripe with Project Funding Information - Responsive scaling like dragon */}
+      <div className="absolute bottom-0 left-0 right-0 z-40 bg-white bottom-stripe" style={{ height: '14vh' }}>
         <div className="relative w-full h-full flex items-center justify-center px-4">
           <Image
             src="/images/welcome/bottom_logos.svg"
-            alt="Bottom Logos"
+            alt="Projekt dofinansowany ze środków Funduszu Europejskiego dla dla Rozwoju Społecznego"
             width={600}
             height={80}
             className="object-contain"
@@ -127,7 +176,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
       </div>
 
       {/* START Button - Positioned above bottom stripe with proper spacing */}
-      <div className="absolute left-0 right-0 z-50 px-2 xs:px-4" style={{ bottom: 'calc(14vh + 2vh + 20px)' }}>
+      <div className="absolute left-0 right-0 z-50 px-2 xs:px-4 start-button-container" style={{ bottom: 'calc(14vh + 2vh + 20px)' }}>
         <div className="flex justify-center">
           <button
             onClick={handleStart}

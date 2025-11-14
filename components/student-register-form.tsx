@@ -6,6 +6,7 @@ import { useState, useEffect } from "react"
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import { useAuth } from "@/contexts/auth-context"
+import AuthFooter from "./auth-footer"
 
 interface FormData {
   name: string
@@ -220,6 +221,8 @@ export default function StudentRegisterForm({ onLoginClick, onSuccess }: Student
           </button>
         </div>
       </div>
+
+      <AuthFooter />
     </div>
   )
 }

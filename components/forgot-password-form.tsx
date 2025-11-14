@@ -4,6 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { useAuth } from "@/contexts/auth-context"
+import AuthFooter from "./auth-footer"
 
 interface ForgotPasswordFormProps {
   onBackToLogin: () => void
@@ -101,6 +102,8 @@ export default function ForgotPasswordForm({ onBackToLogin }: ForgotPasswordForm
           </button>
         </div>
         </div>
+
+        <AuthFooter />
       </div>
     </div>
   )

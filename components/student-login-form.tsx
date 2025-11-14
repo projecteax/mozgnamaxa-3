@@ -7,6 +7,7 @@ import { collection, query, where, getDocs, updateDoc, doc } from "firebase/fire
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import { db } from "@/lib/firebase"
 import { useAuth } from "@/contexts/auth-context"
+import AuthFooter from "./auth-footer"
 
 interface StudentLoginFormProps {
   onRegisterClick: () => void
@@ -157,23 +158,7 @@ export default function StudentLoginForm({ onRegisterClick, onForgotPasswordClic
         </div>
       </div>
 
-      {/* Creative Commons License Footer */}
-      <div className="w-full max-w-md mx-auto mt-4 mb-4">
-        <div className="text-center text-sm text-gray-600">
-          <p>
-            Niniejszy materiał opublikowany jest na licencji{" "}
-            <a 
-              href="https://creativecommons.org/licenses/by/4.0/deed.pl" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 underline"
-            >
-              CC BY 4.0 (Creative Commons – Uznanie autorstwa – 4.0 Międzynarodowe)
-            </a>
-            .
-          </p>
-        </div>
-      </div>
+      <AuthFooter />
     </div>
   )
 }

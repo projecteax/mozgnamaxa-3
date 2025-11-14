@@ -130,9 +130,6 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
   const [draggedItem, setDraggedItem] = useState<string | null>(null)
   const [isGameComplete, setIsGameComplete] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string>("")
-  const [touchStartPos, setTouchStartPos] = useState<{ x: number; y: number } | null>(null)
-  const [isDragging, setIsDragging] = useState(false)
-  const [dragOffset, setDragOffset] = useState<{ x: number; y: number } | null>(null)
   const { recordCompletion, isLoggedIn } = useGameCompletionWithHistory("matching-game")
 
   // Reset game state when items change (season change or new game)
@@ -142,41 +139,7 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
     setSuccessMessage("")
   }, [scrambledTargetItems])
 
-  // Prevent scrolling during drag operations and update drag position
-  useEffect(() => {
-    const handleGlobalTouchMove = (e: TouchEvent) => {
-      if (isDragging && draggedItem) {
-        e.preventDefault()
-        const touch = e.touches[0]
-        setDragOffset({ 
-          x: touch.clientX, 
-          y: touch.clientY 
-        })
-      }
-    }
-
-    const preventScroll = (e: TouchEvent) => {
-      if (isDragging) {
-        e.preventDefault()
-      }
-    }
-
-    if (isDragging) {
-      document.addEventListener('touchmove', handleGlobalTouchMove, { passive: false })
-      document.addEventListener('touchmove', preventScroll, { passive: false })
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.removeEventListener('touchmove', handleGlobalTouchMove)
-      document.removeEventListener('touchmove', preventScroll)
-      document.body.style.overflow = 'auto'
-    }
-
-    return () => {
-      document.removeEventListener('touchmove', handleGlobalTouchMove)
-      document.removeEventListener('touchmove', preventScroll)
-      document.body.style.overflow = 'auto'
-    }
-  }, [isDragging, draggedItem])
+  // Simple touch handling - no complex global listeners needed
 
   useEffect(() => {
     if (correctItems.length === scrambledTargetItems.length) {
@@ -222,82 +185,27 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
     e.preventDefault()
     e.stopPropagation()
     
-    const touch = e.touches[0]
-    const rect = e.currentTarget.getBoundingClientRect()
-    
-    setTouchStartPos({ x: touch.clientX, y: touch.clientY })
-    setDragOffset({ 
-      x: touch.clientX, 
-      y: touch.clientY 
-    })
+    console.log('Touch start:', { id })
     setDraggedItem(id)
-    setIsDragging(true)
   }
 
   const handleTouchMove = (e: React.TouchEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    
-    if (!draggedItem) return
-    
-    const touch = e.touches[0]
-    const deltaX = Math.abs(touch.clientX - (touchStartPos?.x || 0))
-    const deltaY = Math.abs(touch.clientY - (touchStartPos?.y || 0))
-    
-    // Only consider it dragging if moved more than 5px (reduced threshold)
-    if (deltaX > 5 || deltaY > 5) {
-      setIsDragging(true)
-      // Update drag offset for visual feedback
-      setDragOffset({ 
-        x: touch.clientX, 
-        y: touch.clientY 
-      })
-    }
   }
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     e.preventDefault()
     e.stopPropagation()
     
-    if (!draggedItem) {
-      setIsDragging(false)
-      setTouchStartPos(null)
-      setDragOffset(null)
-      setDraggedItem(null)
-      return
-    }
+    if (!draggedItem) return
 
-    const touch = e.changedTouches[0]
-    const dropZone = document.elementFromPoint(touch.clientX, touch.clientY)
-    const targetId = dropZone?.getAttribute("data-id")
-
-    // Debug logging
-    console.log('Touch end:', { draggedItem, targetId, touchX: touch.clientX, touchY: touch.clientY })
-
-    // Check if we're dropping on a valid drop zone
-    if (draggedItem && targetId && correctItems.length < scrambledTargetItems.length) {
-      // Check if this is the next correct item in sequence
-      const currentCorrectCount = correctItems.length
-      const expectedNextItem = scrambledTargetItems[currentCorrectCount]
-      
-      console.log('Drop check:', { 
-        draggedItem, 
-        targetId, 
-        expectedNextItem: expectedNextItem.id,
-        currentCorrectCount 
-      })
-      
-      // The dragged item should match the expected next item
-      if (draggedItem === expectedNextItem.id && targetId === expectedNextItem.id) {
-        console.log('Correct match!')
-        setCorrectItems([...correctItems, draggedItem])
-      }
-    }
+    console.log('Touch end:', { draggedItem })
+    
+    // For tablets, just use the click handler - much simpler and more reliable
+    handleClick(draggedItem)
     
     setDraggedItem(null)
-    setIsDragging(false)
-    setTouchStartPos(null)
-    setDragOffset(null)
   }
 
   const handleClick = (itemId: string) => {
@@ -325,9 +233,6 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
     setIsGameComplete(false)
     setSuccessMessage("")
     setDraggedItem(null)
-    setIsDragging(false)
-    setTouchStartPos(null)
-    setDragOffset(null)
   }
 
   // Get the appropriate title box based on season
@@ -420,7 +325,6 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
                   }`}
                   onDragOver={isAvailable ? handleDragOver : undefined}
                   onDrop={isAvailable ? (e) => handleDrop(e, item.id) : undefined}
-                  onTouchEnd={isAvailable ? handleTouchEnd : undefined}
                   style={{
                     touchAction: 'none',
                     userSelect: 'none',
@@ -467,24 +371,12 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
                   onTouchMove={handleTouchMove}
                   onTouchEnd={handleTouchEnd}
                   onClick={() => handleClick(item.id)}
-                  className={`relative h-[80px] w-[80px] cursor-grab touch-manipulation transition-all duration-200 ${
-                    draggedItem === item.id && isDragging 
-                      ? 'scale-110 opacity-80 shadow-lg z-50' 
-                      : 'hover:scale-105'
-                  }`}
+                  className="relative h-[80px] w-[80px] cursor-pointer touch-manipulation transition-all duration-200 hover:scale-105"
                   style={{
-                    touchAction: 'none',
+                    touchAction: 'manipulation',
                     userSelect: 'none',
                     WebkitUserSelect: 'none',
-                    WebkitTouchCallout: 'none',
-                    position: draggedItem === item.id && isDragging ? 'fixed' : 'relative',
-                    left: draggedItem === item.id && isDragging && dragOffset 
-                      ? `${dragOffset.x - 40}px` 
-                      : undefined,
-                    top: draggedItem === item.id && isDragging && dragOffset 
-                      ? `${dragOffset.y - 40}px` 
-                      : undefined,
-                    zIndex: draggedItem === item.id && isDragging ? 1000 : undefined
+                    WebkitTouchCallout: 'none'
                   }}
                 >
                   <Image

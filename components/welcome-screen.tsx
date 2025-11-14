@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import MobileNotSupported from "./mobile-not-supported"
+import CookieConsent from "./cookie-consent"
 
 interface WelcomeScreenProps {
   onStart: () => void
@@ -206,6 +207,9 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
         </div>
       )}
       </div>
+      
+      {/* Cookie Consent Banner */}
+      <CookieConsent />
     </>
   )
 }

@@ -1,10 +1,8 @@
 
 "use client"
 
-import { useState } from "react"
 import Image from "next/image"
 import SoundButtonEnhanced from "./sound-button-enhanced"
-import PublicPrivacyPolicy from "./public-privacy-policy"
 
 interface MainMenuProps {
   onStudentLogin: () => void
@@ -17,12 +15,10 @@ export default function MainMenu({
   onTeacherLogin,
   onPlayWithoutLogin,
 }: MainMenuProps) {
-  const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false)
-
   return (
     <div className="w-full h-screen bg-[#E8F4FD] relative overflow-hidden">
       {/* Sound Icon - Top Right Corner with 50px margins */}
-      <div className="absolute top-[60px] right-[60px]">
+      <div className="absolute top-[60px] right-[60px] z-30">
         <SoundButtonEnhanced
           text="Cześć! Jestem MAX! Będę Ci towarzyszyć podczas rozwiązywania zadań."
           soundIcon="/images/sound_main_menu.svg"
@@ -31,13 +27,13 @@ export default function MainMenu({
         />
       </div>
 
-      {/* Dragon - Always stuck to left bottom corner, 75% of screen height */}
+      {/* Dragon - Always stuck to left bottom corner, 75% of screen height, above footer */}
       <Image
         src="/images/dragon_menu.svg"
         alt="Dragon Menu"
         width={800}
         height={800}
-        className="absolute bottom-0 left-0"
+        className="absolute bottom-0 left-0 z-10"
         style={{ 
           height: '75vh',
           width: 'auto',
@@ -48,7 +44,7 @@ export default function MainMenu({
 
       {/* Cloud - Positioned relative to dragon */}
       <div 
-        className="absolute"
+        className="absolute z-20"
         style={{
           top: 'calc(25vh - 18.75vh - 20px)',
           left: 'calc(75vh - 120px)',
@@ -79,7 +75,7 @@ export default function MainMenu({
 
       {/* Menu Buttons Container - Spans from dragon's right edge to screen's right edge */}
       <div 
-        className="absolute buttons-container" 
+        className="absolute buttons-container z-20" 
         style={{ 
           top: 'clamp(200px, calc(37.5vh + 50px), 400px)', 
           left: '75vh',
@@ -88,7 +84,7 @@ export default function MainMenu({
           height: 'auto',
           paddingLeft: 'clamp(20px, 3vw, 60px)',
           paddingRight: '20px',
-          paddingBottom: '200px', // Space for footer
+          paddingBottom: '120px', // Space for footer
           boxSizing: 'border-box'
         }}
       >
@@ -163,77 +159,58 @@ export default function MainMenu({
         </div>
       </div>
 
-      {/* Footer with CC License and Privacy Policy - Fixed at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 bg-white/95 border-t-2 border-gray-300 py-4 px-4 shadow-lg">
+      {/* Footer with CC License - Fixed at bottom, below dragon */}
+      <div className="absolute bottom-0 left-0 right-0 z-0 bg-white/95 border-t-2 border-gray-300 py-2 px-4">
         <div className="max-w-6xl mx-auto">
-          {/* Privacy Policy Link */}
-          <div className="text-center mb-3">
-            <button
-              onClick={() => setShowPrivacyPolicy(true)}
-              className="text-blue-600 hover:text-blue-800 underline font-bold font-sour-gummy text-base sm:text-lg transition-colors"
-            >
-              📋 Polityka Prywatności
-            </button>
-          </div>
-
           {/* CC License Footer - Compact version for main menu */}
-          <div className="w-full max-w-6xl mx-auto">
-            <div className="bg-white/80 rounded-xl p-4 border-2 border-gray-200">
-              <div className="flex flex-col items-center gap-3">
-                {/* CC License Badge */}
+          <div className="flex flex-col items-center gap-2">
+            {/* CC License Badge - At the very bottom */}
+            <a
+              href="https://creativecommons.org/licenses/by/4.0/deed.pl"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-80 transition-opacity"
+            >
+              <img
+                src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by.svg"
+                alt="CC BY 4.0"
+                className="h-6 w-auto"
+              />
+            </a>
+
+            {/* License Text - Compact */}
+            <div className="text-center space-y-1 text-gray-700 font-sour-gummy text-xs">
+              <p className="leading-tight">
+                Niniejszy materiał opublikowany jest na licencji{" "}
+                <strong>CC BY 4.0 (Creative Commons – Uznanie autorstwa – 4.0 Międzynarodowe)</strong>.
+                Szczegóły licencji znajdziesz{" "}
                 <a
                   href="https://creativecommons.org/licenses/by/4.0/deed.pl"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:opacity-80 transition-opacity"
+                  className="text-blue-600 hover:text-blue-800 underline font-bold"
                 >
-                  <img
-                    src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by.svg"
-                    alt="CC BY 4.0"
-                    className="h-8 w-auto"
-                  />
+                  TUTAJ
                 </a>
-
-                {/* License Text - Compact */}
-                <div className="text-center space-y-2 text-gray-700 font-sour-gummy text-xs sm:text-sm">
-                  <p className="leading-relaxed">
-                    Niniejszy materiał opublikowany jest na licencji{" "}
-                    <strong>CC BY 4.0 (Creative Commons – Uznanie autorstwa – 4.0 Międzynarodowe)</strong>.
-                  </p>
-                  
-                  <p className="leading-relaxed">
-                    Szczegóły licencji znajdziesz{" "}
-                    <a
-                      href="https://creativecommons.org/licenses/by/4.0/deed.pl"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 underline font-bold"
-                    >
-                      TUTAJ
-                    </a>
-                    .
-                  </p>
-
-                  <p className="leading-relaxed text-xs">
-                    Co do zasady masz prawo do korzystania, używania i remiksowania niniejszego materiału w celach komercyjnych i niekomercyjnych, 
-                    przy jednoczesnej konieczności podania autorów i autorek materiału.
-                  </p>
-
-                  <p className="leading-relaxed text-xs">
-                    Prosimy również, aby podać informację, że materiał powstał w ramach projektu{" "}
-                    <strong>„POPOJUTRZE 3.0 – KSZTAŁCENIE"</strong>,{" "}
-                    <a
-                      href="https://www.popojutrze.pl"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 underline font-bold"
-                    >
-                      www.popojutrze.pl
-                    </a>
-                    .
-                  </p>
-                </div>
-              </div>
+                .
+              </p>
+              <p className="leading-tight">
+                Co do zasady masz prawo do korzystania, używania i remiksowania niniejszego materiału w celach komercyjnych i niekomercyjnych, 
+                przy jednoczesnej konieczności podania autorów i autorek materiału.
+              </p>
+              <p className="leading-tight">
+                Prosimy również, aby podać informację, że materiał powstał w ramach projektu{" "}
+                <strong>„POPOJUTRZE 3.0 – KSZTAŁCENIE"</strong>,{" "}
+                <a
+                  href="https://www.popojutrze.pl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:text-blue-800 underline font-bold"
+                >
+                  www.popojutrze.pl
+                </a>
+                .
+              </p>
             </div>
           </div>
         </div>
@@ -286,11 +263,6 @@ export default function MainMenu({
           }
         }
       `}</style>
-
-      {/* Privacy Policy Modal */}
-      {showPrivacyPolicy && (
-        <PublicPrivacyPolicy onClose={() => setShowPrivacyPolicy(false)} />
-      )}
     </div>
   )
 }

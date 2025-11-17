@@ -10,6 +10,7 @@ import UserAvatar from "./user-avatar"
 import TeacherUserButton from "./teacher-user-button"
 import TeacherStudentRegisterForm from "./teacher-student-register-form"
 import PrivacyPolicyPage from "./privacy-policy-page"
+import CCLicenseFooter from "./cc-license-footer"
 import { collection, query, where, getDocs, deleteDoc, doc, updateDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import { getTeacherStudents, type StudentProgress } from "@/lib/progress-service"
@@ -374,22 +375,7 @@ export default function TeacherPanel({ onMenuClick, isCreatingStudent, setIsCrea
         </div>
 
         {/* Creative Commons License Footer */}
-        <div className="w-full max-w-6xl mx-auto mt-8 mb-4">
-          <div className="text-center text-sm text-gray-600">
-            <p>
-              Niniejszy materiał opublikowany jest na licencji{" "}
-              <a 
-                href="https://creativecommons.org/licenses/by/4.0/deed.pl" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-800 underline"
-              >
-                CC BY 4.0 (Creative Commons – Uznanie autorstwa – 4.0 Międzynarodowe)
-              </a>
-              .
-            </p>
-          </div>
-        </div>
+        <CCLicenseFooter />
       </div>
     </div>
   )

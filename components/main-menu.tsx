@@ -84,7 +84,7 @@ export default function MainMenu({
           height: 'auto',
           paddingLeft: 'clamp(20px, 3vw, 60px)',
           paddingRight: '20px',
-          paddingBottom: '60px', // Space for compact footer
+          paddingBottom: '100px', // Space for footer with full text
           boxSizing: 'border-box'
         }}
       >
@@ -159,11 +159,11 @@ export default function MainMenu({
         </div>
       </div>
 
-      {/* Footer with CC License - Fixed at bottom, below dragon - Compact */}
-      <div className="absolute bottom-0 left-0 right-0 z-0 bg-white/95 border-t border-gray-300 py-1 px-2">
-        <div className="max-w-6xl mx-auto">
+      {/* Footer with CC License - Fixed at bottom, below dragon - Compact with full text */}
+      <div className="absolute bottom-0 left-0 right-0 z-0 bg-white/95 border-t border-gray-200 py-1 px-2 footer-cc">
+        <div className="w-full mx-auto max-w-6xl">
           <div className="flex flex-col items-center gap-1">
-            {/* CC License Badge - At the very bottom */}
+            {/* CC License Badge - At the very bottom, responsive size */}
             <a
               href="https://creativecommons.org/licenses/by/4.0/deed.pl"
               target="_blank"
@@ -173,30 +173,40 @@ export default function MainMenu({
               <img
                 src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by.svg"
                 alt="CC BY 4.0"
-                className="h-4 sm:h-5 w-auto"
+                className="cc-badge-size"
               />
             </a>
 
-            {/* License Text - Very compact, responsive */}
-            <div className="text-center text-gray-700 font-sour-gummy leading-tight">
-              <p className="text-[10px] sm:text-xs px-1">
-                Materiał na licencji{" "}
+            {/* License Text - Full text but very responsive font */}
+            <div className="text-center text-gray-700 font-sour-gummy leading-tight space-y-0.5 footer-text-container">
+              <p className="footer-text">
+                Niniejszy materiał opublikowany jest na licencji{" "}
+                <strong>CC BY 4.0 (Creative Commons – Uznanie autorstwa – 4.0 Międzynarodowe)</strong>.
+                Szczegóły licencji znajdziesz{" "}
                 <a
                   href="https://creativecommons.org/licenses/by/4.0/deed.pl"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:text-blue-800 underline font-bold"
                 >
-                  CC BY 4.0
+                  TUTAJ
                 </a>
-                . Projekt{" "}
+                .
+              </p>
+              <p className="footer-text">
+                Co do zasady masz prawo do korzystania, używania i remiksowania niniejszego materiału w celach komercyjnych i niekomercyjnych, 
+                przy jednoczesnej konieczności podania autorów i autorek materiału.
+              </p>
+              <p className="footer-text">
+                Prosimy również, aby podać informację, że materiał powstał w ramach projektu{" "}
+                <strong>„POPOJUTRZE 3.0 – KSZTAŁCENIE"</strong>,{" "}
                 <a
                   href="https://www.popojutrze.pl"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:text-blue-800 underline font-bold"
                 >
-                  POPOJUTRZE 3.0
+                  www.popojutrze.pl
                 </a>
                 .
               </p>
@@ -249,6 +259,58 @@ export default function MainMenu({
             width: 100vw !important;
             paddingLeft: 20px !important;
             paddingRight: 20px !important;
+          }
+        }
+
+        /* Footer CC License - Very responsive sizing */
+        .footer-cc {
+          padding-left: clamp(75vh, 75vh, 75vh) !important;
+        }
+
+        .cc-badge-size {
+          height: clamp(8px, 1.2vh, 20px) !important;
+          width: auto !important;
+        }
+
+        .footer-text {
+          font-size: clamp(6px, 0.8vw, 12px) !important;
+          padding: 0 clamp(2px, 0.3vw, 8px) !important;
+          line-height: 1.2 !important;
+        }
+
+        .footer-text-container {
+          max-width: calc(100vw - 75vh) !important;
+        }
+
+        /* Adjust footer for very small screens */
+        @media (max-width: 1200px) {
+          .footer-cc {
+            padding-left: clamp(50vh, 60vh, 75vh) !important;
+          }
+          .footer-text-container {
+            max-width: calc(100vw - clamp(50vh, 60vh, 75vh)) !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .footer-cc {
+            padding-left: 0 !important;
+          }
+          .footer-text-container {
+            max-width: 100vw !important;
+            padding: 0 10px !important;
+          }
+          .footer-text {
+            font-size: clamp(7px, 1vw, 10px) !important;
+          }
+        }
+
+        @media (max-width: 600px) {
+          .footer-text {
+            font-size: clamp(6px, 0.9vw, 9px) !important;
+          }
+          .cc-badge-size {
+            height: clamp(6px, 1vh, 16px) !important;
           }
         }
       `}</style>

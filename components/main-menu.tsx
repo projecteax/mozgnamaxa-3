@@ -84,7 +84,7 @@ export default function MainMenu({
           height: 'auto',
           paddingLeft: 'clamp(20px, 3vw, 60px)',
           paddingRight: '20px',
-          paddingBottom: '120px', // Space for footer
+          paddingBottom: '60px', // Space for compact footer
           boxSizing: 'border-box'
         }}
       >
@@ -159,11 +159,10 @@ export default function MainMenu({
         </div>
       </div>
 
-      {/* Footer with CC License - Fixed at bottom, below dragon */}
-      <div className="absolute bottom-0 left-0 right-0 z-0 bg-white/95 border-t-2 border-gray-300 py-2 px-4">
+      {/* Footer with CC License - Fixed at bottom, below dragon - Compact */}
+      <div className="absolute bottom-0 left-0 right-0 z-0 bg-white/95 border-t border-gray-300 py-1 px-2">
         <div className="max-w-6xl mx-auto">
-          {/* CC License Footer - Compact version for main menu */}
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-1">
             {/* CC License Badge - At the very bottom */}
             <a
               href="https://creativecommons.org/licenses/by/4.0/deed.pl"
@@ -174,40 +173,30 @@ export default function MainMenu({
               <img
                 src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by.svg"
                 alt="CC BY 4.0"
-                className="h-6 w-auto"
+                className="h-4 sm:h-5 w-auto"
               />
             </a>
 
-            {/* License Text - Compact */}
-            <div className="text-center space-y-1 text-gray-700 font-sour-gummy text-xs">
-              <p className="leading-tight">
-                Niniejszy materiał opublikowany jest na licencji{" "}
-                <strong>CC BY 4.0 (Creative Commons – Uznanie autorstwa – 4.0 Międzynarodowe)</strong>.
-                Szczegóły licencji znajdziesz{" "}
+            {/* License Text - Very compact, responsive */}
+            <div className="text-center text-gray-700 font-sour-gummy leading-tight">
+              <p className="text-[10px] sm:text-xs px-1">
+                Materiał na licencji{" "}
                 <a
                   href="https://creativecommons.org/licenses/by/4.0/deed.pl"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:text-blue-800 underline font-bold"
                 >
-                  TUTAJ
+                  CC BY 4.0
                 </a>
-                .
-              </p>
-              <p className="leading-tight">
-                Co do zasady masz prawo do korzystania, używania i remiksowania niniejszego materiału w celach komercyjnych i niekomercyjnych, 
-                przy jednoczesnej konieczności podania autorów i autorek materiału.
-              </p>
-              <p className="leading-tight">
-                Prosimy również, aby podać informację, że materiał powstał w ramach projektu{" "}
-                <strong>„POPOJUTRZE 3.0 – KSZTAŁCENIE"</strong>,{" "}
+                . Projekt{" "}
                 <a
                   href="https://www.popojutrze.pl"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:text-blue-800 underline font-bold"
                 >
-                  www.popojutrze.pl
+                  POPOJUTRZE 3.0
                 </a>
                 .
               </p>

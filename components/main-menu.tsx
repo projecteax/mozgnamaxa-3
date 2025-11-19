@@ -27,7 +27,7 @@ export default function MainMenu({
         />
       </div>
 
-      {/* Dragon - Always stuck to left bottom corner, 75% of screen height, above footer */}
+      {/* Dragon - Always stuck to left bottom corner, 75% of screen height, above footer background only */}
       <Image
         src="/images/dragon_menu.svg"
         alt="Dragon Menu"
@@ -38,7 +38,8 @@ export default function MainMenu({
           height: '75vh',
           width: 'auto',
           objectFit: 'contain',
-          objectPosition: 'bottom left'
+          objectPosition: 'bottom left',
+          pointerEvents: 'none'
         }}
       />
 
@@ -158,19 +159,20 @@ export default function MainMenu({
       </div>
 
       {/* Footer with CC License - Fixed at bottom, below dragon - Compact with full text */}
-      <div className="absolute bottom-0 left-0 right-0 z-0 footer-cc" style={{ minHeight: 'clamp(60px, 12vh, 100px)' }}>
+      <div className="absolute bottom-0 left-0 right-0 footer-cc" style={{ minHeight: 'clamp(60px, 12vh, 100px)', zIndex: 0 }}>
         {/* Footer background - below dragon */}
-        <div className="absolute inset-0 bg-white/95 border-t border-gray-200 z-0"></div>
+        <div className="absolute inset-0 bg-white/95 border-t border-gray-200" style={{ zIndex: 0 }}></div>
         
         {/* Footer content - above dragon, clickable */}
-        <div className="relative z-30 w-full mx-auto max-w-6xl py-1 px-2">
+        <div className="relative w-full mx-auto max-w-6xl py-1 px-2" style={{ zIndex: 50, pointerEvents: 'auto' }}>
           <div className="flex flex-row items-center gap-3 footer-content-wrapper">
             {/* CC License Badge - On the left side, larger size, vertically centered */}
             <a
               href="https://creativecommons.org/licenses/by/4.0/deed.pl"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:opacity-80 transition-opacity flex-shrink-0 cc-badge-link relative z-30"
+              className="hover:opacity-80 transition-opacity flex-shrink-0 cc-badge-link"
+              style={{ zIndex: 50, pointerEvents: 'auto', position: 'relative' }}
             >
               <img
                 src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by.svg"
@@ -180,7 +182,7 @@ export default function MainMenu({
             </a>
 
             {/* License Text - Full text but very responsive font */}
-            <div className="text-left text-gray-700 font-sour-gummy leading-tight space-y-0.5 footer-text-container flex-1 relative z-30">
+            <div className="text-left text-gray-700 font-sour-gummy leading-tight space-y-0.5 footer-text-container flex-1" style={{ zIndex: 50, pointerEvents: 'auto', position: 'relative' }}>
               <p className="footer-text">
                 Niniejszy materiał opublikowany jest na licencji{" "}
                 <strong>CC BY 4.0 (Creative Commons – Uznanie autorstwa – 4.0 Międzynarodowe)</strong>.
@@ -189,7 +191,8 @@ export default function MainMenu({
                   href="https://creativecommons.org/licenses/by/4.0/deed.pl"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-800 underline font-bold relative z-30"
+                  className="text-blue-600 hover:text-blue-800 underline font-bold"
+                  style={{ zIndex: 50, pointerEvents: 'auto', position: 'relative' }}
                 >
                   TUTAJ
                 </a>
@@ -206,7 +209,8 @@ export default function MainMenu({
                   href="https://www.popojutrze.pl"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-800 underline font-bold relative z-30"
+                  className="text-blue-600 hover:text-blue-800 underline font-bold"
+                  style={{ zIndex: 50, pointerEvents: 'auto', position: 'relative' }}
                 >
                   www.popojutrze.pl
                 </a>

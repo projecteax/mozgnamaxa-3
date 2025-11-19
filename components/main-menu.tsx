@@ -160,13 +160,13 @@ export default function MainMenu({
       {/* Footer with CC License - Fixed at bottom, below dragon - Compact with full text */}
       <div className="absolute bottom-0 left-0 right-0 z-0 bg-white/95 border-t border-gray-200 py-1 px-2 footer-cc" style={{ minHeight: 'clamp(60px, 12vh, 100px)' }}>
         <div className="w-full mx-auto max-w-6xl">
-          <div className="flex flex-col items-center gap-1">
-            {/* CC License Badge - At the very bottom, responsive size */}
+          <div className="flex flex-row items-start gap-3 footer-content-wrapper">
+            {/* CC License Badge - On the left side, larger size */}
             <a
               href="https://creativecommons.org/licenses/by/4.0/deed.pl"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:opacity-80 transition-opacity"
+              className="hover:opacity-80 transition-opacity flex-shrink-0"
             >
               <img
                 src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by.svg"
@@ -176,7 +176,7 @@ export default function MainMenu({
             </a>
 
             {/* License Text - Full text but very responsive font */}
-            <div className="text-center text-gray-700 font-sour-gummy leading-tight space-y-0.5 footer-text-container">
+            <div className="text-left text-gray-700 font-sour-gummy leading-tight space-y-0.5 footer-text-container flex-1">
               <p className="footer-text">
                 Niniejszy materiał opublikowany jest na licencji{" "}
                 <strong>CC BY 4.0 (Creative Commons – Uznanie autorstwa – 4.0 Międzynarodowe)</strong>.
@@ -315,8 +315,12 @@ export default function MainMenu({
         }
 
         .cc-badge-size {
-          height: clamp(8px, 1.2vh, 20px) !important;
+          height: clamp(20px, 3vh, 40px) !important;
           width: auto !important;
+        }
+
+        .footer-content-wrapper {
+          align-items: flex-start !important;
         }
 
         .footer-text {
@@ -357,7 +361,7 @@ export default function MainMenu({
             font-size: clamp(6px, 0.9vw, 9px) !important;
           }
           .cc-badge-size {
-            height: clamp(6px, 1vh, 16px) !important;
+            height: clamp(16px, 2.5vh, 32px) !important;
           }
         }
       `}</style>

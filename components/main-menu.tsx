@@ -158,15 +158,19 @@ export default function MainMenu({
       </div>
 
       {/* Footer with CC License - Fixed at bottom, below dragon - Compact with full text */}
-      <div className="absolute bottom-0 left-0 right-0 z-0 bg-white/95 border-t border-gray-200 py-1 px-2 footer-cc" style={{ minHeight: 'clamp(60px, 12vh, 100px)' }}>
-        <div className="w-full mx-auto max-w-6xl">
+      <div className="absolute bottom-0 left-0 right-0 z-0 footer-cc" style={{ minHeight: 'clamp(60px, 12vh, 100px)' }}>
+        {/* Footer background - below dragon */}
+        <div className="absolute inset-0 bg-white/95 border-t border-gray-200 z-0"></div>
+        
+        {/* Footer content - above dragon, clickable */}
+        <div className="relative z-30 w-full mx-auto max-w-6xl py-1 px-2">
           <div className="flex flex-row items-center gap-3 footer-content-wrapper">
             {/* CC License Badge - On the left side, larger size, vertically centered */}
             <a
               href="https://creativecommons.org/licenses/by/4.0/deed.pl"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:opacity-80 transition-opacity flex-shrink-0 cc-badge-link"
+              className="hover:opacity-80 transition-opacity flex-shrink-0 cc-badge-link relative z-30"
             >
               <img
                 src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by.svg"
@@ -176,7 +180,7 @@ export default function MainMenu({
             </a>
 
             {/* License Text - Full text but very responsive font */}
-            <div className="text-left text-gray-700 font-sour-gummy leading-tight space-y-0.5 footer-text-container flex-1">
+            <div className="text-left text-gray-700 font-sour-gummy leading-tight space-y-0.5 footer-text-container flex-1 relative z-30">
               <p className="footer-text">
                 Niniejszy materiał opublikowany jest na licencji{" "}
                 <strong>CC BY 4.0 (Creative Commons – Uznanie autorstwa – 4.0 Międzynarodowe)</strong>.
@@ -185,7 +189,7 @@ export default function MainMenu({
                   href="https://creativecommons.org/licenses/by/4.0/deed.pl"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-800 underline font-bold"
+                  className="text-blue-600 hover:text-blue-800 underline font-bold relative z-30"
                 >
                   TUTAJ
                 </a>
@@ -202,7 +206,7 @@ export default function MainMenu({
                   href="https://www.popojutrze.pl"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-800 underline font-bold"
+                  className="text-blue-600 hover:text-blue-800 underline font-bold relative z-30"
                 >
                   www.popojutrze.pl
                 </a>

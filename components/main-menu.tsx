@@ -84,19 +84,18 @@ export default function MainMenu({
           height: 'auto',
           paddingLeft: 'clamp(20px, 3vw, 60px)',
           paddingRight: '20px',
-          paddingBottom: '100px', // Space for footer with full text
+          paddingBottom: 'clamp(80px, 15vh, 120px)', // Responsive space for footer
           boxSizing: 'border-box'
         }}
       >
-        <div className="flex flex-col items-start gap-8 w-full">
+        <div className="flex flex-col items-start button-gap w-full">
           {/* Student Login Button */}
           <button
             onClick={onStudentLogin}
-            className="relative group hover:scale-105 transition-transform duration-200"
+            className="relative group hover:scale-105 transition-transform duration-200 menu-button"
             style={{ 
               width: 'clamp(250px, 40vw, 600px)', 
               height: 'clamp(60px, 8vh, 120px)',
-              marginBottom: 'clamp(20px, 5vh, 60px)',
               maxWidth: '100%'
             }}
           >
@@ -115,11 +114,10 @@ export default function MainMenu({
           {/* Play Without Login Button */}
           <button
             onClick={onPlayWithoutLogin}
-            className="relative group hover:scale-105 transition-transform duration-200"
+            className="relative group hover:scale-105 transition-transform duration-200 menu-button"
             style={{ 
               width: 'clamp(250px, 40vw, 600px)', 
               height: 'clamp(60px, 8vh, 120px)',
-              marginBottom: 'clamp(20px, 5vh, 60px)',
               maxWidth: '100%'
             }}
           >
@@ -138,7 +136,7 @@ export default function MainMenu({
           {/* Teacher Login Button */}
           <button
             onClick={onTeacherLogin}
-            className="relative group hover:scale-105 transition-transform duration-200"
+            className="relative group hover:scale-105 transition-transform duration-200 menu-button"
             style={{ 
               width: 'clamp(250px, 40vw, 600px)', 
               height: 'clamp(60px, 8vh, 120px)',
@@ -160,7 +158,7 @@ export default function MainMenu({
       </div>
 
       {/* Footer with CC License - Fixed at bottom, below dragon - Compact with full text */}
-      <div className="absolute bottom-0 left-0 right-0 z-0 bg-white/95 border-t border-gray-200 py-1 px-2 footer-cc">
+      <div className="absolute bottom-0 left-0 right-0 z-0 bg-white/95 border-t border-gray-200 py-1 px-2 footer-cc" style={{ minHeight: 'clamp(60px, 12vh, 100px)' }}>
         <div className="w-full mx-auto max-w-6xl">
           <div className="flex flex-col items-center gap-1">
             {/* CC License Badge - At the very bottom, responsive size */}
@@ -216,26 +214,40 @@ export default function MainMenu({
       </div>
       
       <style jsx>{`
-        /* Text scaling - scales proportionally with button size */
+        /* Text scaling - scales proportionally with button height using vh units */
         .button-text {
-          font-size: clamp(0.9rem, 1.8vw, 2.2rem);
+          font-size: clamp(1rem, 2vh, 2.5rem) !important;
           max-height: 100%;
           overflow: hidden;
           text-overflow: ellipsis;
+          line-height: 1.2 !important;
+          padding: 0 clamp(4px, 0.5vw, 12px) !important;
         }
+        
+        /* Progressive text scaling based on viewport height - matches button scaling */
         @media (max-width: 1366px) {
           .button-text {
-            font-size: clamp(0.85rem, 1.6vw, 2rem);
+            font-size: clamp(0.9rem, 1.8vh, 2.2rem) !important;
+          }
+        }
+        @media (max-width: 1200px) {
+          .button-text {
+            font-size: clamp(0.85rem, 1.6vh, 2rem) !important;
           }
         }
         @media (max-width: 1024px) {
           .button-text {
-            font-size: clamp(0.8rem, 1.4vw, 1.8rem);
+            font-size: clamp(0.75rem, 1.4vh, 1.8rem) !important;
           }
         }
         @media (max-width: 768px) {
           .button-text {
-            font-size: clamp(0.75rem, 1.2vw, 1.5rem);
+            font-size: clamp(0.7rem, 1.2vh, 1.5rem) !important;
+          }
+        }
+        @media (max-width: 600px) {
+          .button-text {
+            font-size: clamp(0.65rem, 1vh, 1.3rem) !important;
           }
         }
         
@@ -243,8 +255,28 @@ export default function MainMenu({
           /* Container spans from dragon's right edge (75vh) to screen's right edge (100vw) */
           /* This ensures buttons never overlap dragon and always fit on screen */
         }
-        
-        /* On smaller screens where 75vh might be too wide, adjust container */
+
+        /* Responsive button gap - scales with viewport - doubled spacing */
+        .button-gap {
+          gap: clamp(3vh, 4vh, 6vh) !important;
+        }
+
+        /* Progressive button scaling - consistent with dragon */
+        .menu-button {
+          width: clamp(200px, 35vw, 600px) !important;
+          height: clamp(50px, 7vh, 120px) !important;
+        }
+
+        @media (max-width: 1200px) {
+          .menu-button {
+            width: clamp(180px, 32vw, 550px) !important;
+            height: clamp(45px, 6.5vh, 110px) !important;
+          }
+          .button-gap {
+            gap: clamp(2.4vh, 3.6vh, 5vh) !important;
+          }
+        }
+
         @media (max-width: 1024px) {
           .buttons-container {
             left: 75vh !important;
@@ -252,13 +284,28 @@ export default function MainMenu({
             paddingLeft: clamp(10px, 2vw, 40px) !important;
             paddingRight: 20px !important;
           }
+          .menu-button {
+            width: clamp(160px, 30vw, 500px) !important;
+            height: clamp(40px, 6vh, 100px) !important;
+          }
+          .button-gap {
+            gap: clamp(2vh, 3vh, 4vh) !important;
+          }
         }
+
         @media (max-width: 768px) {
           .buttons-container {
             left: 0 !important;
             width: 100vw !important;
             paddingLeft: 20px !important;
             paddingRight: 20px !important;
+          }
+          .menu-button {
+            width: clamp(140px, 28vw, 450px) !important;
+            height: clamp(35px, 5.5vh, 90px) !important;
+          }
+          .button-gap {
+            gap: clamp(1.6vh, 2.4vh, 3.6vh) !important;
           }
         }
 

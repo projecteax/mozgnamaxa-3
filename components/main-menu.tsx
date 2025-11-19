@@ -160,13 +160,13 @@ export default function MainMenu({
       {/* Footer with CC License - Fixed at bottom, below dragon - Compact with full text */}
       <div className="absolute bottom-0 left-0 right-0 z-0 bg-white/95 border-t border-gray-200 py-1 px-2 footer-cc" style={{ minHeight: 'clamp(60px, 12vh, 100px)' }}>
         <div className="w-full mx-auto max-w-6xl">
-          <div className="flex flex-row items-start gap-3 footer-content-wrapper">
-            {/* CC License Badge - On the left side, larger size */}
+          <div className="flex flex-row items-center gap-3 footer-content-wrapper">
+            {/* CC License Badge - On the left side, larger size, vertically centered */}
             <a
               href="https://creativecommons.org/licenses/by/4.0/deed.pl"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:opacity-80 transition-opacity flex-shrink-0"
+              className="hover:opacity-80 transition-opacity flex-shrink-0 cc-badge-link"
             >
               <img
                 src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by.svg"
@@ -320,7 +320,12 @@ export default function MainMenu({
         }
 
         .footer-content-wrapper {
-          align-items: flex-start !important;
+          align-items: center !important;
+        }
+
+        .cc-badge-link {
+          display: inline-block;
+          cursor: pointer;
         }
 
         .footer-text {

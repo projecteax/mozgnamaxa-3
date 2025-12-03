@@ -385,7 +385,7 @@ export default function MatchingGame({ onMenuClick, onBack, onNext, onRetry, use
                     fill
                     className="object-contain pointer-events-none"
                     style={{
-                      filter: draggedItem === item.id && isDragging 
+                      filter: draggedItem === item.id
                         ? "drop-shadow(4px 4px 8px rgba(0, 0, 0, 0.4))" 
                         : "drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.25))",
                     }}

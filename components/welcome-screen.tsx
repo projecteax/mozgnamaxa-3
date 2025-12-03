@@ -62,7 +62,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
       </div>
 
       {/* Dragon Welcome - Bottom Right with improved responsive sizing */}
-      <div className="absolute right-0 z-20 dragon-small" style={{ bottom: '14vh' }}>
+      <div className="absolute right-0 z-20 dragon-small" style={{ bottom: '14vh', pointerEvents: 'none' }}>
         <Image
           src="/images/welcome/dragon_welcome 1.svg"
           alt="Dragon Welcome"
@@ -72,13 +72,14 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
           style={{ 
             height: '75vh',
             width: 'auto',
-            objectPosition: 'bottom right'
+            objectPosition: 'bottom right',
+            pointerEvents: 'none'
           }}
         />
       </div>
       
       {/* Dragon Welcome - Larger for screens above 1600px */}
-      <div className="absolute right-0 z-20 dragon-large" style={{ bottom: '14vh' }}>
+      <div className="absolute right-0 z-20 dragon-large" style={{ bottom: '14vh', pointerEvents: 'none' }}>
         <Image
           src="/images/welcome/dragon_welcome 1.svg"
           alt="Dragon Welcome"
@@ -88,7 +89,8 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
           style={{ 
             height: '75vh',
             width: 'auto',
-            objectPosition: 'bottom right'
+            objectPosition: 'bottom right',
+            pointerEvents: 'none'
           }}
         />
       </div>
@@ -177,12 +179,13 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
       </div>
 
       {/* START Button - Positioned above bottom stripe with proper spacing */}
-      <div className="absolute left-0 right-0 z-50 px-2 xs:px-4 start-button-container" style={{ bottom: 'calc(14vh + 2vh + 20px)' }}>
+      <div className="absolute left-0 right-0 z-50 px-2 xs:px-4 start-button-container" style={{ bottom: 'calc(14vh + 2vh + 20px)', pointerEvents: 'auto' }}>
         <div className="flex justify-center">
           <button
             onClick={handleStart}
             disabled={isLoading}
             className="relative hover:scale-105 transition-transform duration-200 disabled:opacity-50"
+            style={{ pointerEvents: 'auto', zIndex: 60 }}
           >
             <Image
               src="/images/welcome/button_START.svg"
@@ -192,7 +195,8 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
               className="object-contain"
               style={{
                 height: '7vh',
-                width: 'auto'
+                width: 'auto',
+                pointerEvents: 'none'
               }}
             />
           </button>

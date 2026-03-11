@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import Image from "next/image"
 import { useGameCompletionWithHistory } from "@/hooks/use-game-completion"
 import { getRandomSuccessMessage } from "@/lib/success-messages"
@@ -28,9 +28,25 @@ interface PuzzlePiece {
   currentPosition: number | null
 }
 
+type SpringPuzzleVariant = 1 | 2 | 3
+type PuzzleLayout = "horizontal" | "vertical" | "grid2x2"
+
+interface PuzzleVariantConfig {
+  images: string[]
+  layout: PuzzleLayout
+  columns: number
+  rows: number
+  pieceWidth: number
+  pieceHeight: number
+  shuffleOrder: number[]
+}
+
 export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userLoggedIn = false, currentSeason = "wiosna", isGameCompleted = false, onComplete }: PuzzleGameProps) {
   const { selectedSeason, getThemeColors } = useSeason()
   const themeColors = getThemeColors()
+  const [diagnosticSpringVariant, setDiagnosticSpringVariant] = useState<0 | SpringPuzzleVariant>(0)
+  const [randomSpringVariant] = useState<SpringPuzzleVariant>(() => (Math.floor(Math.random() * 3) + 1) as SpringPuzzleVariant)
+  const activeSpringVariant = diagnosticSpringVariant === 0 ? randomSpringVariant : diagnosticSpringVariant
 
   // Get the appropriate title box based on season
   const getTitleBox = () => {
@@ -46,69 +62,126 @@ export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userL
     }
   }
 
-  // Get puzzle images based on season
-  const getPuzzleImages = () => {
+  const puzzleConfig = useMemo((): PuzzleVariantConfig => {
+    if (selectedSeason === "wiosna") {
+      if (activeSpringVariant === 2) {
+        return {
+          images: [
+            "/images/puzzle_2_meadow_01.svg",
+            "/images/puzzle_2_meadow_02.svg",
+            "/images/puzzle_2_meadow_03.svg",
+            "/images/puzzle_2_meadow_04.svg",
+            "/images/puzzle_2_meadow_05.svg",
+          ],
+          layout: "vertical",
+          columns: 1,
+          rows: 5,
+          // Fill the full board area in variant 2 to avoid inner white frame.
+          pieceWidth: 335,
+          pieceHeight: 48,
+          shuffleOrder: [1, 5, 2, 4, 3],
+        }
+      }
+
+      if (activeSpringVariant === 3) {
+        return {
+          images: [
+            "/images/puzzle_3_meadow_01.svg",
+            "/images/puzzle_3_meadow_02.svg",
+            "/images/puzzle_3_meadow_03.svg",
+            "/images/puzzle_3_meadow_04.svg",
+          ],
+          layout: "grid2x2",
+          columns: 2,
+          rows: 2,
+          pieceWidth: 200,
+          pieceHeight: 200,
+          shuffleOrder: [2, 4, 1, 3],
+        }
+      }
+    }
+
     switch (selectedSeason) {
       case "jesien":
-        return [
-          "/images/puzzle-game/autumn_p1.png",
-          "/images/puzzle-game/autumn_p2.png",
-          "/images/puzzle-game/autumn_p3.png",
-          "/images/puzzle-game/autumn_p4.png",
-          "/images/puzzle-game/autumn_p5.png",
-        ]
+        return {
+          images: [
+            "/images/puzzle-game/autumn_p1.png",
+            "/images/puzzle-game/autumn_p2.png",
+            "/images/puzzle-game/autumn_p3.png",
+            "/images/puzzle-game/autumn_p4.png",
+            "/images/puzzle-game/autumn_p5.png",
+          ],
+          layout: "horizontal",
+          columns: 5,
+          rows: 1,
+          pieceWidth: 67,
+          pieceHeight: 240,
+          shuffleOrder: [1, 5, 2, 4, 3],
+        }
       case "lato":
-        return [
-          "/images/puzzle-game/playground_1.svg",
-          "/images/puzzle-game/playground_2.svg",
-          "/images/puzzle-game/playground_3.svg",
-          "/images/puzzle-game/playground_4.svg",
-          "/images/puzzle-game/playground_5.svg",
-        ]
+        return {
+          images: [
+            "/images/puzzle-game/playground_1.svg",
+            "/images/puzzle-game/playground_2.svg",
+            "/images/puzzle-game/playground_3.svg",
+            "/images/puzzle-game/playground_4.svg",
+            "/images/puzzle-game/playground_5.svg",
+          ],
+          layout: "horizontal",
+          columns: 5,
+          rows: 1,
+          pieceWidth: 67,
+          pieceHeight: 240,
+          shuffleOrder: [1, 5, 2, 4, 3],
+        }
       case "zima":
-        return [
-          "/images/puzzle-game/winter_landscape_1.svg",
-          "/images/puzzle-game/winter_landscape_2.svg",
-          "/images/puzzle-game/winter_landscape_3.svg",
-          "/images/puzzle-game/winter_landscape_4.svg",
-          "/images/puzzle-game/winter_landscape_5.svg",
-        ]
-      default: // wiosna (spring)
-        return [
-          "/images/puzzle_field_01.png",
-          "/images/puzzle_field_02.png",
-          "/images/puzzle_field_03.png",
-          "/images/puzzle_field_04.png",
-          "/images/puzzle_field_05.png",
-        ]
+        return {
+          images: [
+            "/images/puzzle-game/winter_landscape_1.svg",
+            "/images/puzzle-game/winter_landscape_2.svg",
+            "/images/puzzle-game/winter_landscape_3.svg",
+            "/images/puzzle-game/winter_landscape_4.svg",
+            "/images/puzzle-game/winter_landscape_5.svg",
+          ],
+          layout: "horizontal",
+          columns: 5,
+          rows: 1,
+          pieceWidth: 67,
+          pieceHeight: 240,
+          shuffleOrder: [1, 5, 2, 4, 3],
+        }
+      default:
+        return {
+          images: [
+            "/images/puzzle_field_01.png",
+            "/images/puzzle_field_02.png",
+            "/images/puzzle_field_03.png",
+            "/images/puzzle_field_04.png",
+            "/images/puzzle_field_05.png",
+          ],
+          layout: "horizontal",
+          columns: 5,
+          rows: 1,
+          pieceWidth: 67,
+          pieceHeight: 240,
+          shuffleOrder: [1, 5, 2, 4, 3],
+        }
     }
-  }
+  }, [selectedSeason, activeSpringVariant])
+  const slotCount = puzzleConfig.images.length
 
-  // Define the puzzle pieces based on season
-  const [puzzlePieces, setPuzzlePieces] = useState<PuzzlePiece[]>(() => {
-    const images = getPuzzleImages()
-    return [
-      { id: 1, image: images[0], correctPosition: 0, currentPosition: null },
-      { id: 2, image: images[1], correctPosition: 1, currentPosition: null },
-      { id: 3, image: images[2], correctPosition: 2, currentPosition: null },
-      { id: 4, image: images[3], correctPosition: 3, currentPosition: null },
-      { id: 5, image: images[4], correctPosition: 4, currentPosition: null },
-    ]
-  })
+  const createInitialPieces = useCallback(
+    (images: string[]): PuzzlePiece[] =>
+      images.map((image, index) => ({
+        id: index + 1,
+        image,
+        correctPosition: index,
+        currentPosition: null,
+      })),
+    [],
+  )
 
-  // Update puzzle pieces when season changes
-  useEffect(() => {
-    const images = getPuzzleImages()
-    setPuzzlePieces([
-      { id: 1, image: images[0], correctPosition: 0, currentPosition: null },
-      { id: 2, image: images[1], correctPosition: 1, currentPosition: null },
-      { id: 3, image: images[2], correctPosition: 2, currentPosition: null },
-      { id: 4, image: images[3], correctPosition: 3, currentPosition: null },
-      { id: 5, image: images[4], correctPosition: 4, currentPosition: null },
-    ])
-    setIsCompleted(false)
-    setSuccessMessage("")
-  }, [selectedSeason])
+  const [puzzlePieces, setPuzzlePieces] = useState<PuzzlePiece[]>(() => createInitialPieces(puzzleConfig.images))
 
   // Shuffle the pieces for initial display on the right
   const [shuffledPieces, setShuffledPieces] = useState<PuzzlePiece[]>([])
@@ -128,43 +201,38 @@ export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userL
   // Use the game completion hook
   const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("puzzle-game")
 
-  // Piece dimensions - enlarged by 300% (3x the previous size)
-  const pieceWidth = Math.round(112 * 0.2 * 5 * 0.2 * 3)
-  const pieceHeight = Math.round(400 * 0.2 * 5 * 0.2 * 3)
-  const totalWidth = pieceWidth * 5
+  useEffect(() => {
+    const initialPieces = createInitialPieces(puzzleConfig.images)
+    setPuzzlePieces(initialPieces)
+    setIsCompleted(false)
+    setSuccessMessage("")
+    setHasSetSuccessMessage(false)
+    setDraggedPiece(null)
+  }, [puzzleConfig, createInitialPieces])
 
   // Initialize shuffled pieces
   useEffect(() => {
-    // Shuffle order: 1,5,2,4,3 as specified
-    const shuffled = [
-      { ...puzzlePieces[0] }, // 1
-      { ...puzzlePieces[4] }, // 5
-      { ...puzzlePieces[1] }, // 2
-      { ...puzzlePieces[3] }, // 4
-      { ...puzzlePieces[2] }, // 3
-    ]
-    setShuffledPieces(shuffled)
-  }, [puzzlePieces])
+    const byId = new Map(puzzlePieces.map((piece) => [piece.id, piece]))
+    const ordered = puzzleConfig.shuffleOrder
+      .map((id) => byId.get(id))
+      .filter((piece): piece is PuzzlePiece => Boolean(piece))
+    const missing = puzzlePieces.filter((piece) => !puzzleConfig.shuffleOrder.includes(piece.id))
+    setShuffledPieces([...ordered, ...missing])
+  }, [puzzlePieces, puzzleConfig])
 
-  // Calculate which positions are unlocked
-  const getUnlockedPositions = () => {
-    const unlockedPositions = new Set<number>()
-
-    // Always unlock position 0 (first slot)
-    unlockedPositions.add(0)
-
-    // Check each position in order and unlock the next one if current is filled
-    for (let i = 0; i < 5; i++) {
-      const isCurrentFilled = puzzlePieces.some((piece) => piece.currentPosition === i)
-      if (isCurrentFilled && i < 4) {
-        unlockedPositions.add(i + 1)
-      }
+  const unlockedPositions = useMemo(() => {
+    if (selectedSeason === "wiosna" && activeSpringVariant === 3) {
+      // Variant 3 must be solved in strict order: top-left, trapezoid 2, trapezoid 3, bottom-right.
+      const order = [0, 1, 2, 3]
+      const nextIndex = order.find((position) => {
+        const pieceAtPosition = puzzlePieces.find((piece) => piece.currentPosition === position)
+        return !pieceAtPosition || pieceAtPosition.correctPosition !== position
+      })
+      return new Set(nextIndex !== undefined ? [nextIndex] : order)
     }
 
-    return unlockedPositions
-  }
-
-  const unlockedPositions = getUnlockedPositions()
+    return new Set(Array.from({ length: slotCount }, (_, i) => i))
+  }, [slotCount, selectedSeason, activeSpringVariant, puzzlePieces])
 
   // Handle drag start
   const handleDragStart = (id: number) => {
@@ -172,7 +240,7 @@ export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userL
   }
 
   // Handle drag over
-  const handleDragOver = (e: React.DragEvent, position: number) => {
+  const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
   }
 
@@ -187,85 +255,47 @@ export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userL
       return // Silently ignore drops on locked positions
     }
 
-    // Find the piece that was dragged
     const draggedPieceObj = puzzlePieces.find((piece) => piece.id === draggedPiece)
-
     if (!draggedPieceObj) return
 
     // Check if this is the correct position for this piece
     if (draggedPieceObj.correctPosition !== position) {
-      return // Silently ignore incorrect placements
+      return
     }
 
-    // Check if this piece is already placed somewhere
-    if (draggedPieceObj.currentPosition !== null) {
-      // Remove it from its current position
-      setPuzzlePieces((prevPieces) =>
-        prevPieces.map((piece) => (piece.id === draggedPiece ? { ...piece, currentPosition: null } : piece)),
-      )
-    }
-
-    // Check if the position is already occupied
     const occupyingPiece = puzzlePieces.find((piece) => piece.currentPosition === position)
 
-    if (occupyingPiece) {
-      // Swap positions
-      setPuzzlePieces((prevPieces) =>
-        prevPieces.map((piece) => {
-          if (piece.id === draggedPiece) {
-            return { ...piece, currentPosition: position }
-          } else if (piece.id === occupyingPiece.id) {
-            return { ...piece, currentPosition: null }
-          }
-          return piece
-        }),
-      )
-    } else {
-      // Place the piece in the empty position
-      setPuzzlePieces((prevPieces) =>
-        prevPieces.map((piece) => (piece.id === draggedPiece ? { ...piece, currentPosition: position } : piece)),
-      )
-    }
+    const updatedPieces = puzzlePieces.map((piece) => {
+      if (piece.id === draggedPiece) {
+        return { ...piece, currentPosition: position }
+      }
+      if (occupyingPiece && piece.id === occupyingPiece.id) {
+        return { ...piece, currentPosition: null }
+      }
+      return piece
+    })
 
+    setPuzzlePieces(updatedPieces)
     setDraggedPiece(null)
 
-    // Check if puzzle is completed
-    setTimeout(() => {
-      // Create updated pieces array to check completion
-      const updatedPieces = puzzlePieces.map((piece) =>
-        piece.id === draggedPiece ? { ...piece, currentPosition: position } : piece,
-      )
-
-      // Check if all pieces are in their correct positions
-      const allCorrect = updatedPieces.every((piece) => piece.currentPosition === piece.correctPosition)
-
-      console.log("Checking puzzle completion:", {
-        pieces: updatedPieces.map((p) => ({ id: p.id, current: p.currentPosition, correct: p.correctPosition })),
-        allCorrect,
-      })
-
-      if (allCorrect) {
-        setIsCompleted(true)
-        // Get a random success message only once
-        if (!hasSetSuccessMessage) {
-          setSuccessMessage(getRandomSuccessMessage())
-          setHasSetSuccessMessage(true)
-        }
-        console.log("🎉 Puzzle game completed! All pieces correctly placed!")
-
-        // Record completion when game is finished
-        if (isLoggedIn) {
-          recordCompletion()
-        }
-
-        // Call completion callback after 3 seconds to show success message
-        if (onComplete) {
-          setTimeout(() => {
-            onComplete()
-          }, 3000) // 3 second delay
-        }
+    const allCorrect = updatedPieces.every((piece) => piece.currentPosition === piece.correctPosition)
+    if (allCorrect) {
+      setIsCompleted(true)
+      if (!hasSetSuccessMessage) {
+        setSuccessMessage(getRandomSuccessMessage())
+        setHasSetSuccessMessage(true)
       }
-    }, 100)
+
+      if (isLoggedIn) {
+        recordCompletion()
+      }
+
+      if (onComplete) {
+        setTimeout(() => {
+          onComplete()
+        }, 3000)
+      }
+    }
   }
 
   // Reset the game
@@ -276,8 +306,63 @@ export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userL
     setHasSetSuccessMessage(false)
   }
 
-  
-  
+  const pieceWidth = puzzleConfig.pieceWidth
+  const pieceHeight = puzzleConfig.pieceHeight
+  const isSpringVariant3 = selectedSeason === "wiosna" && activeSpringVariant === 3
+  // Variant 3 should be compact and square-like.
+  const boardWidth = isSpringVariant3 ? 200 : 335
+  const boardHeight = isSpringVariant3 ? 200 : 240
+  const totalWidth = boardWidth
+  const totalHeight = boardHeight
+
+  const variant3SlotMap = useMemo(
+    () => [
+      // Native SVG bounding boxes and final placement so puzzle parts touch.
+      { left: 0, top: 0, width: 101, height: 101, zIndex: 3 }, // top-left triangle
+      { left: 0, top: 0, width: 200, height: 200, zIndex: 1 }, // trapezoid 2
+      { left: 0, top: 0, width: 200, height: 200, zIndex: 2 }, // trapezoid 3
+      { left: 96, top: 96, width: 104, height: 104, zIndex: 4 }, // bottom-right triangle
+    ],
+    [],
+  )
+
+  const getSlotStyle = (position: number, isUnlocked: boolean): React.CSSProperties => {
+    if (puzzleConfig.layout === "vertical") {
+      return {
+        position: "absolute",
+        left: "0px",
+        top: `${position * pieceHeight}px`,
+        width: `${pieceWidth}px`,
+        height: `${pieceHeight}px`,
+        opacity: isUnlocked ? 1 : 0.5,
+      }
+    }
+
+    if (puzzleConfig.layout === "grid2x2") {
+      // Keep native SVG geometry by using original bounding boxes and overlap.
+      const slot = variant3SlotMap[position]
+      return {
+        position: "absolute",
+        left: `${slot.left}px`,
+        top: `${slot.top}px`,
+        width: `${slot.width}px`,
+        height: `${slot.height}px`,
+        zIndex: slot.zIndex,
+        opacity: 1,
+      }
+    }
+
+    const row = Math.floor(position / puzzleConfig.columns)
+    const col = position % puzzleConfig.columns
+    return {
+      position: "absolute",
+      left: `${col * pieceWidth}px`,
+      top: `${row * pieceHeight}px`,
+      width: `${pieceWidth}px`,
+      height: `${pieceHeight}px`,
+      opacity: isUnlocked ? 1 : 0.5,
+    }
+  }
 
   return (
     <div className="w-full max-w-6xl" style={{ backgroundColor: themeColors.backgroundColor }}>
@@ -307,32 +392,73 @@ export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userL
         </div>
       </div>
 
+      {/* Diagnostic variant selector (test-only helper; remove in production) */}
+      {selectedSeason === "wiosna" && (
+        <div className="w-full max-w-4xl mx-auto mb-4 p-3 rounded-lg bg-white/80 border border-[#3e459c]/20 flex items-center gap-3">
+          <span className="text-sm font-medium text-[#3e459c]">Wariant (diagnostyka):</span>
+          <select
+            value={diagnosticSpringVariant}
+            onChange={(e) => setDiagnosticSpringVariant(Number(e.target.value) as 0 | SpringPuzzleVariant)}
+            className="px-2 py-1 text-sm border border-[#3e459c]/30 rounded-md bg-white text-[#3e459c]"
+          >
+            <option value={0}>Auto (losowo)</option>
+            <option value={1}>Wariant 1</option>
+            <option value={2}>Wariant 2 (z gory do dolu)</option>
+            <option value={3}>Wariant 3 (trapezy i trojkaty)</option>
+          </select>
+          <span className="text-xs text-gray-600">Aktywny: {activeSpringVariant}</span>
+        </div>
+      )}
+
       {/* Game area */}
       <div className="flex justify-center items-center">
         <div className="flex flex-col">
           {/* Main game container */}
-          <div className="flex items-center">
+          <div className="flex items-start">
             {/* Single rectangular puzzle board - exact dimensions with no gaps */}
             <div
+              key={`${selectedSeason}-${activeSpringVariant}-${puzzleConfig.layout}-board`}
               className="relative bg-white border-2 border-gray-300 rounded-md flex overflow-hidden"
-              style={{ width: `${totalWidth}px`, height: `${pieceHeight}px` }}
+              style={{ width: `${totalWidth}px`, height: `${totalHeight}px` }}
             >
               {/* Puzzle slots with no gaps between them */}
-              {[0, 1, 2, 3, 4].map((position) => {
+              {Array.from({ length: slotCount }, (_, position) => {
                 const isUnlocked = unlockedPositions.has(position)
+                const placedPiece = puzzlePieces.find((piece) => piece.currentPosition === position)
+                const isSolvedSlot = Boolean(placedPiece && placedPiece.correctPosition === position)
+                const canAcceptDrop = isUnlocked && !isSolvedSlot
                 return (
                   <div
                     key={`slot-${position}`}
-                    className={`relative ${!isUnlocked ? "bg-gray-400 opacity-50" : ""}`}
+                    className="absolute"
                     style={{
-                      width: `${pieceWidth}px`,
-                      height: `${pieceHeight}px`,
-                      padding: 0,
-                      margin: 0,
+                      ...getSlotStyle(position, isUnlocked),
+                      // In overlapping layout, only current active slot should catch DnD events.
+                      pointerEvents: canAcceptDrop ? "auto" : "none",
                     }}
-                    onDragOver={(e) => handleDragOver(e, position)}
-                    onDrop={(e) => handleDrop(e, position)}
+                    onDragOver={canAcceptDrop ? handleDragOver : undefined}
+                    onDrop={canAcceptDrop ? (e) => handleDrop(e, position) : undefined}
                   >
+                    {/* Variant 3 slot placeholders: active slot white, other slots light gray */}
+                    {puzzleConfig.layout === "grid2x2" && !placedPiece && (
+                      <div
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                          backgroundColor: isUnlocked ? "#ffffff" : "#e5e5e5",
+                          maskImage: `url(${puzzlePieces.find((p) => p.correctPosition === position)?.image || "/placeholder.svg"})`,
+                          WebkitMaskImage: `url(${puzzlePieces.find((p) => p.correctPosition === position)?.image || "/placeholder.svg"})`,
+                          maskRepeat: "no-repeat",
+                          WebkitMaskRepeat: "no-repeat",
+                          maskPosition: "center",
+                          WebkitMaskPosition: "center",
+                          maskSize: "contain",
+                          WebkitMaskSize: "contain",
+                        }}
+                      >
+                        {/* shape placeholder */}
+                      </div>
+                    )}
+
                     {/* Placed puzzle piece */}
                     {puzzlePieces.map(
                       (piece) =>
@@ -346,7 +472,7 @@ export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userL
                               src={piece.image || "/placeholder.svg"}
                               alt={`Puzzle piece ${piece.id}`}
                               fill
-                              style={{ objectFit: "contain" }}
+                              style={{ objectFit: puzzleConfig.layout === "vertical" ? "fill" : "contain" }}
                               className="select-none"
                             />
                           </div>
@@ -357,12 +483,49 @@ export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userL
               })}
             </div>
 
-            {/* Puzzle pieces in a single horizontal line */}
-            <div className="flex ml-6">
+            {/* Puzzle pieces tray */}
+            <div
+      key={`${selectedSeason}-${activeSpringVariant}-${puzzleConfig.layout}-tray`}
+              className={`ml-6 ${
+                puzzleConfig.layout === "vertical"
+                  ? "flex flex-col gap-2"
+                  : puzzleConfig.layout === "grid2x2"
+                    ? "relative w-[320px] h-[220px]"
+                    : "flex gap-1"
+              }`}
+            >
               {shuffledPieces.map((piece) => {
                 // Only show pieces that aren't placed on the board
                 const originalPiece = puzzlePieces.find((p) => p.id === piece.id)
                 if (originalPiece && originalPiece.currentPosition !== null) return null
+
+                if (puzzleConfig.layout === "grid2x2") {
+                  const trayPositions: Record<number, React.CSSProperties> = {
+                    // Scrambled reference arrangement: 2,4,1,3 with overlap.
+                    2: { left: "0px", top: "16px", width: "156px", height: "156px", zIndex: 2 },
+                    4: { left: "188px", top: "0px", width: "82px", height: "82px", zIndex: 4 },
+                    1: { left: "106px", top: "104px", width: "79px", height: "79px", zIndex: 3 },
+                    3: { left: "165px", top: "36px", width: "155px", height: "180px", zIndex: 1 },
+                  }
+                  const style = trayPositions[piece.id] || { left: "0px", top: "0px", width: `${pieceWidth}px`, height: `${pieceHeight}px`, zIndex: 1 }
+                  return (
+                    <div
+                      key={`piece-${piece.id}`}
+                      draggable
+                      onDragStart={() => handleDragStart(piece.id)}
+                      className="absolute cursor-grab"
+                      style={style}
+                    >
+                      <Image
+                        src={piece.image || "/placeholder.svg"}
+                        alt={`Puzzle piece ${piece.id}`}
+                        fill
+                        style={{ objectFit: "contain" }}
+                        className="select-none"
+                      />
+                    </div>
+                  )
+                }
 
                 return (
                   <div
@@ -373,7 +536,6 @@ export default function PuzzleGame({ onMenuClick, onBack, onNext, onRetry, userL
                     style={{
                       width: `${pieceWidth}px`,
                       height: `${pieceHeight}px`,
-                      marginRight: "4px",
                     }}
                   >
                     <Image

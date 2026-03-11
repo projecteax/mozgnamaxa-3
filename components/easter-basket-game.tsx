@@ -23,22 +23,27 @@ interface EasterBasketGameProps {
 interface GameItem {
   id: string
   image: string
-  summerImage: string
-  autumnImage: string
-  winterImage: string
+  summerImage?: string
+  autumnImage?: string
+  winterImage?: string
   isCorrect: boolean
   category: string
   position: string
   size: string
 }
 
+type SpringEasterBasketVariant = 1 | 2 | 3
+
 export default function EasterBasketGame({ onMenuClick, onBack, onNext, onRetry, userLoggedIn = false, currentSeason = "wiosna", isGameCompleted = false }: EasterBasketGameProps) {
   const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("easter-basket-game")
   const { selectedSeason, getThemeColors } = useSeason()
   const theme = getThemeColors()
+  const [diagnosticSpringVariant, setDiagnosticSpringVariant] = useState<0 | SpringEasterBasketVariant>(0)
+  const [randomSpringVariant] = useState<SpringEasterBasketVariant>(() => (Math.floor(Math.random() * 3) + 1) as SpringEasterBasketVariant)
+  const activeSpringVariant = diagnosticSpringVariant === 0 ? randomSpringVariant : diagnosticSpringVariant
 
   // Define the game items with their positions moved higher up to align with the red line
-  const gameItems: GameItem[] = [
+  const baseGameItems: GameItem[] = [
     {
       id: "branch",
       image: "/images/branch_new.svg",
@@ -107,6 +112,117 @@ export default function EasterBasketGame({ onMenuClick, onBack, onNext, onRetry,
     },
   ]
 
+  const springVariant2Items: GameItem[] = [
+    {
+      id: "beach-ball",
+      image: "/images/easter_v2_pilka.svg",
+      isCorrect: true,
+      category: "non-easter",
+      position: "top-[60px] left-[20%] transform -translate-x-1/2",
+      size: "h-24 w-24",
+    },
+    {
+      id: "babka",
+      image: "/images/easter_v2_babka.svg",
+      isCorrect: false,
+      category: "easter",
+      position: "top-[60px] left-[50%] transform -translate-x-1/2",
+      size: "h-24 w-24",
+    },
+    {
+      id: "lamb-v2",
+      image: "/images/easter_v2_baranek.svg",
+      isCorrect: false,
+      category: "easter",
+      position: "top-[60px] left-[80%] transform -translate-x-1/2",
+      size: "h-24 w-24",
+    },
+    {
+      id: "mazurek",
+      image: "/images/easter_v2_mazurek.svg",
+      isCorrect: false,
+      category: "easter",
+      position: "top-[200px] left-[25%] transform -translate-x-1/2",
+      size: "h-24 w-24",
+    },
+    {
+      id: "egg-v2",
+      image: "/images/easter_v2_pisanka_07.svg",
+      isCorrect: false,
+      category: "easter",
+      position: "top-[200px] left-[50%] transform -translate-x-1/2",
+      size: "h-24 w-24",
+    },
+    {
+      id: "bazie",
+      image: "/images/easter_v2_bazie.svg",
+      isCorrect: false,
+      category: "easter",
+      position: "top-[200px] left-[75%] transform -translate-x-1/2",
+      size: "h-24 w-24",
+    },
+  ]
+
+  const springVariant3Items: GameItem[] = [
+    {
+      id: "sausage-v3",
+      image: "/images/easter_v3_kielbasa.svg",
+      isCorrect: false,
+      category: "non-easter",
+      position: "top-[60px] left-[20%] transform -translate-x-1/2",
+      size: "h-24 w-24",
+    },
+    {
+      id: "rabbit-v3",
+      image: "/images/easter_v3_krolik.svg",
+      isCorrect: false,
+      category: "easter",
+      position: "top-[60px] left-[50%] transform -translate-x-1/2",
+      size: "h-24 w-24",
+    },
+    {
+      id: "palm-v3",
+      image: "/images/easter_v3_palemka.svg",
+      isCorrect: false,
+      category: "easter",
+      position: "top-[60px] left-[80%] transform -translate-x-1/2",
+      size: "h-24 w-24",
+    },
+    {
+      id: "rose-v3",
+      image: "/images/easter_v3_roza.svg",
+      isCorrect: true,
+      category: "easter",
+      position: "top-[200px] left-[25%] transform -translate-x-1/2",
+      size: "h-24 w-24",
+    },
+    {
+      id: "egg-v3",
+      image: "/images/easter_v3_pisanka_08.svg",
+      isCorrect: false,
+      category: "easter",
+      position: "top-[200px] left-[50%] transform -translate-x-1/2",
+      size: "h-24 w-24",
+    },
+    {
+      id: "napkin-v3",
+      image: "/images/easter_v3_serwetka.svg",
+      isCorrect: false,
+      category: "easter",
+      position: "top-[200px] left-[75%] transform -translate-x-1/2",
+      size: "h-24 w-24",
+    },
+  ]
+
+  const gameItems: GameItem[] =
+    selectedSeason === "wiosna"
+      ? activeSpringVariant === 2
+        ? springVariant2Items
+        : activeSpringVariant === 3
+          ? springVariant3Items
+          : baseGameItems
+      : baseGameItems
+
   // State for tracking if the correct item has been selected
   const [selectedItem, setSelectedItem] = useState<string | null>(null)
 
@@ -132,30 +248,24 @@ export default function EasterBasketGame({ onMenuClick, onBack, onNext, onRetry,
     }
   }
 
+  const isCorrectItemForCurrentSeason = (id: string) => {
+    if (selectedSeason === "wiosna") {
+      if (activeSpringVariant === 2) return id === "beach-ball"
+      if (activeSpringVariant === 3) return id === "rose-v3"
+      return id === "banana"
+    }
+    if (selectedSeason === "lato") return id === "banana"
+    if (selectedSeason === "jesien") return id === "egg"
+    if (selectedSeason === "zima") return id === "egg"
+    return false
+  }
+
   // Handle item click
   const handleItemClick = (id: string, isCorrect: boolean) => {
     if (isCompleted) return
 
     setSelectedItem(id)
-
-    // Determine correct item based on season
-    let isCorrectForSeason = false
-    if (selectedSeason === "wiosna") {
-      // Spring: banana should be correct
-      isCorrectForSeason = id === "banana"
-    } else if (selectedSeason === "lato") {
-      // Summer: banana should be correct (shows toothbrush)
-      isCorrectForSeason = id === "banana"
-    } else if (selectedSeason === "jesien") {
-      // Autumn: egg should be correct (shows zebra)
-      isCorrectForSeason = id === "egg"
-    } else if (selectedSeason === "zima") {
-      // Winter: egg should be correct (shows bicycle)
-      isCorrectForSeason = id === "egg"
-    } else {
-      // Default fallback
-      isCorrectForSeason = isCorrect
-    }
+    const isCorrectForSeason = isCorrectItemForCurrentSeason(id) || isCorrect
 
     if (isCorrectForSeason) {
       setIsCompleted(true)
@@ -187,15 +297,22 @@ export default function EasterBasketGame({ onMenuClick, onBack, onNext, onRetry,
   // Get the appropriate image based on season
   const getItemImage = (item: GameItem) => {
     if (selectedSeason === "lato") {
-      return item.summerImage
+      return item.summerImage || item.image
     } else if (selectedSeason === "jesien") {
-      return item.autumnImage
+      return item.autumnImage || item.image
     } else if (selectedSeason === "zima") {
-      return item.winterImage
+      return item.winterImage || item.image
     } else {
       return item.image
     }
   }
+
+  useEffect(() => {
+    setSelectedItem(null)
+    setIsCompleted(false)
+    setHasRecordedCompletion(false)
+    setSuccessMessage(null)
+  }, [selectedSeason, activeSpringVariant])
 
   // Get the appropriate title box based on season
   const getTitleBox = () => {
@@ -236,6 +353,23 @@ export default function EasterBasketGame({ onMenuClick, onBack, onNext, onRetry,
         </div>
       </div>
 
+      {selectedSeason === "wiosna" && (
+        <div className="w-full max-w-4xl mx-auto mb-4 p-3 rounded-lg bg-white/80 border border-[#3e459c]/20 flex items-center gap-3">
+          <span className="text-sm font-medium text-[#3e459c]">Wariant (diagnostyka):</span>
+          <select
+            value={diagnosticSpringVariant}
+            onChange={(e) => setDiagnosticSpringVariant(Number(e.target.value) as 0 | SpringEasterBasketVariant)}
+            className="px-2 py-1 text-sm border border-[#3e459c]/30 rounded-md bg-white text-[#3e459c]"
+          >
+            <option value={0}>Auto (losowo)</option>
+            <option value={1}>Wariant 1</option>
+            <option value={2}>Wariant 2</option>
+            <option value={3}>Wariant 3</option>
+          </select>
+          <span className="text-xs text-gray-600">Aktywny: {activeSpringVariant}</span>
+        </div>
+      )}
+
       {/* Game area */}
       <div className="flex justify-center items-center">
         <div className="flex flex-col items-center w-full">
@@ -245,14 +379,7 @@ export default function EasterBasketGame({ onMenuClick, onBack, onNext, onRetry,
             style={{ backgroundColor: theme.background || "transparent" }}
           >
             {gameItems.map((item) => {
-              // For autumn season, only zebra (egg item) should be highlighted when correct
-              // For winter season, only bike (egg item) should be highlighted when correct
-              const isCorrectForCurrentSeason =
-                selectedSeason === "jesien"
-                  ? item.id === "egg"
-                  : selectedSeason === "zima"
-                    ? item.id === "egg"
-                    : item.isCorrect
+              const isCorrectForCurrentSeason = isCorrectItemForCurrentSeason(item.id)
 
               return (
                 <div

@@ -20,10 +20,15 @@ interface MazeGameProps {
   isGameCompleted?: boolean
 }
 
+type SpringMazeVariant = 1 | 2
+
 export default function MazeGame({ onMenuClick, onBack, onNext, onRetry, userLoggedIn = false, currentSeason = "wiosna", isGameCompleted = false }: MazeGameProps) {
   // Season context
   const { selectedSeason, getThemeColors } = useSeason()
   const theme = getThemeColors()
+  const [diagnosticSpringVariant, setDiagnosticSpringVariant] = useState<0 | SpringMazeVariant>(0)
+  const [randomSpringVariant] = useState<SpringMazeVariant>(() => (Math.floor(Math.random() * 2) + 1) as SpringMazeVariant)
+  const activeSpringVariant = diagnosticSpringVariant === 0 ? randomSpringVariant : diagnosticSpringVariant
 
   // State to track if the game is completed
   const [isCompleted, setIsCompleted] = useState(false)
@@ -67,6 +72,9 @@ export default function MazeGame({ onMenuClick, onBack, onNext, onRetry, userLog
       return isCompleted ? "/images/maze_finished_summer.svg" : "/images/maze_summer.svg"
     } else if (selectedSeason === "jesien") {
       return isCompleted ? "/images/maze_01_autumn_finished.svg" : "/images/maze_01_autumn.svg"
+    }
+    if (activeSpringVariant === 2) {
+      return "/images/maze_spring_v2.svg"
     }
     return isCompleted ? "/images/maze_finished.svg" : "/images/maze.svg"
   }
@@ -242,6 +250,13 @@ export default function MazeGame({ onMenuClick, onBack, onNext, onRetry, userLog
     setProgressSaved(false)
   }
 
+  useEffect(() => {
+    setIsCompleted(false)
+    setCharacterPosition(initialPosition)
+    setSuccessMessage("")
+    setProgressSaved(false)
+  }, [selectedSeason, activeSpringVariant])
+
   return (
     <div className="w-full max-w-5xl" style={{ backgroundColor: theme.backgroundColor }}>
       {/* Header with title - matching exact structure from matching-game */}
@@ -266,6 +281,22 @@ export default function MazeGame({ onMenuClick, onBack, onNext, onRetry, userLog
           <Image src={getMenuIcon() || "/placeholder.svg"} alt="Menu" fill className="object-contain cursor-pointer" />
         </div>
       </div>
+
+      {selectedSeason === "wiosna" && (
+        <div className="w-full max-w-4xl mx-auto mb-4 p-3 rounded-lg bg-white/80 border border-[#3e459c]/20 flex items-center gap-3">
+          <span className="text-sm font-medium text-[#3e459c]">Wariant (diagnostyka):</span>
+          <select
+            value={diagnosticSpringVariant}
+            onChange={(e) => setDiagnosticSpringVariant(Number(e.target.value) as 0 | SpringMazeVariant)}
+            className="px-2 py-1 text-sm border border-[#3e459c]/30 rounded-md bg-white text-[#3e459c]"
+          >
+            <option value={0}>Auto (losowo)</option>
+            <option value={1}>Wariant 1</option>
+            <option value={2}>Wariant 2</option>
+          </select>
+          <span className="text-xs text-gray-600">Aktywny: {activeSpringVariant}</span>
+        </div>
+      )}
 
       {/* Game area - balanced layout with elements close to maze */}
       <div ref={gameContainerRef} className="flex justify-center items-center mt-0 relative">
@@ -299,7 +330,10 @@ export default function MazeGame({ onMenuClick, onBack, onNext, onRetry, userLog
             {/* Top target - correct one for winter, summer and autumn, incorrect for spring */}
             <div
               ref={
-                selectedSeason === "zima" || selectedSeason === "lato" || selectedSeason === "jesien"
+                selectedSeason === "zima" ||
+                selectedSeason === "lato" ||
+                selectedSeason === "jesien" ||
+                (selectedSeason === "wiosna" && activeSpringVariant === 2)
                   ? targetRef
                   : undefined
               }
@@ -311,7 +345,10 @@ export default function MazeGame({ onMenuClick, onBack, onNext, onRetry, userLog
             {/* Bottom target - correct one for spring, incorrect for winter, summer and autumn */}
             <div
               ref={
-                selectedSeason === "zima" || selectedSeason === "lato" || selectedSeason === "jesien"
+                selectedSeason === "zima" ||
+                selectedSeason === "lato" ||
+                selectedSeason === "jesien" ||
+                (selectedSeason === "wiosna" && activeSpringVariant === 2)
                   ? undefined
                   : targetRef
               }

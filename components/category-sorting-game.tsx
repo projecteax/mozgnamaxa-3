@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useMemo, useState, useEffect } from "react"
 import Image from "next/image"
 import { useGameCompletionWithHistory } from "@/hooks/use-game-completion"
 import { getRandomSuccessMessage } from "@/lib/success-messages"
@@ -23,21 +23,25 @@ interface SortableItem {
   id: string
   name: string
   image: string
-  summerImage: string
-  autumnImage: string
-  winterImage: string
-  category: "animal" | "flower" | "fruit" | "easter" | "xmas"
+  summerImage?: string
+  autumnImage?: string
+  winterImage?: string
+  category: "animal" | "flower" | "fruit" | "easter" | "xmas" | "plant" | "green" | "yellow"
   placed: boolean
   isIndicator?: boolean
 }
+
+type SpringCategoryVariant = 1 | 2
 
 export default function CategorySortingGame({ onMenuClick, onBack, onNext, onRetry, userLoggedIn = false, currentSeason = "wiosna", isGameCompleted = false }: CategorySortingGameProps) {
   const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("category-sorting-game")
   const { selectedSeason, getThemeColors } = useSeason()
   const theme = getThemeColors()
+  const [diagnosticSpringVariant, setDiagnosticSpringVariant] = useState<0 | SpringCategoryVariant>(0)
+  const [randomSpringVariant] = useState<SpringCategoryVariant>(() => (Math.floor(Math.random() * 2) + 1) as SpringCategoryVariant)
+  const activeSpringVariant = diagnosticSpringVariant === 0 ? randomSpringVariant : diagnosticSpringVariant
 
-  // Define the items for sorting
-  const [items, setItems] = useState<SortableItem[]>([
+  const makeBaseSeasonItems = (): SortableItem[] => [
     {
       id: "ladybug",
       name: "Ladybug",
@@ -98,7 +102,21 @@ export default function CategorySortingGame({ onMenuClick, onBack, onNext, onRet
       category: selectedSeason === "jesien" ? "fruit" : selectedSeason === "zima" ? "xmas" : "animal",
       placed: false,
     },
-  ])
+  ]
+
+  const makeSpringVariant2Items = (): SortableItem[] => [
+    { id: "v2-butterfly-a", name: "Butterfly A", image: "/images/sorting_v2_butterfly_a.svg", category: "yellow", placed: false },
+    { id: "v2-bush", name: "Bush", image: "/images/sorting_v2_bush.svg", category: "green", placed: false },
+    { id: "v2-banana", name: "Banana", image: "/images/sorting_v2_banana.svg", category: "yellow", placed: false },
+    { id: "v2-frog", name: "Frog", image: "/images/sorting_v2_frog.svg", category: "green", placed: false },
+    { id: "v2-butterfly-b", name: "Butterfly B", image: "/images/sorting_v2_butterfly_b.svg", category: "green", placed: false },
+    { id: "v2-daffodil", name: "Daffodil", image: "/images/sorting_v2_daffodil.svg", category: "yellow", placed: false },
+    { id: "v2-sun", name: "Sun", image: "/images/sorting_v2_sun.svg", category: "yellow", placed: false },
+    { id: "v2-lettuce", name: "Lettuce", image: "/images/sorting_v2_lettuce.svg", category: "green", placed: false },
+  ]
+
+  // Define the items for sorting
+  const [items, setItems] = useState<SortableItem[]>([])
 
   // State for tracking items placed in each category
   const [leftBoxItems, setLeftBoxItems] = useState<string[]>([]) // fruits for autumn, easter for winter
@@ -113,8 +131,19 @@ export default function CategorySortingGame({ onMenuClick, onBack, onNext, onRet
   // State for success message
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
+  useEffect(() => {
+    const nextItems = selectedSeason === "wiosna" && activeSpringVariant === 2 ? makeSpringVariant2Items() : makeBaseSeasonItems()
+    setItems(nextItems)
+    setLeftBoxItems([])
+    setRightBoxItems([])
+    setDraggedItem(null)
+    setIsCompleted(false)
+    setSuccessMessage(null)
+  }, [selectedSeason, activeSpringVariant])
+
   // Helper function to get the appropriate image based on season
   const getItemImage = (item: SortableItem) => {
+    if (selectedSeason === "wiosna" && activeSpringVariant === 2) return item.image
     if (selectedSeason === "zima") return item.winterImage
     if (selectedSeason === "jesien") return item.autumnImage
     if (selectedSeason === "lato") return item.summerImage
@@ -123,6 +152,9 @@ export default function CategorySortingGame({ onMenuClick, onBack, onNext, onRet
 
   // Helper function to get category indicator image
   const getCategoryImage = (isLeftBox: boolean) => {
+    if (selectedSeason === "wiosna" && activeSpringVariant === 2) {
+      return isLeftBox ? "/images/sorting_v2_chive_indicator.svg" : "/images/sorting_v2_chick_indicator.svg"
+    }
     if (selectedSeason === "zima") {
       return isLeftBox ? "/images/basket_winter_easter.svg" : "/images/star_winter_xmas.svg"
     }
@@ -171,7 +203,14 @@ export default function CategorySortingGame({ onMenuClick, onBack, onNext, onRet
     // For autumn: only accept fruits in left box
     // For winter: only accept easter items in left box
     // For other seasons: only accept animals in left box
-    const expectedCategory = selectedSeason === "jesien" ? "fruit" : selectedSeason === "zima" ? "easter" : "animal"
+    const expectedCategory =
+      selectedSeason === "wiosna" && activeSpringVariant === 2
+        ? "green"
+        : selectedSeason === "jesien"
+          ? "fruit"
+          : selectedSeason === "zima"
+            ? "easter"
+            : "animal"
     if (item.category !== expectedCategory) {
       setDraggedItem(null)
       return
@@ -208,7 +247,14 @@ export default function CategorySortingGame({ onMenuClick, onBack, onNext, onRet
     // For autumn: only accept animals in right box
     // For winter: only accept xmas items in right box
     // For other seasons: only accept flowers in right box
-    const expectedCategory = selectedSeason === "jesien" ? "animal" : selectedSeason === "zima" ? "xmas" : "flower"
+    const expectedCategory =
+      selectedSeason === "wiosna" && activeSpringVariant === 2
+        ? "yellow"
+        : selectedSeason === "jesien"
+          ? "animal"
+          : selectedSeason === "zima"
+            ? "xmas"
+            : "flower"
     if (item.category !== expectedCategory) {
       setDraggedItem(null)
       return
@@ -240,6 +286,17 @@ export default function CategorySortingGame({ onMenuClick, onBack, onNext, onRet
     setRightBoxItems([])
     setIsCompleted(false)
     setSuccessMessage(null)
+  }
+
+  const springVariant2Sizes: Record<string, number> = {
+    "v2-butterfly-a": 88,
+    "v2-bush": 88,
+    "v2-banana": 90,
+    "v2-frog": 92,
+    "v2-butterfly-b": 88,
+    "v2-daffodil": 90,
+    "v2-sun": 90,
+    "v2-lettuce": 88,
   }
 
   
@@ -277,10 +334,26 @@ export default function CategorySortingGame({ onMenuClick, onBack, onNext, onRet
         </div>
       </div>
 
+      {selectedSeason === "wiosna" && (
+        <div className="w-full max-w-4xl mx-auto mb-4 p-3 rounded-lg bg-white/80 border border-[#3e459c]/20 flex items-center gap-3">
+          <span className="text-sm font-medium text-[#3e459c]">Wariant (diagnostyka):</span>
+          <select
+            value={diagnosticSpringVariant}
+            onChange={(e) => setDiagnosticSpringVariant(Number(e.target.value) as 0 | SpringCategoryVariant)}
+            className="px-2 py-1 text-sm border border-[#3e459c]/30 rounded-md bg-white text-[#3e459c]"
+          >
+            <option value={0}>Auto (losowo)</option>
+            <option value={1}>Wariant 1</option>
+            <option value={2}>Wariant 2</option>
+          </select>
+          <span className="text-xs text-gray-600">Aktywny: {activeSpringVariant}</span>
+        </div>
+      )}
+
       {/* Game area */}
       <div className="flex flex-col items-center">
         {/* Draggable items at the top */}
-        <div className="flex justify-center gap-8 mb-6 flex-wrap">
+        <div className={`flex justify-center mb-6 ${selectedSeason === "wiosna" && activeSpringVariant === 2 ? "gap-4 flex-nowrap" : "gap-8 flex-wrap"}`}>
           {items.map((item) => {
             // Skip items that have been placed
             if (item.placed) return null
@@ -291,6 +364,11 @@ export default function CategorySortingGame({ onMenuClick, onBack, onNext, onRet
                 draggable
                 onDragStart={() => handleDragStart(item.id)}
                 className="relative h-20 w-20 cursor-grab"
+                style={
+                  selectedSeason === "wiosna" && activeSpringVariant === 2
+                    ? { width: `${springVariant2Sizes[item.id] ?? 80}px`, height: `${springVariant2Sizes[item.id] ?? 80}px` }
+                    : undefined
+                }
               >
                 <Image 
                   src={getItemImage(item) || "/placeholder.svg"} 

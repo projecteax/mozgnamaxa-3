@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useCallback, useMemo } from "react"
+import { useState, useCallback, useMemo, useEffect } from "react"
 import Image from "next/image"
 import { useGameCompletionWithHistory } from "@/hooks/use-game-completion"
 import { getRandomSuccessMessage } from "@/lib/success-messages"
@@ -28,18 +28,39 @@ interface ButterflyHalf {
   matched: boolean
 }
 
+type SpringVariant = 1 | 2 | 3
+
 export default function ButterflyPairsGame({ onMenuClick, onComplete, onBack, onNext, onRetry, userLoggedIn = false, currentSeason = "wiosna", isGameCompleted = false }: ButterflyPairsGameProps) {
   const { selectedSeason, getThemeColors } = useSeason()
   const theme = getThemeColors()
+  const [diagnosticSpringVariant, setDiagnosticSpringVariant] = useState<0 | SpringVariant>(0)
+  const [randomSpringVariant] = useState<SpringVariant>(() => (Math.floor(Math.random() * 3) + 1) as SpringVariant)
+  const activeSpringVariant = diagnosticSpringVariant === 0 ? randomSpringVariant : diagnosticSpringVariant
 
   // Define the butterfly halves based on season
   const springLeftHalves = useMemo(
-    () => [
-      { id: "blue-left", image: "/images/butterfly_05_left.svg", pairId: "blue", isLeft: true, matched: false },
-      { id: "orange-left", image: "/images/butterfly_03_left.svg", pairId: "orange", isLeft: true, matched: false },
-      { id: "green-left", image: "/images/butterfly_04_left.svg", pairId: "green", isLeft: true, matched: false },
-    ],
-    [],
+    () => {
+      const springLeftByVariant: Record<SpringVariant, ButterflyHalf[]> = {
+        1: [
+          { id: "butterfly-05-left", image: "/images/butterfly_05_left.svg", pairId: "butterfly-05", isLeft: true, matched: false },
+          { id: "butterfly-03-left", image: "/images/butterfly_03_left.svg", pairId: "butterfly-03", isLeft: true, matched: false },
+          { id: "butterfly-04-left", image: "/images/butterfly_04_left.svg", pairId: "butterfly-04", isLeft: true, matched: false },
+        ],
+        2: [
+          { id: "butterfly-06-left", image: "/images/butterfly_06_left.svg", pairId: "butterfly-06", isLeft: true, matched: false },
+          { id: "butterfly-07-left", image: "/images/butterfly_07_left.svg", pairId: "butterfly-07", isLeft: true, matched: false },
+          { id: "butterfly-08-left", image: "/images/butterfly_08_left.svg", pairId: "butterfly-08", isLeft: true, matched: false },
+        ],
+        3: [
+          { id: "butterfly-09-left", image: "/images/butterfly_09_left.svg", pairId: "butterfly-09", isLeft: true, matched: false },
+          { id: "butterfly-10-left", image: "/images/butterfly_10_left.svg", pairId: "butterfly-10", isLeft: true, matched: false },
+          { id: "butterfly-11-left", image: "/images/butterfly_11_left.svg", pairId: "butterfly-11", isLeft: true, matched: false },
+        ],
+      }
+
+      return springLeftByVariant[activeSpringVariant]
+    },
+    [activeSpringVariant],
   )
 
   const summerLeftHalves = useMemo(
@@ -75,7 +96,7 @@ export default function ButterflyPairsGame({ onMenuClick, onComplete, onBack, on
     [],
   )
 
-  const getLeftHalves = () => {
+  const getLeftHalves = useCallback(() => {
     switch (selectedSeason) {
       case "lato":
         return summerLeftHalves
@@ -86,10 +107,9 @@ export default function ButterflyPairsGame({ onMenuClick, onComplete, onBack, on
       default:
         return springLeftHalves
     }
-  }
+  }, [selectedSeason, springLeftHalves, summerLeftHalves, autumnLeftHalves, winterLeftHalves])
 
-  const leftHalves = getLeftHalves()
-  const [leftHalvesState, setLeftHalvesState] = useState<ButterflyHalf[]>(leftHalves)
+  const [leftHalvesState, setLeftHalvesState] = useState<ButterflyHalf[]>(() => getLeftHalves())
 
   // State for tracking the current dragged item
   const [draggedItem, setDraggedItem] = useState<string | null>(null)
@@ -117,11 +137,24 @@ export default function ButterflyPairsGame({ onMenuClick, onComplete, onBack, on
 
   // Function to initialize and shuffle right halves
   const initializeRightHalves = useCallback(() => {
-    const springRightHalves = [
-      { id: "blue-right", image: "/images/butterfly_05_right.svg", pairId: "blue", isLeft: false, matched: false },
-      { id: "orange-right", image: "/images/butterfly_03_right.svg", pairId: "orange", isLeft: false, matched: false },
-      { id: "green-right", image: "/images/butterfly_04_right.svg", pairId: "green", isLeft: false, matched: false },
-    ]
+    const springRightByVariant: Record<SpringVariant, ButterflyHalf[]> = {
+      1: [
+        { id: "butterfly-05-right", image: "/images/butterfly_05_right.svg", pairId: "butterfly-05", isLeft: false, matched: false },
+        { id: "butterfly-03-right", image: "/images/butterfly_03_right.svg", pairId: "butterfly-03", isLeft: false, matched: false },
+        { id: "butterfly-04-right", image: "/images/butterfly_04_right.svg", pairId: "butterfly-04", isLeft: false, matched: false },
+      ],
+      2: [
+        { id: "butterfly-06-right", image: "/images/butterfly_06_right.svg", pairId: "butterfly-06", isLeft: false, matched: false },
+        { id: "butterfly-07-right", image: "/images/butterfly_07_right.svg", pairId: "butterfly-07", isLeft: false, matched: false },
+        { id: "butterfly-08-right", image: "/images/butterfly_08_right.svg", pairId: "butterfly-08", isLeft: false, matched: false },
+      ],
+      3: [
+        { id: "butterfly-09-right", image: "/images/butterfly_09_right.svg", pairId: "butterfly-09", isLeft: false, matched: false },
+        { id: "butterfly-10-right", image: "/images/butterfly_10_right.svg", pairId: "butterfly-10", isLeft: false, matched: false },
+        { id: "butterfly-11-right", image: "/images/butterfly_11_right.svg", pairId: "butterfly-11", isLeft: false, matched: false },
+      ],
+    }
+    const springRightHalves = springRightByVariant[activeSpringVariant]
 
     const summerRightHalves = [
       { id: "cloud-right", image: "/images/cloud_right_summer.svg", pairId: "cloud", isLeft: false, matched: false },
@@ -198,10 +231,23 @@ export default function ButterflyPairsGame({ onMenuClick, onComplete, onBack, on
     }
 
     return shuffleArray(initialRightHalves)
-  }, [selectedSeason])
+  }, [selectedSeason, getLeftHalves, activeSpringVariant])
 
   // State for right halves, initialized with shuffled values
-  const [rightHalves, setRightHalves] = useState<ButterflyHalf[]>(initializeRightHalves)
+  const [rightHalves, setRightHalves] = useState<ButterflyHalf[]>(() => initializeRightHalves())
+
+  useEffect(() => {
+    const resetLeft = getLeftHalves().map((half) => ({ ...half, matched: false }))
+    setLeftHalvesState(resetLeft)
+    setRightHalves(initializeRightHalves())
+    setDraggedItem(null)
+    setDraggedIsLeft(false)
+    setErrorMessage(null)
+    setAllMatched(false)
+    setMatchedPairs({})
+    setSuccessMessage("")
+    setHasSetSuccessMessage(false)
+  }, [selectedSeason, activeSpringVariant, getLeftHalves, initializeRightHalves])
 
   // Handle drag start
   const handleDragStart = (id: string, isLeft: boolean) => {
@@ -291,7 +337,7 @@ export default function ButterflyPairsGame({ onMenuClick, onComplete, onBack, on
 
   // Reset the game
   const resetGame = () => {
-    setLeftHalvesState(leftHalves.map((half) => ({ ...half, matched: false })))
+    setLeftHalvesState(getLeftHalves().map((half) => ({ ...half, matched: false })))
     setRightHalves(initializeRightHalves()) // Re-initialize and shuffle right halves
     setAllMatched(false)
     setErrorMessage(null)
@@ -382,6 +428,24 @@ export default function ButterflyPairsGame({ onMenuClick, onComplete, onBack, on
           <Image src={theme.menuIcon || "/placeholder.svg"} alt="Menu" fill className="object-contain cursor-pointer" />
         </div>
       </div>
+
+      {/* Diagnostic variant selector (test-only helper; remove in production) */}
+      {selectedSeason === "wiosna" && (
+        <div className="mb-6 p-3 rounded-lg bg-white/80 border border-[#3e459c]/20 flex items-center gap-3">
+          <span className="text-sm font-medium text-[#3e459c]">Wariant (diagnostyka):</span>
+          <select
+            value={diagnosticSpringVariant}
+            onChange={(e) => setDiagnosticSpringVariant(Number(e.target.value) as 0 | SpringVariant)}
+            className="px-2 py-1 text-sm border border-[#3e459c]/30 rounded-md bg-white text-[#3e459c]"
+          >
+            <option value={0}>Auto (losowo)</option>
+            <option value={1}>Wariant 1 (03,04,05)</option>
+            <option value={2}>Wariant 2 (06,07,08)</option>
+            <option value={3}>Wariant 3 (09,10,11)</option>
+          </select>
+          <span className="text-xs text-gray-600">Aktywny: {activeSpringVariant}</span>
+        </div>
+      )}
 
       {/* Game area */}
       <div className="flex justify-center items-center mt-16">

@@ -30,9 +30,14 @@ interface Difference {
   found: boolean
 }
 
+type SpringSpotVariant = 1 | 2 | 3
+
 export default function SpotDifferenceGame({ onMenuClick, onBack, onNext, onRetry, userLoggedIn = false, currentSeason = "wiosna", isGameCompleted = false }: SpotDifferenceGameProps) {
   const { selectedSeason, getThemeColors } = useSeason()
   const theme = getThemeColors()
+  const [diagnosticSpringVariant, setDiagnosticSpringVariant] = useState<0 | SpringSpotVariant>(0)
+  const [randomSpringVariant] = useState<SpringSpotVariant>(() => (Math.floor(Math.random() * 3) + 1) as SpringSpotVariant)
+  const activeSpringVariant = diagnosticSpringVariant === 0 ? randomSpringVariant : diagnosticSpringVariant
 
   // Get the appropriate title box based on season
   const getTitleBox = () => {
@@ -48,8 +53,8 @@ export default function SpotDifferenceGame({ onMenuClick, onBack, onNext, onRetr
     }
   }
 
-  // Get differences based on season
-  const getDifferences = () => {
+  // Get differences based on season/variant
+  const getDifferences = (): Difference[] => {
     if (selectedSeason === "lato") {
       // Summer differences with positions
       return [
@@ -72,11 +77,29 @@ export default function SpotDifferenceGame({ onMenuClick, onBack, onNext, onRetr
         { id: 3, name: "difference3", xProp: 0.8, yProp: 0.6, radius: 30, found: false },
       ]
     } else {
-      // Spring differences with original positions
+      // Spring variant 1 (existing)
+      if (activeSpringVariant === 1) {
+        return [
+          { id: 1, name: "animal", xProp: 6 / 15, yProp: 3 / 11, radius: 30, found: false },
+          { id: 2, name: "egg", xProp: 8 / 15, yProp: 5 / 11, radius: 30, found: false },
+          { id: 3, name: "bow", xProp: 10 / 15, yProp: 6 / 11, radius: 30, found: false },
+        ]
+      }
+
+      // Spring variant 2 (ver2 pair)
+      if (activeSpringVariant === 2) {
+        return [
+          { id: 1, name: "top-left-decoration", xProp: 0.25, yProp: 0.25, radius: 35, found: false },
+          { id: 2, name: "upper-mid-detail", xProp: 0.6, yProp: 0.4, radius: 35, found: false },
+          { id: 3, name: "large-lower-area", xProp: 0.4, yProp: 0.65, radius: 90, found: false },
+        ]
+      }
+
+      // Spring variant 3 (ver3 pair)
       return [
-        { id: 1, name: "animal", xProp: 6 / 15, yProp: 3 / 11, radius: 30, found: false },
-        { id: 2, name: "egg", xProp: 8 / 15, yProp: 5 / 11, radius: 30, found: false },
-        { id: 3, name: "bow", xProp: 10 / 15, yProp: 6 / 11, radius: 30, found: false },
+        { id: 1, name: "top-mid-area", xProp: 0.55, yProp: 0.3, radius: 35, found: false },
+        { id: 2, name: "mid-area", xProp: 0.55, yProp: 0.43, radius: 35, found: false },
+        { id: 3, name: "mid-right-area", xProp: 0.7, yProp: 0.52, radius: 35, found: false },
       ]
     }
   }
@@ -84,14 +107,14 @@ export default function SpotDifferenceGame({ onMenuClick, onBack, onNext, onRetr
   // Initialize differences based on season
   const [differences, setDifferences] = useState<Difference[]>(getDifferences())
 
-  // Update differences when season changes
+  // Update differences when season/variant changes
   useEffect(() => {
     setDifferences(getDifferences())
     setFoundCount(0)
     setIsCompleted(false)
     setSuccessMessage(null)
     setHasRecordedCompletion(false)
-  }, [selectedSeason])
+  }, [selectedSeason, activeSpringVariant])
 
   // State for tracking game completion
   const [isCompleted, setIsCompleted] = useState(false)
@@ -189,7 +212,7 @@ export default function SpotDifferenceGame({ onMenuClick, onBack, onNext, onRetr
     setHasRecordedCompletion(false)
   }
 
-  // Get images based on season
+  // Get images based on season/variant
   const getImages = () => {
     if (selectedSeason === "lato") {
       return {
@@ -205,6 +228,16 @@ export default function SpotDifferenceGame({ onMenuClick, onBack, onNext, onRetr
       return {
         leftImage: "/images/differences_3_winter_left.svg",
         rightImage: "/images/differences_3_winter_right.svg",
+      }
+    } else if (activeSpringVariant === 2) {
+      return {
+        leftImage: "/images/spot_diff_v2_left.svg",
+        rightImage: "/images/spot_diff_v2_right.svg",
+      }
+    } else if (activeSpringVariant === 3) {
+      return {
+        leftImage: "/images/spot_diff_v3_left.svg",
+        rightImage: "/images/spot_diff_v3_right.svg",
       }
     } else {
       return {
@@ -248,6 +281,23 @@ export default function SpotDifferenceGame({ onMenuClick, onBack, onNext, onRetr
           <Image src={theme.menuIcon || "/placeholder.svg"} alt="Menu" fill className="object-contain cursor-pointer" />
         </div>
       </div>
+
+      {selectedSeason === "wiosna" && (
+        <div className="w-full max-w-4xl mx-auto mb-4 p-3 rounded-lg bg-white/80 border border-[#3e459c]/20 flex items-center gap-3">
+          <span className="text-sm font-medium text-[#3e459c]">Wariant (diagnostyka):</span>
+          <select
+            value={diagnosticSpringVariant}
+            onChange={(e) => setDiagnosticSpringVariant(Number(e.target.value) as 0 | SpringSpotVariant)}
+            className="px-2 py-1 text-sm border border-[#3e459c]/30 rounded-md bg-white text-[#3e459c]"
+          >
+            <option value={0}>Auto (losowo)</option>
+            <option value={1}>Wariant 1</option>
+            <option value={2}>Wariant 2</option>
+            <option value={3}>Wariant 3</option>
+          </select>
+          <span className="text-xs text-gray-600">Aktywny: {activeSpringVariant}</span>
+        </div>
+      )}
 
       {/* Game area */}
       <div className="flex flex-col items-center">

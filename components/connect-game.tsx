@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import Image from "next/image"
 
 // Add the import for useGameCompletion at the top of the file
@@ -33,6 +33,8 @@ interface GameItem {
   isLeft: boolean
   matched: boolean
 }
+
+type SpringConnectVariant = 1 | 2 | 3
 
 // Helper function to shuffle an array
 function shuffleArray<T>(array: T[]): T[] {
@@ -76,6 +78,9 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
   // First, add a useGameCompletion hook at the top with other hooks
   const { recordCompletion, isLoggedIn, isHistoricallyCompleted } = useGameCompletionWithHistory("connect-game")
   const { selectedSeason, getThemeColors } = useSeason()
+  const [diagnosticSpringVariant, setDiagnosticSpringVariant] = useState<0 | SpringConnectVariant>(0)
+  const [randomSpringVariant] = useState<SpringConnectVariant>(() => (Math.floor(Math.random() * 3) + 1) as SpringConnectVariant)
+  const activeSpringVariant = diagnosticSpringVariant === 0 ? randomSpringVariant : diagnosticSpringVariant
 
   // Define the game items with new SVG files
   const [leftItems, setLeftItems] = useState<GameItem[]>([
@@ -193,55 +198,85 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
   // Initialize right items in specific order with new SVG files
   useEffect(() => {
     if (selectedSeason === "wiosna") {
-      const left = shuffleArray([
-        {
-          id: "single-flower",
-          image: "/images/red_flower.svg",
-          pairId: "flower",
-          isLeft: true,
-          matched: false,
-        },
-        {
-          id: "single-bee",
-          image: "/images/bee.svg",
-          pairId: "bee",
-          isLeft: true,
-          matched: false,
-        },
-        {
-          id: "single-butterfly",
-          image: "/images/butterfly_orange.svg",
-          pairId: "butterfly",
-          isLeft: true,
-          matched: false,
-        },
-      ])
-      const rightArray = [
-        {
-          id: "set-of-flowers",
-          image: "/images/red_flowers_multiple.svg",
-          pairId: "flower",
-          isLeft: false,
-          matched: false,
-        },
-        {
-          id: "set-of-bees",
-          image: "/images/bees.svg",
-          pairId: "bee",
-          isLeft: false,
-          matched: false,
-        },
-        {
-          id: "set-of-butterflies",
-          image: "/images/butterflies.svg",
-          pairId: "butterfly",
-          isLeft: false,
-          matched: false,
-        },
-      ]
-      const right = shuffleArrayDifferent(rightArray, left)
-      setLeftItems(left)
-      setRightItems(right)
+      if (activeSpringVariant === 2) {
+        const left = [
+          { id: "v2-snowdrop-single", image: "/images/connect_v2_snowdrop_single.svg", pairId: "snowdrop", isLeft: true, matched: false },
+          { id: "v2-ant-single", image: "/images/connect_v2_ant_single.svg", pairId: "ant", isLeft: true, matched: false },
+          { id: "v2-radish-single", image: "/images/connect_v2_radish_single.svg", pairId: "radish", isLeft: true, matched: false },
+        ]
+        const right = [
+          { id: "v2-ant-group", image: "/images/connect_v2_ant_group.svg", pairId: "ant", isLeft: false, matched: false },
+          { id: "v2-radish-bunch", image: "/images/connect_v2_radish_bunch.svg", pairId: "radish", isLeft: false, matched: false },
+          { id: "v2-snowdrop-bouquet", image: "/images/connect_v2_snowdrop_bouquet.svg", pairId: "snowdrop", isLeft: false, matched: false },
+        ]
+        setLeftItems(left)
+        setRightItems(right)
+      } else if (activeSpringVariant === 3) {
+        const left = [
+          { id: "v3-bee-single", image: "/images/connect_v3_bee_single.svg", pairId: "bee", isLeft: true, matched: false },
+          { id: "v3-lark-single", image: "/images/connect_v3_lark_single.svg", pairId: "lark", isLeft: true, matched: false },
+          { id: "v3-daffodil-single", image: "/images/connect_v3_daffodil_single.svg", pairId: "daffodil", isLeft: true, matched: false },
+        ]
+        const right = [
+          { id: "v3-nest-group", image: "/images/connect_v3_nest_group.svg", pairId: "lark", isLeft: false, matched: false },
+          { id: "v3-daffodil-bouquet", image: "/images/connect_v3_daffodil_bouquet.svg", pairId: "daffodil", isLeft: false, matched: false },
+          { id: "v3-bee-group", image: "/images/connect_v3_bee_group.svg", pairId: "bee", isLeft: false, matched: false },
+        ]
+        setLeftItems(left)
+        setRightItems(right)
+      } else {
+        const left = [
+          {
+            id: "single-flower",
+            image: "/images/red_flower.svg",
+            pairId: "flower",
+            isLeft: true,
+            matched: false,
+          },
+          {
+            id: "single-bee",
+            image: "/images/bee.svg",
+            pairId: "bee",
+            isLeft: true,
+            matched: false,
+          },
+          {
+            id: "single-butterfly",
+            image: "/images/butterfly_orange.svg",
+            pairId: "butterfly",
+            isLeft: true,
+            matched: false,
+          },
+        ]
+        const rightArray = [
+          {
+            id: "set-of-flowers",
+            image: "/images/red_flowers_multiple.svg",
+            pairId: "flower",
+            isLeft: false,
+            matched: false,
+          },
+          {
+            id: "set-of-bees",
+            image: "/images/bees.svg",
+            pairId: "bee",
+            isLeft: false,
+            matched: false,
+          },
+          {
+            id: "set-of-butterflies",
+            image: "/images/butterflies.svg",
+            pairId: "butterfly",
+            isLeft: false,
+            matched: false,
+          },
+        ]
+        const right = rightArray
+        setLeftItems(left)
+        setRightItems(right)
+      }
+      setMatchedPairs({})
+      setAllMatched(false)
       return
     }
     // Update left items with correct pairIds based on season
@@ -389,7 +424,7 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
     const right = shuffleArrayDifferent(rightArray, left)
     setLeftItems(left)
     setRightItems(right)
-  }, [selectedSeason])
+  }, [selectedSeason, activeSpringVariant])
 
   // Handle drag start
   const handleDragStart = (id: string, isLeft: boolean) => {
@@ -497,6 +532,40 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
   }
 
   const themeColors = getThemeColors()
+  const useSpringFreeLayout = selectedSeason === "wiosna"
+  const springAbsolutePositions = useMemo((): Record<string, React.CSSProperties> => {
+    if (activeSpringVariant === 1) {
+      return {
+        "single-flower": { left: "110px", top: "46px", width: "76px", height: "110px" },
+        "single-bee": { left: "140px", top: "148px", width: "92px", height: "70px" },
+        "single-butterfly": { left: "76px", top: "214px", width: "124px", height: "94px" },
+        "set-of-bees": { left: "608px", top: "50px", width: "110px", height: "84px" },
+        "set-of-butterflies": { left: "504px", top: "138px", width: "150px", height: "88px" },
+        "set-of-flowers": { left: "650px", top: "222px", width: "94px", height: "96px" },
+      }
+    }
+    if (activeSpringVariant === 2) {
+      return {
+        "v2-snowdrop-single": { left: "88px", top: "48px", width: "80px", height: "100px" },
+        "v2-ant-single": { left: "210px", top: "115px", width: "78px", height: "55px" },
+        "v2-radish-single": { left: "100px", top: "185px", width: "72px", height: "92px" },
+        "v2-ant-group": { left: "590px", top: "50px", width: "120px", height: "70px" },
+        "v2-radish-bunch": { left: "520px", top: "132px", width: "92px", height: "120px" },
+        "v2-snowdrop-bouquet": { left: "665px", top: "168px", width: "90px", height: "100px" },
+      }
+    }
+    if (activeSpringVariant === 3) {
+      return {
+        "v3-bee-single": { left: "132px", top: "58px", width: "72px", height: "62px" },
+        "v3-lark-single": { left: "204px", top: "102px", width: "106px", height: "96px" },
+        "v3-daffodil-single": { left: "108px", top: "178px", width: "88px", height: "100px" },
+        "v3-nest-group": { left: "552px", top: "46px", width: "140px", height: "96px" },
+        "v3-daffodil-bouquet": { left: "494px", top: "132px", width: "90px", height: "102px" },
+        "v3-bee-group": { left: "634px", top: "170px", width: "116px", height: "95px" },
+      }
+    }
+    return {}
+  }, [activeSpringVariant])
 
   
   
@@ -531,68 +600,195 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
         </div>
       </div>
 
+      {selectedSeason === "wiosna" && (
+        <div className="w-full max-w-4xl mx-auto mb-4 p-3 rounded-lg bg-white/80 border border-[#3e459c]/20 flex items-center gap-3">
+          <span className="text-sm font-medium text-[#3e459c]">Wariant (diagnostyka):</span>
+          <select
+            value={diagnosticSpringVariant}
+            onChange={(e) => setDiagnosticSpringVariant(Number(e.target.value) as 0 | SpringConnectVariant)}
+            className="px-2 py-1 text-sm border border-[#3e459c]/30 rounded-md bg-white text-[#3e459c]"
+          >
+            <option value={0}>Auto (losowo)</option>
+            <option value={1}>Wariant 1</option>
+            <option value={2}>Wariant 2</option>
+            <option value={3}>Wariant 3</option>
+          </select>
+          <span className="text-xs text-gray-600">Aktywny: {activeSpringVariant}</span>
+        </div>
+      )}
+
       {/* Game area */}
       <div className="flex justify-center items-center mt-16">
         <div className="flex flex-col items-center w-full">
           {/* Game container */}
-          <div className="flex justify-between w-full max-w-4xl">
-            {/* Left column - single items */}
-            <div className="flex flex-col gap-4">
-              {leftItems.map((item) => (
-                <div key={item.id} className="relative">
-                  {item.matched ? (
-                    // When matched, display both items side by side
-                    <div className="flex items-center gap-4">
-                      {/* Left item */}
-                      <div className="relative h-20 w-20">
+          {useSpringFreeLayout ? (
+            <div className="w-full max-w-4xl">
+              <div className="relative w-full h-[330px]">
+                {[...leftItems, ...rightItems].map((item) => {
+                  if (item.matched && !item.isLeft) return null
+                  const pos = springAbsolutePositions[item.id]
+                  if (!pos) return null
+                  const pairItem = rightItems.find((right) => right.pairId === item.pairId)
+
+                  if (item.matched && item.isLeft && pairItem) {
+                    return (
+                      <div key={item.id} className="absolute" style={pos}>
+                        <div className="relative w-full h-full flex items-center justify-center gap-2">
+                          <div className="relative w-[48%] h-[85%]">
+                            <Image
+                              src={getImageForSeason(item) || "/placeholder.svg"}
+                              alt={`Single ${item.pairId}`}
+                              fill
+                              className="object-contain"
+                              style={{ filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))" }}
+                            />
+                          </div>
+                          <div className="relative w-[48%] h-[85%]">
+                            <Image
+                              src={getImageForSeason(pairItem) || "/placeholder.svg"}
+                              alt={`Set of ${item.pairId}s`}
+                              fill
+                              className="object-contain"
+                              style={{ filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))" }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  }
+
+                  return (
+                    <div
+                      key={item.id}
+                      className="absolute"
+                      style={pos}
+                      onDragOver={handleDragOver}
+                      onDrop={(e) => handleDrop(e, item.id, item.isLeft)}
+                    >
+                      <div
+                        className="relative w-full h-full cursor-grab"
+                        draggable
+                        onDragStart={() => handleDragStart(item.id, item.isLeft)}
+                      >
                         <Image
                           src={getImageForSeason(item) || "/placeholder.svg"}
-                          alt={`Single ${item.pairId}`}
+                          alt={item.pairId}
                           fill
                           className="object-contain"
-                          style={{
-                            filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))",
-                            transform: "scale(0.8)"
-                          }}
-                        />
-                      </div>
-
-                      {/* Right item */}
-                      <div className="relative h-20 w-20">
-                        <Image
-                          src={getImageForSeason(rightItems.find((right) => right.pairId === item.pairId)!) || ""}
-                          alt={`Set of ${item.pairId}s`}
-                          fill
-                          className="object-contain"
-                          style={{
-                            filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))",
-                            transform: "scale(0.8)"
-                          }}
+                          style={{ filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))" }}
                         />
                       </div>
                     </div>
-                  ) : (
-                    // When not matched, display draggable item with extended drop zone
+                  )
+                })}
+              </div>
+            </div>
+          ) : (
+            <div className="flex justify-between w-full max-w-4xl">
+              {/* Left column - single items */}
+              <div className="flex flex-col gap-4">
+                {leftItems.map((item) => (
+                  <div key={item.id} className="relative">
+                    {item.matched ? (
+                      // When matched, display both items side by side
+                      <div className="flex items-center gap-4">
+                        {/* Left item */}
+                        <div className="relative h-20 w-20">
+                          <Image
+                            src={getImageForSeason(item) || "/placeholder.svg"}
+                            alt={`Single ${item.pairId}`}
+                            fill
+                            className="object-contain"
+                            style={{
+                              filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))",
+                              transform: "scale(0.8)"
+                            }}
+                          />
+                        </div>
+
+                        {/* Right item */}
+                        <div className="relative h-20 w-20">
+                          <Image
+                            src={getImageForSeason(rightItems.find((right) => right.pairId === item.pairId)!) || ""}
+                            alt={`Set of ${item.pairId}s`}
+                            fill
+                            className="object-contain"
+                            style={{
+                              filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))",
+                              transform: "scale(0.8)"
+                            }}
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      // When not matched, display draggable item with extended drop zone
+                      <div className="flex items-center">
+                        {/* Left drop zone */}
+                        <div
+                          className="w-12 h-24"
+                          onDragOver={handleDragOver}
+                          onDrop={(e) => handleDrop(e, item.id, true)}
+                        />
+
+                        {/* Main icon */}
+                        <div className="p-1">
+                          <div
+                            className="relative h-20 w-20 cursor-grab"
+                            draggable
+                            onDragStart={() => handleDragStart(item.id, true)}
+                            onDragOver={handleDragOver}
+                            onDrop={(e) => handleDrop(e, item.id, true)}
+                          >
+                            <Image
+                              src={getImageForSeason(item) || "/placeholder.svg"}
+                              alt={`Single ${item.pairId}`}
+                              fill
+                              className="object-contain"
+                              style={{
+                                filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))",
+                                transform: "scale(0.8)"
+                              }}
+                            />
+                          </div>
+                        </div>
+
+                        {/* Right drop zone */}
+                        <div
+                          className="w-12 h-24"
+                          onDragOver={handleDragOver}
+                          onDrop={(e) => handleDrop(e, item.id, true)}
+                        />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Right column - sets of items */}
+              <div className="flex flex-col gap-4">
+                {rightItems.map((item) => (
+                  <div key={item.id} className={`relative ${item.matched ? "opacity-0" : ""}`}>
+                    {/* Extended drop zone with areas on both sides */}
                     <div className="flex items-center">
                       {/* Left drop zone */}
                       <div
                         className="w-12 h-24"
-                        onDragOver={handleDragOver}
-                        onDrop={(e) => handleDrop(e, item.id, true)}
+                        onDragOver={item.matched ? undefined : handleDragOver}
+                        onDrop={item.matched ? undefined : (e) => handleDrop(e, item.id, false)}
                       />
 
                       {/* Main icon */}
                       <div className="p-1">
                         <div
-                          className="relative h-20 w-20 cursor-grab"
-                          draggable
-                          onDragStart={() => handleDragStart(item.id, true)}
-                          onDragOver={handleDragOver}
-                          onDrop={(e) => handleDrop(e, item.id, true)}
+                          className={`relative h-20 w-20 ${item.matched ? "opacity-0" : "cursor-grab"}`}
+                          draggable={!item.matched}
+                          onDragStart={item.matched ? undefined : () => handleDragStart(item.id, false)}
+                          onDragOver={item.matched ? undefined : handleDragOver}
+                          onDrop={item.matched ? undefined : (e) => handleDrop(e, item.id, false)}
                         >
                           <Image
                             src={getImageForSeason(item) || "/placeholder.svg"}
-                            alt={`Single ${item.pairId}`}
+                            alt={`Set of ${item.pairId}s`}
                             fill
                             className="object-contain"
                             style={{
@@ -606,61 +802,15 @@ export default function ConnectGame({ onMenuClick, onBack, onNext, onRetry, user
                       {/* Right drop zone */}
                       <div
                         className="w-12 h-24"
-                        onDragOver={handleDragOver}
-                        onDrop={(e) => handleDrop(e, item.id, true)}
-                      />
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Right column - sets of items */}
-            <div className="flex flex-col gap-4">
-              {rightItems.map((item) => (
-                <div key={item.id} className={`relative ${item.matched ? "opacity-0" : ""}`}>
-                  {/* Extended drop zone with areas on both sides */}
-                  <div className="flex items-center">
-                    {/* Left drop zone */}
-                    <div
-                      className="w-12 h-24"
-                      onDragOver={item.matched ? undefined : handleDragOver}
-                      onDrop={item.matched ? undefined : (e) => handleDrop(e, item.id, false)}
-                    />
-
-                    {/* Main icon */}
-                    <div className="p-1">
-                      <div
-                        className={`relative h-20 w-20 ${item.matched ? "opacity-0" : "cursor-grab"}`}
-                        draggable={!item.matched}
-                        onDragStart={item.matched ? undefined : () => handleDragStart(item.id, false)}
                         onDragOver={item.matched ? undefined : handleDragOver}
                         onDrop={item.matched ? undefined : (e) => handleDrop(e, item.id, false)}
-                      >
-                        <Image
-                          src={getImageForSeason(item) || "/placeholder.svg"}
-                          alt={`Set of ${item.pairId}s`}
-                          fill
-                          className="object-contain"
-                          style={{
-                            filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))",
-                            transform: "scale(0.8)"
-                          }}
-                        />
-                      </div>
+                      />
                     </div>
-
-                    {/* Right drop zone */}
-                    <div
-                      className="w-12 h-24"
-                      onDragOver={item.matched ? undefined : handleDragOver}
-                      onDrop={item.matched ? undefined : (e) => handleDrop(e, item.id, false)}
-                    />
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Feedback message */}
           {feedbackMessage && !allMatched && (

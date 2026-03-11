@@ -26,9 +26,14 @@ interface MemoryCard {
   isMatched: boolean
 }
 
+type SpringMemory3Variant = 1 | 2
+
 export default function MemoryGame3({ onMenuClick, onBack, onNext, onRetry, userLoggedIn = false, currentSeason = "wiosna", isGameCompleted = false }: MemoryGameProps) {
   const { selectedSeason, getThemeColors } = useSeason()
   const theme = getThemeColors()
+  const [diagnosticSpringVariant, setDiagnosticSpringVariant] = useState<0 | SpringMemory3Variant>(0)
+  const [randomSpringVariant] = useState<SpringMemory3Variant>(() => (Math.floor(Math.random() * 2) + 1) as SpringMemory3Variant)
+  const activeSpringVariant = diagnosticSpringVariant === 0 ? randomSpringVariant : diagnosticSpringVariant
 
   // Get the appropriate title box based on season
   const getTitleBox = () => {
@@ -185,8 +190,74 @@ export default function MemoryGame3({ onMenuClick, onBack, onNext, onRetry, user
       },
     ]
 
-    setCards(orderedCards)
-  }, [selectedSeason])
+    const springVariant2Cards: MemoryCard[] = [
+      {
+        id: 0,
+        image: "/images/memory3_v2_duck_big.svg",
+        name: "Item1",
+        isFlipped: false,
+        isMatched: false,
+      },
+      {
+        id: 1,
+        image: "/images/memory3_v2_calf_small.svg",
+        name: "Item3",
+        isFlipped: false,
+        isMatched: false,
+      },
+      {
+        id: 2,
+        image: "/images/memory3_v2_cat_big.svg",
+        name: "Item4",
+        isFlipped: false,
+        isMatched: false,
+      },
+      {
+        id: 3,
+        image: "/images/memory3_v2_cow_big.svg",
+        name: "Item3",
+        isFlipped: false,
+        isMatched: false,
+      },
+      {
+        id: 4,
+        image: "/images/memory3_v2_dog_big.svg",
+        name: "Item5",
+        isFlipped: false,
+        isMatched: false,
+      },
+      {
+        id: 5,
+        image: "/images/memory3_v2_duckling_small.svg",
+        name: "Item1",
+        isFlipped: false,
+        isMatched: false,
+      },
+      {
+        id: 6,
+        image: "/images/memory3_v2_puppy_small.svg",
+        name: "Item5",
+        isFlipped: false,
+        isMatched: false,
+      },
+      {
+        id: 7,
+        image: "/images/memory3_v2_kitten_small.svg",
+        name: "Item4",
+        isFlipped: false,
+        isMatched: false,
+      },
+    ]
+
+    const nextCards = selectedSeason === "wiosna" && activeSpringVariant === 2 ? springVariant2Cards : orderedCards
+    setCards(nextCards)
+    setFlippedCards([])
+    setIsCompleted(false)
+    setIsChecking(false)
+    setProgressSaved(false)
+    setSuccessMessage("")
+    successMessageSetRef.current = false
+  }, [selectedSeason, activeSpringVariant])
 
   // Handle card click
   const handleCardClick = (id: number) => {
@@ -304,6 +375,22 @@ export default function MemoryGame3({ onMenuClick, onBack, onNext, onRetry, user
         </div>
       </div>
 
+      {selectedSeason === "wiosna" && (
+        <div className="w-full max-w-4xl mx-auto mb-4 p-3 rounded-lg bg-white/80 border border-[#3e459c]/20 flex items-center gap-3">
+          <span className="text-sm font-medium text-[#3e459c]">Wariant (diagnostyka):</span>
+          <select
+            value={diagnosticSpringVariant}
+            onChange={(e) => setDiagnosticSpringVariant(Number(e.target.value) as 0 | SpringMemory3Variant)}
+            className="px-2 py-1 text-sm border border-[#3e459c]/30 rounded-md bg-white text-[#3e459c]"
+          >
+            <option value={0}>Auto (losowo)</option>
+            <option value={1}>Wariant 1</option>
+            <option value={2}>Wariant 2</option>
+          </select>
+          <span className="text-xs text-gray-600">Aktywny: {activeSpringVariant}</span>
+        </div>
+      )}
+
       {/* Game area */}
       <div className="flex flex-col items-center">
         {/* Memory cards grid - enlarged by 120% */}
@@ -343,7 +430,13 @@ export default function MemoryGame3({ onMenuClick, onBack, onNext, onRetry, user
 
                   {/* Card image with shadow */}
                   <div className="relative h-20 w-20 z-10 drop-shadow-md">
-                    <Image src={card.image || "/placeholder.svg"} alt={card.name} fill className="object-contain" />
+                    <Image
+                      src={card.image || "/placeholder.svg"}
+                      alt={card.name}
+                      fill
+                      className="object-contain"
+                      style={{ filter: "drop-shadow(2px 2px 6px rgba(0,0,0,0.25))" }}
+                    />
                   </div>
                 </div>
               </div>

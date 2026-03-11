@@ -42,9 +42,14 @@ interface DropZone {
   position: number
 }
 
+type SpringMemory5Variant = 1 | 2
+
 export default function MemoryGame5({ onMenuClick, onComplete, onBack, onNext, onRetry, userLoggedIn = false, currentSeason = "wiosna", isGameCompleted = false }: MemoryGame5Props) {
   const { selectedSeason, getThemeColors } = useSeason()
   const theme = getThemeColors()
+  const [diagnosticSpringVariant, setDiagnosticSpringVariant] = useState<0 | SpringMemory5Variant>(0)
+  const [randomSpringVariant] = useState<SpringMemory5Variant>(() => (Math.floor(Math.random() * 2) + 1) as SpringMemory5Variant)
+  const activeSpringVariant = diagnosticSpringVariant === 0 ? randomSpringVariant : diagnosticSpringVariant
 
   // Get the appropriate title box based on season
   const getTitleBox = () => {
@@ -60,8 +65,7 @@ export default function MemoryGame5({ onMenuClick, onComplete, onBack, onNext, o
     }
   }
 
-  // Define the animal items
-  const [animals, setAnimals] = useState<AnimalItem[]>([
+  const springVariant1Animals: AnimalItem[] = [
     {
       id: "frog",
       name: "Frog",
@@ -114,15 +118,88 @@ export default function MemoryGame5({ onMenuClick, onComplete, onBack, onNext, o
       winterShadowImage: "/images/snowman_04_winter_shadow.svg",
       matched: false,
     },
-  ])
+  ]
+
+  const springVariant2Animals: AnimalItem[] = [
+    {
+      id: "chick",
+      name: "Chick",
+      image: "/images/memory_v2_chick_single.svg",
+      shadowImage: "/images/memory_v2_chick_group.svg",
+      summerImage: "/images/memory_v2_chick_single.svg",
+      summerShadowImage: "/images/memory_v2_chick_group.svg",
+      autumnImage: "/images/memory_v2_chick_single.svg",
+      autumnShadowImage: "/images/memory_v2_chick_group.svg",
+      winterImage: "/images/memory_v2_chick_single.svg",
+      winterShadowImage: "/images/memory_v2_chick_group.svg",
+      matched: false,
+    },
+    {
+      id: "ant",
+      name: "Ant",
+      image: "/images/memory_v2_ant_single.svg",
+      shadowImage: "/images/memory_v2_ant_group.svg",
+      summerImage: "/images/memory_v2_ant_single.svg",
+      summerShadowImage: "/images/memory_v2_ant_group.svg",
+      autumnImage: "/images/memory_v2_ant_single.svg",
+      autumnShadowImage: "/images/memory_v2_ant_group.svg",
+      winterImage: "/images/memory_v2_ant_single.svg",
+      winterShadowImage: "/images/memory_v2_ant_group.svg",
+      matched: false,
+    },
+    {
+      id: "sheep",
+      name: "Sheep",
+      image: "/images/memory_v2_sheep_single.svg",
+      shadowImage: "/images/memory_v2_sheep_group.svg",
+      summerImage: "/images/memory_v2_sheep_single.svg",
+      summerShadowImage: "/images/memory_v2_sheep_group.svg",
+      autumnImage: "/images/memory_v2_sheep_single.svg",
+      autumnShadowImage: "/images/memory_v2_sheep_group.svg",
+      winterImage: "/images/memory_v2_sheep_single.svg",
+      winterShadowImage: "/images/memory_v2_sheep_group.svg",
+      matched: false,
+    },
+    {
+      id: "snail",
+      name: "Snail",
+      image: "/images/memory_v2_snail_single.svg",
+      shadowImage: "/images/memory_v2_snail_group.svg",
+      summerImage: "/images/memory_v2_snail_single.svg",
+      summerShadowImage: "/images/memory_v2_snail_group.svg",
+      autumnImage: "/images/memory_v2_snail_single.svg",
+      autumnShadowImage: "/images/memory_v2_snail_group.svg",
+      winterImage: "/images/memory_v2_snail_single.svg",
+      winterShadowImage: "/images/memory_v2_snail_group.svg",
+      matched: false,
+    },
+  ]
+
+  const createDropZones = (animalIds: string[]): DropZone[] =>
+    animalIds.map((animalId, position) => ({
+      id: `zone-${animalId}`,
+      animalId,
+      filled: false,
+      position,
+    }))
+
+  const getInitialAnimals = (): AnimalItem[] => {
+    const source = selectedSeason === "wiosna" && activeSpringVariant === 2 ? springVariant2Animals : springVariant1Animals
+    return source.map((animal) => ({ ...animal, matched: false }))
+  }
+
+  const getInitialDropZones = (): DropZone[] => {
+    if (selectedSeason === "wiosna" && activeSpringVariant === 2) {
+      return createDropZones(["snail", "sheep", "ant", "chick"])
+    }
+    return createDropZones(["butterfly", "ladybug", "frog", "sparrow"])
+  }
+
+  // Define the animal items
+  const [animals, setAnimals] = useState<AnimalItem[]>(() => getInitialAnimals())
 
   // Define the drop zones (shadows)
-  const [dropZones, setDropZones] = useState<DropZone[]>([
-    { id: "zone-butterfly", animalId: "butterfly", filled: false, position: 0 },
-    { id: "zone-ladybug", animalId: "ladybug", filled: false, position: 1 },
-    { id: "zone-frog", animalId: "frog", filled: false, position: 2 },
-    { id: "zone-sparrow", animalId: "sparrow", filled: false, position: 3 },
-  ])
+  const [dropZones, setDropZones] = useState<DropZone[]>(() => getInitialDropZones())
 
   // State for tracking the current dragged item
   const [draggedItem, setDraggedItem] = useState<string | null>(null)
@@ -246,12 +323,22 @@ export default function MemoryGame5({ onMenuClick, onComplete, onBack, onNext, o
 
   // Reset the game
   const resetGame = () => {
-    setAnimals((prevAnimals) => prevAnimals.map((animal) => ({ ...animal, matched: false })))
-    setDropZones((prevZones) => prevZones.map((zone) => ({ ...zone, filled: false })))
+    setAnimals(getInitialAnimals())
+    setDropZones(getInitialDropZones())
+    setDraggedItem(null)
     setIsCompleted(false)
     setProgressSaved(false)
     setSuccessMessage("")
   }
+
+  useEffect(() => {
+    setAnimals(getInitialAnimals())
+    setDropZones(getInitialDropZones())
+    setDraggedItem(null)
+    setIsCompleted(false)
+    setProgressSaved(false)
+    setSuccessMessage("")
+  }, [selectedSeason, activeSpringVariant])
 
   return (
     <div className="w-full max-w-4xl" style={{ backgroundColor: theme.background }}>
@@ -276,6 +363,22 @@ export default function MemoryGame5({ onMenuClick, onComplete, onBack, onNext, o
         </div>
       </div>
 
+      {selectedSeason === "wiosna" && (
+        <div className="w-full max-w-4xl mx-auto mb-4 p-3 rounded-lg bg-white/80 border border-[#3e459c]/20 flex items-center gap-3">
+          <span className="text-sm font-medium text-[#3e459c]">Wariant (diagnostyka):</span>
+          <select
+            value={diagnosticSpringVariant}
+            onChange={(e) => setDiagnosticSpringVariant(Number(e.target.value) as 0 | SpringMemory5Variant)}
+            className="px-2 py-1 text-sm border border-[#3e459c]/30 rounded-md bg-white text-[#3e459c]"
+          >
+            <option value={0}>Auto (losowo)</option>
+            <option value={1}>Wariant 1</option>
+            <option value={2}>Wariant 2</option>
+          </select>
+          <span className="text-xs text-gray-600">Aktywny: {activeSpringVariant}</span>
+        </div>
+      )}
+
       {/* Game area */}
       <div className="flex flex-col items-center mt-16">
         {/* Top row - draggable animals */}
@@ -296,6 +399,9 @@ export default function MemoryGame5({ onMenuClick, onComplete, onBack, onNext, o
                   alt={animal.name}
                   fill
                   className="object-contain"
+                  style={{
+                    filter: "drop-shadow(2px 2px 6px rgba(0,0,0,0.22))",
+                  }}
                 />
               </div>
             )
@@ -333,6 +439,9 @@ export default function MemoryGame5({ onMenuClick, onComplete, onBack, onNext, o
                         alt={animal.name}
                         fill
                         className="object-contain"
+                        style={{
+                          filter: "drop-shadow(2px 2px 6px rgba(0,0,0,0.22))",
+                        }}
                       />
                     </div>
                   </div>
